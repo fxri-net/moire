@@ -1,7 +1,7 @@
 /**
  * 创建风音视图
  */
-var fxView = new function() {};
+var fxView = new function() { return isObject(fxView) ? fxView : {}; };
 
 /**
  * 定制
@@ -9,47 +9,62 @@ var fxView = new function() {};
 fxView['custom'] = {};
 
 /**
- * 数据
+ * 部署
  */
-fxView['data'] = {
+fxView['deploy'] = {
     /**
      * 缓存
      */
-    cache: {},
-
-    /**
-     * 部署
-     */
-    deploy: {},
+    'cache': {},
 
     /**
      * 输出
      */
-    echo: {}
+    'echo': {},
+
+    /**
+     * 视图
+     */
+    'view': {}
 };
 
 /**
- * 工厂
+ * 加工
  */
-fxView['factory'] = {
+fxView['machine'] = {};
+
+/**
+ * 物料
+ */
+fxView['material'] = {
     /**
-     * 模具
+     * 元素
      */
-    mould: {},
+    'elem': {},
 
     /**
      * 模板
      */
-    template: {},
-
-    /**
-     * 工具
-     */
-    tool: {}
+    'template': {}
 };
 
 /**
- * 架子
+ * 模具
+ */
+fxView['mould'] = {
+    /**
+     * 工具
+     */
+    'tool': {},
+
+    /**
+     * 视图
+     */
+    'view': {}
+};
+
+/**
+ * 货架
  */
 fxView['shelf'] = {};
 
@@ -59,39 +74,39 @@ fxView['shelf'] = {};
 fxView['store'] = {};
 
 /**
- * 视图商店-处理
+ * 云纹商店-处理
  */
 fxView['store']['deal'] = function() {
     // 初始化变量
     var dark = {
         // 地址
-        url: null,
+        'url': null,
         // 类型
-        type: 'post',
+        'type': 'post',
         // 缓存
-        cache: false,
+        'cache': false,
         // 数据
-        data: {
+        'data': {
             // 基础
-            base: {
+            'base': {
                 // 令牌
-                token: fxApp['user']['base']['token'],
+                'token': fxApp['user']['base']['token'],
                 // 格式
-                format: 'json'
+                'format': 'json'
             },
             // 数据
-            data: {}
+            'data': {}
         },
         // 成功回调
-        success: success,
+        'success': success,
         // 失败回调
-        error: error,
+        'error': error,
         // 扩展
-        extend: {
+        'extend': {
             // 元素
-            elem: null,
+            'elem': null,
             // 提示
-            tips: true
+            'tips': true
         }
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -109,23 +124,23 @@ fxView['store']['deal'] = function() {
         if (data['code'] == 200 && !isNull(dark['extend']['elem'])) {
             // 请求成功
             layui.layer.tips(data['message'], $(dark['extend']['elem']), {
-                time: 800,
-                tips: fxBase['math']['rand'](1, 4),
-                tipsMore: true
+                'time': 800,
+                'tips': fxBase['math']['rand'](1, 4),
+                'tipsMore': true
             });
         } else if (data['code'] == 200) {
             // 请求成功
             layui.layer.msg(data['message'], {
-                time: 800
+                'time': 800
             });
         } else {
             // 请求失败
             $.toast({
-                text: data['message'],
-                icon: 'error',
-                hideAfter: 2000,
-                position: 'top-right',
-                stack: 3
+                'text': data['message'],
+                'icon': 'error',
+                'hideAfter': 2000,
+                'position': 'top-right',
+                'stack': 3
             });
         }
     }
@@ -133,52 +148,52 @@ fxView['store']['deal'] = function() {
     function error(data) {
         // 请求失败
         $.toast({
-            text: data['responseText'],
-            icon: 'error',
-            hideAfter: 2000,
-            position: 'top-right',
-            stack: 3
+            'text': data['responseText'],
+            'icon': 'error',
+            'hideAfter': 2000,
+            'position': 'top-right',
+            'stack': 3
         });
     }
     return dark['echo'];
 };
 
 /**
- * 视图商店-采购
+ * 云纹商店-采购
  */
 fxView['store']['purchase'] = function() {
     // 初始化变量
     var dark = {
         // 地址
-        url: null,
+        'url': null,
         // 异步
-        async: false,
+        'async': false,
         // 数据
-        data: {
+        'data': {
             // 基础
-            base: {
+            'base': {
                 // 页码
-                page: 1,
+                'page': 1,
                 // 条数
-                limit: -1
+                'limit': -1
             }
         },
         // 成功回调
-        success: success,
+        'success': success,
         // 失败回调
-        error: error,
+        'error': error,
         // 扩展
-        extend: {
+        'extend': {
             // 提示
-            tips: false,
+            'tips': false,
             // 等级
-            level: 1,
+            'level': 1,
             // 键钥
-            key: 'id',
+            'key': 'id',
             // 键值
-            value: null,
+            'value': null,
             // 联结
-            nexus: ' - '
+            'nexus': ' - '
         }
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -214,28 +229,28 @@ fxView['store']['purchase'] = function() {
 };
 
 /**
- * 视图商店-供应
+ * 云纹商店-供应
  */
 fxView['store']['supply'] = function() {
     // 初始化变量
     fxView['shelf'] = {
         // 属性
-        attr: {},
+        'attr': {},
         // 基础
-        base: {},
+        'base': {},
         // 数据
-        data: {},
+        'data': {},
         // 视图
-        view: {
+        'view': {
             // 元素
-            elem: null,
+            'elem': null,
             // 模型
-            model: {
+            'model': {
                 // 主键
-                key: 'id'
+                'key': 'id'
             },
             // 参数
-            param: null
+            'param': null
         }
     };
     fxView['shelf'] = fxBase['param']['merge'](fxView['shelf'], arguments[0]);
@@ -244,9 +259,9 @@ fxView['store']['supply'] = function() {
         if (!isBlank(value['url'])) {
             value = fxBase['param']['merge']({
                 // 扩展
-                extend: {
+                'extend': {
                     // 映射
-                    mapping: { 0: key }
+                    'mapping': { 0: key }
                 }
             }, value);
             $.each(fxView['store']['purchase'](value), function(key2, value2) {
@@ -262,44 +277,105 @@ fxView['store']['supply'] = function() {
 };
 
 /**
- * 视图商店-门面
+ * 云纹商店-门面
  */
 fxView['store']['facade'] = function() {
     // 初始化变量
     var dark = {
         // 元素
-        elem: null
+        'elem': null
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
-    if (isObject(fxView['data']['deploy'][dark['elem']])) {
+    if (isObject(fxView['deploy']['view'][dark['elem']])) {
         dark['data'] = fxBase['param']['merge']({
             // 基础
-            base: {
+            'base': {
                 // 元素
-                elem: null
+                'elem': null
             }
-        }, fxView['data']['deploy'][dark['elem']]);
+        }, fxView['deploy']['view'][dark['elem']]);
     } else {
         dark['data'] = {
             // 基础
-            base: fxBase['param']['merge']({
+            'base': fxBase['param']['merge']({
                 // 元素
-                elem: null
+                'elem': null
             }, dark)
         };
     }
     // 替换标题
     if (isBlank(fxApp['view']['elems'][dark['elem']])) {
         $('title').html(fxBase['base']['lang']([fxApp['view']['name'], dark['elem'], ' - ', 'site title']));
-        fxApp['title'] = $('title').html();
+        fxApp['env']['title'] = $('title').html();
     }
     // 执行视图
-    if (isFunction(fxView['factory']['mould'][dark['data']['base']['elem']])) {
-        fxView['factory']['mould'][dark['data']['base']['elem']](dark['data']);
+    if (isFunction(fxView['mould']['view'][dark['data']['base']['elem']])) {
+        fxView['mould']['view'][dark['data']['base']['elem']](dark['data']);
     } else if (isFunction(fxView['custom'][dark['data']['base']['elem']])) {
         fxView['custom'][dark['data']['base']['elem']](dark['data']);
     } else {
-        return fxView['factory']['tool']['message']({ text: ['view', 'not configured'] });
+        return fxView['mould']['tool']['message']({ 'text': ['view', 'not configured'] });
     }
+};
+
+/**
+ * 云纹加工-元素
+ */
+fxView['machine']['elem'] = function() {
+    // 初始化变量
+    dark = fxBase['param']['merge'](arguments[0], {
+        // 编号
+        'id': '',
+        // 字段
+        'field': '',
+        // 标题
+        'title': '',
+        // 必填
+        'require': 0,
+        // 货架
+        'shelf': {},
+        // 皮肤
+        'skin': null
+    }, arguments[1]);
+    dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
+    dark['requireText'] = dark['require'] == 1 ? 'required' : null;
+    return dark;
+};
+
+/**
+ * 云纹物料-加载器
+ */
+fxView['material']['loader'] = function() {
+    // 初始化变量
+    var dark = [
+        // 插件
+        [],
+        // 回调
+        null,
+        // 路径
+        fxApp['env']['script']
+    ];
+    dark = fxBase['param']['merge'](1, dark, arguments);
+    // 疏理数据
+    dark['plugin'] = dark[0];
+    dark['callback'] = isFunction(dark[1]) ? dark[1] : null;
+    dark['path'] = isString(dark[1]) ? dark[1] : dark[2];
+    if (isBlank(dark['plugin'])) {
+        dark['plugin'] = [];
+    } else if (!isArray(dark['plugin']) && !isObject(dark['plugin'])) {
+        dark['plugin'] = fxBase['text']['explode'](',', dark['plugin']);
+    }
+    // 加载插件
+    $.each(dark['plugin'], function(key, value) {
+        if (isFunction(fxView['material']['elem'][value])) return true;
+        document.write('<script type="text/javascript" src="' +
+            dark['path'] + '/plugin/' + value + '/facade.js?version=' + fxApp['view']['version'] + '"></script>');
+    });
+    // 执行回调
+    $(document).ready(function() {
+        if (isFunction(dark['callback'])) {
+            dark['callback']();
+        }
+    });
 };

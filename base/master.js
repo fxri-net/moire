@@ -1,7 +1,7 @@
 /**
  * 创建本地存储
  */
-var fxLocal = new function() {};
+var fxLocal = new function() { return isObject(fxLocal) ? fxLocal : {}; };
 
 /**
  * 设置数据
@@ -42,7 +42,7 @@ fxLocal['clear'] = function() {
 /**
  * 创建会话存储
  */
-var fxSession = new function() {};
+var fxSession = new function() { return isObject(fxSession) ? fxSession : {}; };
 
 /**
  * 设置数据
@@ -83,7 +83,7 @@ fxSession['clear'] = function() {
 /**
  * 创建风音基础
  */
-var fxBase = new function() {};
+var fxBase = new function() { return isObject(fxBase) ? fxBase : {}; };
 
 /**
  * 基础
@@ -92,14 +92,14 @@ fxBase['base'] = {
     /**
      * 获取模具
      */
-    mould: function() {
+    'mould': function() {
         // 初始化变量
         var dark = {};
         dark = {
             // 类型
-            type: null,
+            'type': null,
             // 单元
-            cell: null
+            'cell': null
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         dark['type'] = !isNull(dark['type']) ? 'moire-type,' + dark['type'] : null;
@@ -110,14 +110,14 @@ fxBase['base'] = {
     /**
      * 获取模板
      */
-    template: function() {
+    'template': function() {
         // 初始化变量
         var dark = {};
         dark = {
             // 类型
-            type: null,
+            'type': null,
             // 单元
-            cell: null
+            'cell': null
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         dark['cell'] = !isNull(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
@@ -127,7 +127,7 @@ fxBase['base'] = {
     /**
      * 语言
      */
-    lang: function(name) {
+    'lang': function(name) {
         // 初始化变量
         if (isNull(fxApp['view']['lang']) || isNull(fxApp['view']['langs'])) return name;
         var langs = fxBase['base']['langList'](name),
@@ -138,7 +138,7 @@ fxBase['base'] = {
     /**
      * 语言-列表
      */
-    langList: function(name) {
+    'langList': function(name) {
         // 初始化变量
         var langs = [];
         if (isArray(name) || isObject(name)) {
@@ -167,7 +167,7 @@ fxBase['base'] = {
     /**
      * 语言-解析
      */
-    langParse: function(name) {
+    'langParse': function(name) {
         // 初始化变量
         var type = fxApp['view']['lang'],
             string;
@@ -197,7 +197,7 @@ fxBase['base'] = {
     /**
      * 最大z-index
      */
-    maxZIndex: function() {
+    'maxZIndex': function() {
         // 初始化变量
         var dark = fxBase['dom']['maxZIndex']();
         return dark > 0 ? dark : 0;
@@ -206,7 +206,7 @@ fxBase['base'] = {
     /**
      * 打散字符串-去除重复值
      */
-    explode: function() {
+    'explode': function() {
         // 初始化变量
         var dark = fxBase['text']['explode'].apply(null, arguments),
             echo = [];
@@ -222,7 +222,7 @@ fxBase['base'] = {
     /**
      * 解析Json
      */
-    json: function() {
+    'json': function() {
         // 初始化变量
         var data = !isNull(arguments[0]) ? arguments[0] : null,
             type = !isNull(arguments[1]) ? arguments[1] : '';
@@ -263,7 +263,7 @@ fxBase['client'] = {
     /**
      * 判断IE浏览器版本
      */
-    ieVersion: function() {
+    'ieVersion': function() {
         // 取得浏览器的userAgent字符串
         var userAgent = navigator.userAgent;
         // 判断是否IE<11浏览器
@@ -307,7 +307,7 @@ fxBase['dom'] = {
     /**
      * 设置/获取样式
      */
-    css: function() {
+    'css': function() {
         // 初始化变量
         var dark = {};
         dark['elem'] = !isNull(arguments[0]) ? arguments[0] : null;
@@ -333,7 +333,7 @@ fxBase['dom'] = {
     /**
      * 设置/获取样式
      */
-    style: function() {
+    'style': function() {
         // 初始化变量
         var dark = {};
         dark['elem'] = !isNull(arguments[0]) ? arguments[0] : null;
@@ -368,17 +368,17 @@ fxBase['dom'] = {
     /**
      * 获取模具
      */
-    mould: function() {
+    'mould': function() {
         // 初始化变量
         var dark = {
             // 元素
-            elem: null,
+            'elem': null,
             // 类型
-            type: null,
+            'type': null,
             // 单元
-            cell: null,
+            'cell': null,
             // 单元名称
-            cellName: null
+            'cellName': null
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         if (isNull(dark['elem'])) {
@@ -433,19 +433,19 @@ fxBase['dom'] = {
     /**
      * 获取模板
      */
-    template: function() {
+    'template': function() {
         // 初始化变量
         var dark = {
             // 库存
-            stock: fxView['factory']['template'],
+            'stock': fxView['material']['template'],
             // 元素
-            elem: null,
+            'elem': null,
             // 类型
-            type: null,
+            'type': null,
             // 单元
-            cell: null,
+            'cell': null,
             // 单元名称
-            cellName: null
+            'cellName': null
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         if (isNull(dark['elem'])) {
@@ -499,19 +499,19 @@ fxBase['dom'] = {
     /**
      * 设置/获取URL
      */
-    url: function() {
+    'url': function() {
         // 初始化变量
         var dark = {
             // 类型
-            type: null,
+            'type': null,
             // 窗口
-            window: !isBlank(arguments[0].window) ? arguments[0].window : window,
+            'window': !isBlank(arguments[0].window) ? arguments[0].window : window,
             // 地址
-            url: null,
+            'url': null,
             // 名称
-            name: null,
+            'name': null,
             // 参数
-            param: {}
+            'param': {}
         };
         // 设置窗口
         delete arguments[0]['window'];
@@ -522,8 +522,8 @@ fxBase['dom'] = {
                 // 设置地址
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.pathname;
                 var param = fxBase['param']['merge'](fxBase['dom']['url']({
-                        type: '2.1',
-                        window: dark['window']
+                        'type': '2.1',
+                        'window': dark['window']
                     }), dark['param']),
                     search = '';
                 $.each(param, function(key, value) {
@@ -571,29 +571,29 @@ fxBase['dom'] = {
     /**
      * 拖拽事件
      */
-    drag: function() {
+    'drag': function() {
         // 初始化变量
         var dark = {
             // 元素
-            elem: null,
+            'elem': null,
             // 延时
-            time: 0,
+            'time': 0,
             // 目标
-            target: null,
+            'target': null,
             // 墙壁
-            wall: false,
+            'wall': false,
             // 堆叠
-            z_index: fxBase['base']['maxZIndex']() + 1,
+            'z_index': fxBase['base']['maxZIndex']() + 1,
             // 样式
-            css: {},
+            'css': {},
             // 边界
-            edge: $(document),
+            'edge': $(document),
             // 边界-左
-            edgeX: null,
+            'edgeX': null,
             // 边界-上
-            edgeY: null,
+            'edgeY': null,
             // 开关
-            switch: true
+            'switch': true
         };
         var tray = {};
         dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -707,7 +707,7 @@ fxBase['dom'] = {
     /**
      * 触发事件
      */
-    trigger: function() {
+    'trigger': function() {
         // 初始化变量
         $('a[fxy-href]').on('click', function() {
             // 替换地址
@@ -718,7 +718,7 @@ fxBase['dom'] = {
     /**
      * 最大z-index
      */
-    maxZIndex: function() {
+    'maxZIndex': function() {
         // 初始化变量
         var selfZ = Math.max.apply(null,
             $.map($('body *'), function(elem, index) {
@@ -741,12 +741,12 @@ fxBase['file'] = {
     /**
      * 获取类方法
      */
-    classMethod: function(object) {
+    'classMethod': function(object) {
         // 初始化变量
         if (!isObject(object)) return;
         var echo = {
-            param: {},
-            method: []
+            'param': {},
+            'method': []
         };
         $.each(object, function(key, value) {
             if (value != null) {
@@ -761,7 +761,7 @@ fxBase['file'] = {
     /**
      * 获取路径后缀名
      */
-    pathExt: function(path) {
+    'pathExt': function(path) {
         // 初始化变量
         last_len = path.lastIndexOf('.');
         len = path.length;
@@ -777,7 +777,7 @@ fxBase['math'] = {
     /**
      * 获取随机数
      */
-    rand: function(min, max) {
+    'rand': function(min, max) {
         // 初始化变量
         if (arguments.length < 2) {
             max = min;
@@ -800,7 +800,7 @@ fxBase['param'] = {
     /**
      * 定义参数
      */
-    define: function() {
+    'define': function() {
         // 初始化变量
         var param = !isNull(arguments[0]) ? arguments[0] : null,
             mode = !isNull(arguments[1]) ? arguments[1] : null,
@@ -949,7 +949,7 @@ fxBase['param'] = {
     /**
      * 合并数组
      */
-    merge: function() {
+    'merge': function() {
         // 初始化变量
         var args = [],
             echo = [],
@@ -981,7 +981,7 @@ fxBase['param'] = {
     /**
      * 覆盖数组
      */
-    cover: function() {
+    'cover': function() {
         // 初始化变量
         var args = !isNull(arguments[0]) ? arguments[0] : null,
             limit = !isNull(arguments[1]) ? arguments[1] : -1;
@@ -1013,7 +1013,7 @@ fxBase['text'] = {
     /**
      * 获取时间
      */
-    time: function() {
+    'time': function() {
         // 初始化变量
         var time = !isNull(arguments[0]) ? arguments[0] : +new Date(),
             milli = !isNull(arguments[1]) ? arguments[1] : false;
@@ -1031,7 +1031,7 @@ fxBase['text'] = {
     /**
      * 毫秒时间
      */
-    mtime: function() {
+    'mtime': function() {
         // 初始化变量
         var mtime = !isNull(arguments[0]) ? arguments[0] : null,
             echo = null;
@@ -1053,7 +1053,7 @@ fxBase['text'] = {
     /**
      * 格式化时间
      */
-    ftime: function() {
+    'ftime': function() {
         // 初始化变量
         var time = !isNull(arguments[0]) ? arguments[0] : null,
             type = !isNull(arguments[1]) ? arguments[1] : null,
@@ -1144,7 +1144,7 @@ fxBase['text'] = {
     /**
      * 替换字符串
      */
-    replace: function(find, replace, string) {
+    'replace': function(find, replace, string) {
         // 初始化变量
         var find = new RegExp(find, 'g');
         return string.replace(find, replace);
@@ -1153,7 +1153,7 @@ fxBase['text'] = {
     /**
      * 打散字符串
      */
-    explode: function() {
+    'explode': function() {
         // 初始化变量
         var separator = !isNull(arguments[0]) ? arguments[0] : null,
             data = !isNull(arguments[1]) ? arguments[1] : null,
@@ -1179,7 +1179,7 @@ fxBase['text'] = {
     /**
      * 组合字符串
      */
-    implode: function() {
+    'implode': function() {
         // 初始化变量
         var separator = !isNull(arguments[0]) ? arguments[0] : null,
             data = !isNull(arguments[1]) ? arguments[1] : null;
@@ -1194,7 +1194,7 @@ fxBase['text'] = {
     /**
      * 填充字符串
      */
-    strPad: function() {
+    'strPad': function() {
         // 初始化变量
         var string = !isNull(arguments[0]) ? arguments[0] : null,
             length = !isNull(arguments[1]) ? arguments[1] : null,
@@ -1225,12 +1225,7 @@ fxBase['text'] = {
 /**
  * 创建风音应用
  */
-var fxApp = new function() {};
-
-/**
- * 根元素
- */
-fxApp['root'] = '';
+var fxApp = new function() { return isObject(fxApp) ? fxApp : {}; };
 
 /**
  * 基础
@@ -1264,17 +1259,17 @@ fxApp['layui'] = {
     /**
      * 初始化
      */
-    init: function() {
+    'init': function() {
         // 初始化变量
         var dark = {
             // 类型
-            type: null,
+            'type': null,
             // 编号
-            id: null,
+            'id': null,
             // 插件
-            plugin: {
+            'plugin': {
                 // 单选
-                radio: false
+                'radio': false
             }
         };
         var tray = {};
@@ -1303,8 +1298,8 @@ fxApp['layui'] = {
                     tray['btns'] = ['remove'];
                 }
                 layui.formSelects.btns(dark['id'], tray['btns'], {
-                    show: 'name',
-                    space: '6px'
+                    'show': 'name',
+                    'space': '6px'
                 });
                 $('.xm-select-parent .xm-form-select dl dt').each(function() {
                     if ($(this).text() != '') {
@@ -1345,7 +1340,7 @@ fxApp['layui'] = {
                     return false;
                 });
                 // 重设搜索文本
-                fxApp['layui']['select']({ elem: $('.xm-select-label') });
+                fxApp['layui']['select']({ 'elem': $('.xm-select-label') });
                 break;
         }
     },
@@ -1353,13 +1348,13 @@ fxApp['layui'] = {
     /**
      * select扩展
      */
-    select: function() {
+    'select': function() {
         // 初始化变量
         var dark = {
             // 元素
-            elem: null,
+            'elem': null,
             // 开关
-            switch: true
+            'switch': true
         };
         var tray = {};
         dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -1441,13 +1436,16 @@ fxApp['console'] = {
     /**
      * 应用
      */
-    app: function() {
+    'app': function() {
         // 初始化变量
         var dark = {
-            // 根元素
-            root: '',
-            // 标题
-            title: $('title').html()
+            // 环境
+            'env': {
+                // IE版本
+                'ie': fxBase['client']['ieVersion'](),
+                // 标题
+                'title': $('title').html()
+            }
         };
         fxApp = fxBase['param']['merge'](fxApp, dark, arguments[0]);
     },
@@ -1455,7 +1453,7 @@ fxApp['console'] = {
     /**
      * 环境
      */
-    env: function() {
+    'env': function() {
         // 初始化变量
         var dark = $('.moire-data').html();
         dark = JSON.parse(!isNull(dark) ? dark : '{}');
@@ -1467,11 +1465,11 @@ fxApp['console'] = {
     /**
      * 版权信息
      */
-    copyright: function() {
+    'copyright': function() {
         // 初始化变量
         var dark = {
             // 开关
-            switch: true
+            'switch': true
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         // 判断顶页面
@@ -1483,11 +1481,11 @@ fxApp['console'] = {
     /**
      * 自动清理日志
      */
-    clear: function() {
+    'clear': function() {
         // 初始化变量
         var dark = {
             // 开关
-            switch: true
+            'switch': true
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         // 判断顶页面

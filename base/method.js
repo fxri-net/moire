@@ -145,5 +145,10 @@ function isMoney(data) {
  */
 function inArray() {
     // 初始化变量
-    return $.inArray.apply(null, arguments) !== -1 ? true : false;
+    for (var i in arguments[1]) {
+        if (arguments[1][i] == arguments[0]) {
+            return true;
+        }
+    }
+    return false;
 }

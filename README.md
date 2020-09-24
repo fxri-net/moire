@@ -10,12 +10,23 @@
 ## 基础部署
 
 ~~~
-// 加载基础函数
-<script type="text/javascript" src="./moire/base/method.js"></script>
-// 加载基础框架
-<script type="text/javascript" src="./moire/base/master.js"></script>
-// 加载基础视图
-<script type="text/javascript" src="./moire/view/master.js"></script>
+// 加载云纹框架
+<script type="text/javascript" src="./moire/moire.js"></script>
+~~~
+
+## 视图插件依赖
+
+~~~
+Layui v2.5.6及以上
+Jquery v1.9及以上
+Jquery_Resize
+Jquery_Slick v1.6.0及以上
+Jquery_Toast
+Jquery_Viewer v1.5.0及以上
+Imagesloaded v4.1.4及以上
+masonry v4.2.2及以上
+Sortable v1.10.2及以上
+Viewer v1.5.0及以上
 ~~~
 
 ## 项目开发
