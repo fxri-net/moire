@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹物料-元素-下拉框
  */
@@ -42,10 +52,10 @@ fxView['material']['elem']['select'] = function() {
             'name': dark['field']
         });
         dark['elem'].append('<option value="">' + dark['default'] + '</option>');
-        $.each(dark['shelf']['data'], function(key2, value2) {
-            dark['elem'].append('<option value="' + key2 + '"' + (dark['data'] == key2 ? ' selected' : '') + '>' + value2 + '</option>');
+        $.each(dark['shelf']['data'], function(key, value) {
+            dark['elem'].append('<option value="' + key + '"' + (dark['data'] == key ? ' selected' : '') + '>' + value + '</option>');
         });
-        // 疏理输出
+        // 疏理皮肤
         switch (dark['skin']) {
             case 'search':
                 // 搜索
@@ -70,6 +80,18 @@ fxView['material']['elem']['select'] = function() {
                 dark['elem'].attr({
                     'lay-verify': dark['requireText']
                 });
+                break;
+        }
+    };
+    // 输出
+    echo['echo'] = function() {
+        // 疏理数据
+        dark['echo'] = dark['elem'].val();
+        // 疏理皮肤
+        switch (dark['skin']) {
+            case 'view':
+                // 视图
+                dark['echo'] = !isBlank(dark['echo']) ? dark['echo'] : dark['default_value'];
                 break;
         }
     };

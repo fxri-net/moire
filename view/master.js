@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 创建风音视图
  */
@@ -329,6 +339,8 @@ fxView['machine']['elem'] = function() {
         'id': '',
         // 字段
         'field': '',
+        // 输出
+        'echo': null,
         // 标题
         'title': '',
         // 必填
@@ -370,7 +382,7 @@ fxView['material']['loader'] = function() {
     $.each(dark['plugin'], function(key, value) {
         if (isFunction(fxView['material']['elem'][value])) return true;
         document.write('<script type="text/javascript" src="' +
-            dark['path'] + '/plugin/' + value + '/facade.js?version=' + fxApp['view']['version'] + '"></script>');
+            dark['path'] + '/plugin/' + value + '/facade.js?version=' + fxApp['env']['version'] + '"></script>');
     });
     // 执行回调
     $(document).ready(function() {

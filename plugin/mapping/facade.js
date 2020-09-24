@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹物料-元素-映射
  */
@@ -73,7 +83,7 @@ fxView['material']['elem']['mapping'] = function() {
         dark['elem'].attr({
             'id': dark['id']
         });
-        // 疏理输出
+        // 疏理皮肤
         switch (dark['skin']) {
             case 'table':
                 // 表格
@@ -88,13 +98,13 @@ fxView['material']['elem']['mapping'] = function() {
                         data[dark['field']] = fxBase['text']['explode'](',', data[dark['field']]);
                     }
                     // 疏理输出
-                    $.each(data[dark['field']], function(key2, value2) {
+                    $.each(data[dark['field']], function(key, value) {
                         // 初始化变量
-                        echo[key2] = [];
-                        $.each(dark['shelf']['data'], function(key3, value3) {
-                            echo[key2].push(value2[key3]);
+                        echo[key] = [];
+                        $.each(dark['shelf']['data'], function(key2, value2) {
+                            echo[key].push(value[key2]);
                         });
-                        echo[key2] = fxBase['text']['implode'](fxBase['base']['lang'](':'), echo[key2]);
+                        echo[key] = fxBase['text']['implode'](fxBase['base']['lang'](':'), echo[key]);
                     });
                     echo = fxBase['text']['implode'](fxBase['base']['lang']('|'), echo);
                     return echo;
@@ -144,18 +154,18 @@ fxView['material']['elem']['mapping'] = function() {
                 if (dark['add']['switch']) {
                     dark['add']['disabled'] = null;
                 }
-                $.each(dark['data'], function(key2, value2) {
+                $.each(dark['data'], function(key, value) {
                     // 初始化变量
                     var echo = $('<div class="moire-clear"></div>');
-                    $.each(dark['shelf']['data'], function(key3, value3) {
-                        echo.append('<input type="text" class="layui-input" moire-type="' + key3 + '"' +
-                            ' placeholder="' + fxBase['base']['lang'](value3) + '" autocomplete="off">')
-                        echo.find('[moire-type=' + key3 + ']')
+                    $.each(dark['shelf']['data'], function(key2, value2) {
+                        echo.append('<input type="text" class="layui-input" moire-type="' + key2 + '"' +
+                            ' placeholder="' + fxBase['base']['lang'](value2) + '" autocomplete="off">')
+                        echo.find('[moire-type=' + key2 + ']')
                             .attr({
                                 'disabled': dark['add']['disabled']
                             })
                             .css('width', 'calc((100% - ' + dark['delete']['width'] + ') / ' + Object.keys(dark['shelf']['data']).length + ')')
-                            .val(value2[key3]);
+                            .val(value[key2]);
                     });
                     echo.append(dark['delete']['elem']);
                     dark['elem'].find('.moire-elem-inline').append(echo);
@@ -170,32 +180,45 @@ fxView['material']['elem']['mapping'] = function() {
                     dark['elem'].parents('div[moire-cell]').on('click', '.moire-operate', function() {
                         // 初始化变量
                         var echo = $('<div class="moire-clear"></div>');
-                        $.each(dark['shelf']['data'], function(key3, value3) {
-                            echo.append('<input type="text" class="layui-input" moire-type="' + key3 + '"' +
-                                ' placeholder="' + fxBase['base']['lang'](value3) + '" autocomplete="off">')
-                            echo.find('[moire-type=' + key3 + ']')
+                        $.each(dark['shelf']['data'], function(key, value) {
+                            echo.append('<input type="text" class="layui-input" moire-type="' + key + '"' +
+                                ' placeholder="' + fxBase['base']['lang'](value) + '" autocomplete="off">')
+                            echo.find('[moire-type=' + key + ']')
                                 .css('width', 'calc((100% - ' + dark['delete']['width'] + ') / ' + Object.keys(dark['shelf']['data']).length + ')');
                         });
                         echo.append(dark['delete']['elem']);
                         dark['elem'].find('.moire-elem-inline').append(echo);
                     });
-                    dark['extend'] = new Sortable(dark['elem'].find('.moire-elem-inline')[0], dark['plugin']);
+                    dark['plugin']['echo'] = new Sortable(dark['elem'].find('.moire-elem-inline')[0], dark['plugin']);
                 }
                 break;
         }
+    };
+    // 输出
+    echo['echo'] = function() {
+        // 疏理数据
+        if (!dark['add']['switch'] && !dark['delete']['switch']) return true;
+        dark['echo'] = [];
+        $(dark['plugin']['echo'].el).children().each(function(key, value) {
+            dark['echo'][key] = {};
+            $(value).children('input').each(function(key2, value2) {
+                dark['echo'][key][$(value2).attr('moire-type')] = $(value2).val();
+            });
+        })
+        dark['echo'] = JSON.stringify(dark['echo']);
     };
     // 重置
     echo['reset'] = function() {
         // 疏理数据
         dark['elem'].find('.moire-elem-inline>div').remove();
-        $.each(dark['data'], function(key2, value2) {
+        $.each(dark['data'], function(key, value) {
             // 初始化变量
             var echo = $('<div></div>');
-            $.each(dark['shelf']['data'], function(key3, value3) {
-                echo.append('<input type="text" class="layui-input" moire-type="' + key3 + '"' +
-                    ' placeholder="' + fxBase['base']['lang'](value3) + '" autocomplete="off">')
-                echo.find('[moire-type=' + key3 + ']')
-                    .val(value2[key3])
+            $.each(dark['shelf']['data'], function(key2, value2) {
+                echo.append('<input type="text" class="layui-input" moire-type="' + key2 + '"' +
+                    ' placeholder="' + fxBase['base']['lang'](value2) + '" autocomplete="off">')
+                echo.find('[moire-type=' + key2 + ']')
+                    .val(value[key2])
                     .css('width', 'calc((100% - 80px) / ' + Object.keys(dark['shelf']['data']).length + ')');
             });
             echo.append(dark['delete']['elem']);

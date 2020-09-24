@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹物料-元素-文件
  */
@@ -65,7 +75,7 @@ fxView['material']['elem']['file'] = function() {
             'id': dark['id'],
         });
         dark['elem'].val(dark['data']);
-        // 疏理输出
+        // 疏理皮肤
         switch (dark['skin']) {
             case 'table':
                 // 表格
@@ -131,18 +141,18 @@ fxView['material']['elem']['file'] = function() {
                     });
                 }
                 // 输出子项
-                $.each(dark['data'], function(key2, value2) {
+                $.each(dark['data'], function(key, value) {
                     switch (dark['option']['type']) {
                         default:
                             // 默认
                         case 'video':
                             // 视频
-                            dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value2 + '" target="_blank">点击链接</a>' +
+                            dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
                                 dark['delete']['elem'] + '</div>');
                             break;
                         case 'image':
                             // 图片
-                            dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value2 + '"' + dark['alt'] + '>' +
+                            dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
                                 dark['delete']['elem'] + '</div>');
                             break;
                     }
@@ -190,28 +200,28 @@ fxView['material']['elem']['file'] = function() {
                         }
                         if (data['code'] == 200) {
                             // 输出子项
-                            $.each(data['data'], function(key2, value2) {
-                                echo['data'].push(value2);
+                            $.each(data['data'], function(key, value) {
+                                echo['data'].push(value);
                                 switch (dark['option']['type']) {
                                     default:
                                         // 默认
                                     case 'video':
                                         // 视频
-                                        dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value2 + '" target="_blank">点击链接</a>' +
+                                        dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
                                             dark['delete']['elem'] + '</div>');
                                         break;
                                     case 'image':
                                         // 图片
-                                        dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value2 + '"' + dark['alt'] + '>' +
+                                        dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
                                             dark['delete']['elem'] + '</div>');
                                         break;
                                 }
                             });
                             // 疏理隐藏图片值
                             echo['list'] = [];
-                            $.each(echo['data'], function(key2, value2) {
-                                if (isBlank(value2)) return true;
-                                echo['list'].push(value2);
+                            $.each(echo['data'], function(key, value) {
+                                if (isBlank(value)) return true;
+                                echo['list'].push(value);
                             });
                             $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['list']));
                             // 请求成功
@@ -290,18 +300,18 @@ fxView['material']['elem']['file'] = function() {
                     });
                 }
                 // 输出子项
-                $.each(dark['data'], function(key2, value2) {
+                $.each(dark['data'], function(key, value) {
                     switch (dark['option']['type']) {
                         default:
                             // 默认
                         case 'video':
                             // 视频
-                            dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value2 + '" target="_blank">点击链接</a>' +
+                            dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
                                 dark['delete']['elem'] + '</div>');
                             break;
                         case 'image':
                             // 图片
-                            dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value2 + '"' + dark['alt'] + '>' +
+                            dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
                                 dark['delete']['elem'] + '</div>');
                             break;
                     }
@@ -379,28 +389,28 @@ fxView['material']['elem']['file'] = function() {
                         // 疏理隐藏图片值
                         echo['data'] = fxBase['text']['explode'](',', $('input[name=' + dark['field'] + ']').val());
                         // 输出子项
-                        $.each(data, function(key2, value2) {
-                            echo['data'].push(value2['ossUrl']);
+                        $.each(data, function(key, value) {
+                            echo['data'].push(value['ossUrl']);
                             switch (dark['option']['type']) {
                                 default:
                                     // 默认
                                 case 'video':
                                     // 视频
-                                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value2['ossUrl'] + '" target="_blank">点击链接</a>' +
+                                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value['ossUrl'] + '" target="_blank">点击链接</a>' +
                                         dark['delete']['elem'] + '</div>');
                                     break;
                                 case 'image':
                                     // 图片
-                                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value2['ossUrl'] + '"' + dark['alt'] + '>' +
+                                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value['ossUrl'] + '"' + dark['alt'] + '>' +
                                         dark['delete']['elem'] + '</div>');
                                     break;
                             }
                         });
                         // 疏理隐藏图片值
                         echo['list'] = [];
-                        $.each(echo['data'], function(key2, value2) {
-                            if (isBlank(value2)) return true;
-                            echo['list'].push(value2);
+                        $.each(echo['data'], function(key, value) {
+                            if (isBlank(value)) return true;
+                            echo['list'].push(value);
                         });
                         $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['list']));
                         // 请求成功
@@ -430,23 +440,44 @@ fxView['material']['elem']['file'] = function() {
                 break;
         }
     };
-    // 重置
-    echo['reset'] = function() {
+    // 输出
+    echo['echo'] = function() {
         // 疏理数据
-        dark['elem'].find('.moire-elem-inline>div').remove();
-        // 输出子项
-        $.each(dark['data'], function(key2, value2) {
+        if (!dark['upload']['switch'] && !dark['delete']['switch']) return true;
+        dark['echo'] = [];
+        dark['elem'].find('.moire-elem-inline>div').each(function(key, value) {
             switch (dark['option']['type']) {
                 default:
                     // 默认
                 case 'video':
                     // 视频
-                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value2 + '" target="_blank">点击链接</a>' +
+                    dark['echo'].push($(value).find('a').attr('href'));
+                    break;
+                case 'image':
+                    // 图片
+                    dark['echo'].push($(value).find('img').attr('src'));
+                    break;
+            }
+        });
+        dark['echo'] = fxBase['text']['implode'](',', dark['echo']);
+    };
+    // 重置
+    echo['reset'] = function() {
+        // 疏理数据
+        dark['elem'].find('.moire-elem-inline>div').remove();
+        // 输出子项
+        $.each(dark['data'], function(key, value) {
+            switch (dark['option']['type']) {
+                default:
+                    // 默认
+                case 'video':
+                    // 视频
+                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
                         dark['delete']['elem'] + '</div>');
                     break;
                 case 'image':
                     // 图片
-                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value2 + '"' + dark['alt'] + '>' +
+                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
                         dark['delete']['elem'] + '</div>');
                     break;
             }

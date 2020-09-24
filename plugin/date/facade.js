@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹物料-元素-日期
  */
@@ -43,7 +53,7 @@ fxView['material']['elem']['date'] = function() {
             'autocomplete': 'off'
         });
         dark['elem'].val(dark['data']);
-        // 疏理输出
+        // 疏理皮肤
         switch (dark['skin']) {
             case 'search':
                 // 搜索
@@ -90,11 +100,11 @@ fxView['material']['elem']['date'] = function() {
                     tray['regexp'] = '[^0-9]+';
                     tray['value'] = fxBase['text']['explode'](tray['regexp'], tray['value'], 'regular').slice(0, tray['format'].length);
                     // 填充时间
-                    $.each(tray['format'], function(key2, value2) {
-                        tray['value'][key2] = fxBase['text']['strPad'](!isBlank(tray['value'][key2]) ? tray['value'][key2] : '0', value2.length, 0, 0);
+                    $.each(tray['format'], function(key, value) {
+                        tray['value'][key] = fxBase['text']['strPad'](!isBlank(tray['value'][key]) ? tray['value'][key] : '0', value.length, 0, 0);
                     });
-                    $.each(tray['format_separator'], function(key2, value2) {
-                        tray['value'][key2] = tray['value'][key2] + value2;
+                    $.each(tray['format_separator'], function(key, value) {
+                        tray['value'][key] = tray['value'][key] + value;
                     });
                     // 组装时间
                     tray['value'] = fxBase['text']['implode']('', tray['value']);
@@ -102,6 +112,11 @@ fxView['material']['elem']['date'] = function() {
                 });
                 break;
         }
+    };
+    // 输出
+    echo['echo'] = function() {
+        // 疏理数据
+        dark['echo'] = dark['elem'].val();
     };
     // 重置
     echo['reset'] = function() {

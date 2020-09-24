@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹物料-元素-复选框
  */
@@ -40,7 +50,7 @@ fxView['material']['elem']['checkbox'] = function() {
             'title': dark['title']
         });
         dark['elem'].prop('checked', !!parseInt(dark['data']));
-        // 疏理输出
+        // 疏理皮肤
         switch (dark['skin']) {
             case 'view':
                 // 视图
@@ -57,6 +67,11 @@ fxView['material']['elem']['checkbox'] = function() {
                 });
                 break;
         }
+    };
+    // 输出
+    echo['echo'] = function() {
+        // 疏理数据
+        dark['echo'] = dark['elem'].prop('checked') ? 1 : 0;
     };
     // 重置
     echo['reset'] = function() {
