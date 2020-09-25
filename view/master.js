@@ -356,13 +356,20 @@ fxView['machine']['elem'] = function() {
 };
 
 /**
- * 云纹物料-加载器
+ * 云纹加工-加载器
  */
-fxView['material']['loader'] = function() {
+fxView['machine']['loader'] = function() {
     // 初始化变量
     var dark = [
         // 插件
         [],
+        // 模块
+        {
+            // 车间
+            'workshop': null,
+            // 装配
+            'assembly': null
+        },
         // 回调
         null,
         // 路径
@@ -371,8 +378,9 @@ fxView['material']['loader'] = function() {
     dark = fxBase['param']['merge'](1, dark, arguments);
     // 疏理数据
     dark['plugin'] = dark[0];
-    dark['callback'] = isFunction(dark[1]) ? dark[1] : null;
-    dark['path'] = isString(dark[1]) ? dark[1] : dark[2];
+    dark['module'] = dark[1];
+    dark['callback'] = isFunction(dark[2]) ? dark[2] : null;
+    dark['path'] = isString(dark[2]) ? dark[2] : dark[3];
     if (isBlank(dark['plugin'])) {
         dark['plugin'] = [];
     } else if (!isArray(dark['plugin']) && !isObject(dark['plugin'])) {
@@ -380,9 +388,10 @@ fxView['material']['loader'] = function() {
     }
     // 加载插件
     $.each(dark['plugin'], function(key, value) {
-        if (isFunction(fxView['material']['elem'][value])) return true;
+        if (isFunction(fxView[dark['module']['workshop']][dark['module']['assembly']][value])) return true;
+        dark['model'] = fxBase['text']['implode']('/', [dark['module']['workshop'], dark['module']['assembly'], value]);
         document.write('<script type="text/javascript" src="' +
-            dark['path'] + '/plugin/' + value + '/facade.js?version=' + fxApp['env']['version'] + '"></script>');
+            dark['path'] + '/view/' + dark['model'] + '/facade.js?version=' + fxApp['env']['version'] + '"></script>');
     });
     // 执行回调
     $(document).ready(function() {
