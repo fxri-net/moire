@@ -112,6 +112,10 @@ fxView['material']['elem']['date'] = function() {
                 });
                 break;
         }
+        // 疏理视图
+        if (isFunction(dark['view'])) {
+            dark['view'](dark);
+        }
     };
     // 输出
     echo['echo'] = function() {

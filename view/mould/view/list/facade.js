@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹模具-视图-列表
  */
@@ -44,12 +54,12 @@ fxView['mould']['view']['list'] = function() {
             // 头部工具栏右侧
             'defaultToolbar': ['filter'],
             // 请求条件
-            'where': {
+            'where': fxBase['text']['strSeparate']({
                 'base': {
                     'token': fxApp['user']['base']['token']
                 },
                 'data': fxApp['data']
-            },
+            }),
             // 响应分页
             'page': {
                 'limits': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -67,26 +77,8 @@ fxView['mould']['view']['list'] = function() {
             },
             // 解析数据
             'parseData': function(data) {
-                if (data['extend']['total_page'] > 0 && data['data'].length == 0 && data['extend']['page'] != data['extend']['total_page']) {
-                    // 重载表格
-                    tray['table'].reload({
-                        'page': {
-                            'curr': data['extend']['total_page']
-                        }
-                    });
-                }
-                data['count'] = data['extend']['total_count'];
-                return data;
-            },
-            // 渲染完成
-            'done': function(data, curr, count) {
-                // 记录数据
-                fxView['deploy']['echo']['list'] = data;
-                // 绘制界面
-                $(window).trigger('resize');
-                $.each(this.where, function(key, value) {
-                    fxApp[key] = fxBase['param']['merge'](fxApp[key], value);
-                });
+                // 疏理数据
+                fxApp = fxBase['param']['merge'](fxApp, this.where);
                 // 替换地址
                 var url = fxBase['dom']['url']({
                     'type': '1.1',
@@ -104,15 +96,33 @@ fxView['mould']['view']['list'] = function() {
                 if (self != top) {
                     url = fxBase['dom']['url']({
                         'type': '1.1',
-                        'window': top.window,
+                        'window': top,
                         'param': {
                             'data': {
                                 'frame': encodeURIComponent(encodeURIComponent(url))
                             }
                         }
                     });
-                    top.window.history.replaceState(null, null, url);
+                    top.history.replaceState(null, null, url);
                 }
+                // 疏理数据
+                if (data['extend']['total_page'] > 0 && data['data'].length == 0 && data['extend']['page'] != data['extend']['total_page']) {
+                    // 重载表格
+                    tray['table'].reload({
+                        'page': {
+                            'curr': data['extend']['total_page']
+                        }
+                    });
+                }
+                data['count'] = data['extend']['total_count'];
+                return data;
+            },
+            // 渲染完成
+            'done': function(data, curr, count) {
+                // 记录数据
+                fxView['deploy']['echo']['list'] = data;
+                // 绘制界面
+                $(window).trigger('resize');
                 // 初始化layui设定
                 fxApp['layui']['init']({ 'type': 'table' });
                 // 更新图片加载器
@@ -147,8 +157,8 @@ fxView['mould']['view']['list'] = function() {
             // 疏理模版
             if (isFunction(value2['templet']) || !isObject(value2['extend'])) return true;
             // 解析数据
-            value2['extend']['id'] = fxBase['base']['explode'](',', value2['extend']['id']);
-            value2['extend']['type'] = fxBase['base']['explode'](',', value2['extend']['type']);
+            value2['extend']['id'] = fxBase['text']['explode'](',', value2['extend']['id']);
+            value2['extend']['type'] = fxBase['text']['explode'](',', value2['extend']['type']);
             $.each(value2['extend']['type'], function(key3, value3) {
                 // 校验元素
                 if (!isFunction(fxView['material']['elem'][value3])) return true;
@@ -158,8 +168,9 @@ fxView['mould']['view']['list'] = function() {
                     'title': value2['title'],
                     'skin': dark['base']['skin']
                 }, value2['extend']);
+                tray['data']['mould'] = dark;
                 tray['data']['pack'] = value2;
-                tray['data']['id'] = !isNull(value2['extend']['id'][key3]) ? value2['extend']['id'][key3] : key + '-' + value2['field'] + '-' + key3;
+                tray['data']['id'] = !isBlank(value2['extend']['id'][key3]) ? value2['extend']['id'][key3] : key + '-' + value2['field'] + '-' + key3;
                 tray['data']['type'] = value3;
                 tray['list'][tray['data']['id']] = fxView['material']['elem'][value3]();
                 tray['list'][tray['data']['id']]['init'](tray['data']);
@@ -203,7 +214,7 @@ fxView['mould']['view']['list'] = function() {
     // 判断顶页面
     if (self != top) {
         // 替换标题
-        $(top.document).find('title').html(fxApp['view']['title'] + ' - ' + top.window.fxApp['env']['title']);
+        $(top.document).find('title').html(fxApp['view']['title'] + ' - ' + top.fxApp['env']['title']);
     }
     // 疏理数据
     fxApp['base'] = dark['data'](fxApp['base']);
@@ -262,15 +273,17 @@ fxView['mould']['view']['list'] = function() {
         });
         // 重载表格
         tray['table'].reload({
-            'where': {
+            'where': fxBase['text']['strSeparate']({
                 'base': {
                     'order': fxApp['base']['order']
                 },
                 'data': tray['data']
-            }
+            })
         });
         return false;
     });
+    // 监听触发事件
+    fxBase['dom']['trigger']();
     // 监听排序操作
     layui.table.on('sort(moire-table)', function(event) {
         // 初始化变量
@@ -300,8 +313,19 @@ fxView['mould']['view']['list'] = function() {
     // 监听开关操作
     layui.form.on('switch', function(event) {
         // 初始化变量
-        var data = {};
-        data[event['elem']['name']] = event['elem']['checked'] ? 1 : 0;
+        var echo = {
+            // 数据
+            'data': {}
+        };
+        echo['data'][dark['base']['model']['key']] = this.value;
+        // 疏理多级
+        echo['echo'] = event['elem']['checked'] ? 1 : 0;
+        $.each(fxBase['text']['explode']('-', event['elem']['name']).reverse(), function(key, value) {
+            var data = {};
+            data[value] = echo['echo'];
+            echo['echo'] = data;
+        });
+        echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         fxView['store']['deal']({
             'url': dark['base']['api']['edit'],
@@ -309,9 +333,7 @@ fxView['mould']['view']['list'] = function() {
                 'base': {
                     'strict': 0
                 },
-                'data': fxBase['param']['merge']({
-                    'id': this.value
-                }, data)
+                'data': echo['data']
             },
             'extend': {
                 'elem': event.othis
@@ -321,21 +343,20 @@ fxView['mould']['view']['list'] = function() {
     // 监听编辑操作
     layui.table.on('edit(moire-table)', function(event) {
         // 处理数据
-        var echo = {};
-        echo['data'] = {};
+        var echo = {
+            // 数据
+            'data': {}
+        };
         echo['data'][dark['base']['model']['key']] = event.data[dark['base']['model']['key']];
-        echo['data'][event.field] = event.value;
         echo['elem'] = $(event.tr).parents('.layui-table-view').find('.layui-table-header');
-        // echo['field'] = event.value;
-        // echo['data'][event.field] = event.value;
-        // $.each(fxBase['text']['explode']('.', event.field).reverse(), function(key, value) {
-        //     var cace = {};
-        //     cace[value] = field;
-        //     field = cace;
-        // });
-        // $.each(field, function(key, value) {
-        //     data[key] = value;
-        // });
+        // 疏理多级
+        echo['echo'] = event.value;
+        $.each(fxBase['text']['explode']('-', event.field).reverse(), function(key, value) {
+            var data = {};
+            data[value] = echo['echo'];
+            echo['echo'] = data;
+        });
+        echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         tray['echo'] = fxView['store']['deal']({
             'url': dark['base']['api']['edit'],
@@ -489,7 +510,7 @@ fxView['mould']['view']['list'] = function() {
                 }
                 break;
             case 'media_video':
-                //查看
+                // 查看
                 layer.open({
                     'type': 1,
                     'title': fxy_lang(['view', ' - ', fxyCore.data.site.title]),
@@ -572,16 +593,16 @@ fxView['mould']['view']['list'] = function() {
                                                     playPromise = this.play();
                                                     if (playPromise) {
                                                         playPromise.then(function() {
-                                                            //音频加载成功
+                                                            // 音频加载成功
                                                         }).catch(function(e) {
-                                                            //音频加载失败
+                                                            // 音频加载失败
                                                         });
                                                     }
                                                 } else {
                                                     this.pause();
                                                 }
                                             });
-                                            //注册拖拽事件
+                                            // 注册拖拽事件
                                             fxy_drag({
                                                 'elem': layero,
                                                 'wall': true
@@ -602,7 +623,7 @@ fxView['mould']['view']['list'] = function() {
                                                 'src': cace.url,
                                                 'title': event.data.extend.name
                                             });
-                                            //注册拖拽事件
+                                            // 注册拖拽事件
                                             fxy_drag({
                                                 'elem': layero,
                                                 'wall': true
@@ -618,7 +639,7 @@ fxView['mould']['view']['list'] = function() {
                                     }
                                     break;
                             }
-                            //界面弹出
+                            // 界面弹出
                             layer.open(cace.conf);
                         });
                     }
@@ -650,6 +671,72 @@ fxView['mould']['view']['list'] = function() {
                 };
                 fxView['mould']['tool'][event.event](tray['param']);
                 break;
+            case 'link':
+                // 链接
+
+                console.log(this);
+                console.log(event);
+                break;
+
+                // // 替换地址
+                // var url = fxBase['dom']['url']({
+                //     'type': '1.1',
+                //     'param': {
+                //         'base': {
+                //             'order': this.where.base.order,
+                //             'page': this.page.curr,
+                //             'limit': this.page.limit
+                //         },
+                //         'data': this.where.data
+                //     }
+                // });
+                // window.history.replaceState(null, null, url);
+                // // 判断顶页面
+                // if (self != top) {
+                //     url = fxBase['dom']['url']({
+                //         'type': '1.1',
+                //         'window': top,
+                //         'param': {
+                //             'data': {
+                //                 'frame': encodeURIComponent(encodeURIComponent(url))
+                //             }
+                //         }
+                //     });
+                //     top.history.replaceState(null, null, url);
+                // }
+
+
+                // var tray = {};
+                // tray['echo'] = '';
+                // // 疏理链接
+                // tray['link'] = fxBase['dom']['url']({
+                //     'type': '1.1',
+                //     'url': dark['option']['link'],
+                //     'param': dark['option']['param'](data[dark['field']])
+                // });
+                // // 疏理元素
+                // if (!isBlank(dark['shelf']['data'][data[dark['field']]])) {
+                //     tray['echo'] = $('<a></a>');
+                //     tray['echo'].attr({
+                //         'href': tray['link'],
+                //         'title': dark['title'],
+                //         'style': 'display: block;width: 100%;height: 100%'
+                //     });
+                //     tray['echo'].text(dark['shelf']['data'][data[dark['field']]]);
+                //     tray['echo'] = tray['echo'].prop('outerHTML');
+                // }
+
+
+                // tray['param'] = {
+                //     // 元素
+                //     'elem': event.event,
+                //     // 参数
+                //     'param': event.data,
+                //     // 副标题
+                //     'subtitle': event.event
+                // };
+                // fxView['mould']['tool']['window'](tray['param']);
+                // break;
         }
     });
 };

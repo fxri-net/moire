@@ -23,10 +23,22 @@ fxView['material']['elem']['text'] = function() {
         fxView['machine']['elem'](dark, arguments[0]);
         dark = fxBase['param']['merge'](dark, {
             // 数据
-            'data': ''
+            'data': '',
+            // 选项
+            'option': {
+                // 地址
+                'url': null,
+                // 文本
+                'text': '点击跳转',
+                // 样式
+                'style': 'display: block;width: 100%;height: 100%',
+                // 目标
+                'target': '_blank'
+            }
         }, dark);
         // 疏理数据
         dark['title'] = fxBase['base']['lang'](dark['title']);
+        dark['option']['text'] = fxBase['base']['lang'](dark['option']['text']);
     };
     // 部署
     echo['deploy'] = function() {
@@ -43,12 +55,43 @@ fxView['material']['elem']['text'] = function() {
         dark['elem'].text(dark['data']);
         // 疏理皮肤
         switch (dark['skin']) {
+            case 'table':
+                // 表格
+                dark['templet'] = function(data) {
+                    return !isBlank(data[dark['field']]) ? data[dark['field']] : '';
+                }
+                break;
             case 'table_link':
                 // 表格-链接
                 dark['templet'] = function(data) {
-                    return !isBlank(data[dark['field']]) ?
-                        '<a href="' + data[dark['field']] + '" title="' + dark['title'] + '" target="_blank">点击跳转</a>' :
-                        '';
+                    var tray = {};
+                    tray['echo'] = '';
+                    // 疏理链接
+                    if (!isBlank(dark['option']['url'])) {
+                        tray['href'] = 'fxy-href';
+                        tray['url'] = fxBase['dom']['url']({
+                            'type': '1.2',
+                            'url': dark['option']['url'],
+                            'param': dark['option']['param'](dark['field'], data)
+                        });
+                    } else {
+                        tray['href'] = 'href';
+                        tray['url'] = data[dark['field']];
+                    }
+                    // 疏理元素
+                    if (!isBlank(tray['url'])) {
+                        tray['attr'] = {
+                            'title': dark['title'],
+                            'style': dark['option']['style'],
+                            'target': dark['option']['target']
+                        };
+                        tray['attr'][tray['href']] = tray['url'];
+                        tray['echo'] = $('<a></a>');
+                        tray['echo'].attr(tray['attr']);
+                        tray['echo'].text(dark['option']['text']);
+                        tray['echo'] = tray['echo'].prop('outerHTML');
+                    }
+                    return tray['echo'];
                 }
                 break;
             case 'view':
@@ -64,6 +107,10 @@ fxView['material']['elem']['text'] = function() {
                     'class': 'moire-div'
                 });
                 break;
+        }
+        // 疏理视图
+        if (isFunction(dark['view'])) {
+            dark['view'](dark);
         }
     };
     // 输出

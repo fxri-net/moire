@@ -80,7 +80,8 @@ fxView['material']['elem']['file'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    var echo = [];
+                    var tray = {};
+                    tray['echo'] = '';
                     // 疏理数据
                     switch (dark['option']['type']) {
                         default:
@@ -89,12 +90,18 @@ fxView['material']['elem']['file'] = function() {
                             // 视频
                         case 'image':
                             // 图片
-                            echo = !isBlank(data[dark['field']]) ?
-                                '<img src="' + data[dark['field']] + '" title="' + dark['title'] + '" style="width: 100%;height: 100%">' :
-                                '';
+                            if (!isBlank(data[dark['field']])) {
+                                tray['echo'] = $('<img>');
+                                tray['echo'].attr({
+                                    'src': data[dark['field']],
+                                    'title': dark['title'],
+                                    'style': 'width: 100%;height: 100%'
+                                });
+                                tray['echo'] = tray['echo'].prop('outerHTML');
+                            }
                             break;
                     }
-                    return echo;
+                    return tray['echo'];
                 };
                 break;
             case 'view':
@@ -438,6 +445,10 @@ fxView['material']['elem']['file'] = function() {
                     $('div[moire-elem=elem]').trigger('resize');
                 });
                 break;
+        }
+        // 疏理视图
+        if (isFunction(dark['view'])) {
+            dark['view'](dark);
         }
     };
     // 输出

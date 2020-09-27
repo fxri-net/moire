@@ -56,9 +56,23 @@ fxView['material']['elem']['switch'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    return '<input type="checkbox" name="' + dark['field'] + '" value="' + data['id'] +
-                        '" lay-skin="switch" lay-text="' + dark['shelf']['data'] + '" lay-filter="' + dark['field'] + '" ' +
-                        (data[dark['field']] == 1 ? 'checked' : '') + '>';
+                    var tray = {};
+                    tray['echo'] = '';
+                    if (!isBlank(dark['shelf']['data'][data[dark['field']]])) {
+                        tray['echo'] = $('<input>');
+                        tray['echo'].attr({
+                            'type': 'checkbox',
+                            'name': dark['field'],
+                            'value': data[dark['mould']['base']['model']['key']],
+                            'lay-skin': 'switch',
+                            'lay-text': dark['shelf']['data'],
+                            'lay-filter': dark['field'],
+                            'checked': data[dark['field']] == 1 ? 'checked' : null
+                        });
+                        tray['echo'].text(dark['shelf']['data'][data[dark['field']]]);
+                        tray['echo'] = tray['echo'].prop('outerHTML');
+                    }
+                    return tray['echo'];
                 };
                 break;
             case 'view':
@@ -75,6 +89,10 @@ fxView['material']['elem']['switch'] = function() {
                     'lay-verify': dark['requireText']
                 });
                 break;
+        }
+        // 疏理视图
+        if (isFunction(dark['view'])) {
+            dark['view'](dark);
         }
     };
     // 输出

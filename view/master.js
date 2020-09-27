@@ -199,19 +199,33 @@ fxView['store']['purchase'] = function() {
             // 等级
             'level': 1,
             // 键钥
-            'key': 'id',
+            'key': null,
+            // 键钥-联结
+            'key_nexus': '-',
             // 键值
             'value': null,
-            // 联结
-            'nexus': ' - '
+            // 键值-联结
+            'value_nexus': ' - '
         }
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 疏理数据
+    if (isBlank(dark['extend']['key'])) {
+        dark['extend']['key'] = ['id'];
+    } else if (!isArray(dark['extend']['key']) && !isObject(dark['extend']['key'])) {
+        dark['extend']['key'] = fxBase['text']['explode'](',', dark['extend']['key']);
+    }
     if (isBlank(dark['extend']['value'])) {
         dark['extend']['value'] = ['id', 'name'];
+    } else if (!isArray(dark['extend']['value']) && !isObject(dark['extend']['value'])) {
+        dark['extend']['value'] = fxBase['text']['explode'](',', dark['extend']['value']);
     }
-    dark['echo'] = {};
+    dark['echo'] = {
+        // 键钥
+        'key': {},
+        // 键值
+        'value': {}
+    };
     fxView['store']['deal'](dark);
     // 成功回调
     function success(data) {
@@ -221,21 +235,28 @@ fxView['store']['purchase'] = function() {
                 data['data'] = [data['data']];
             }
             $.each(data['data'], function(key, value) {
-                dark['echo'][key] = {};
+                dark['echo']['value'][key] = {};
                 $.each(value, function(key2, value2) {
-                    dark['echo'][key][value2[dark['extend']['key']]] = [];
-                    $.each(dark['extend']['value'], function(key3, value3) {
-                        dark['echo'][key][value2[dark['extend']['key']]].push(value2[value3]);
+                    // 疏理键钥
+                    dark['echo']['key'] = [];
+                    $.each(dark['extend']['key'], function(key3, value3) {
+                        dark['echo']['key'].push(!isUndefined(value2[value3]) ? value2[value3] : value3);
                     });
-                    dark['echo'][key][value2[dark['extend']['key']]] =
-                        fxBase['text']['implode'](dark['extend']['nexus'], dark['echo'][key][value2[dark['extend']['key']]]);
+                    dark['echo']['key'] = fxBase['text']['implode'](dark['extend']['key_nexus'], dark['echo']['key']);
+                    // 疏理键值
+                    dark['echo']['value'][key][dark['echo']['key']] = [];
+                    $.each(dark['extend']['value'], function(key3, value3) {
+                        dark['echo']['value'][key][dark['echo']['key']].push(!isUndefined(value2[value3]) ? value2[value3] : value3);
+                    });
+                    dark['echo']['value'][key][dark['echo']['key']] =
+                        fxBase['text']['implode'](dark['extend']['value_nexus'], dark['echo']['value'][key][dark['echo']['key']]);
                 });
             });
         }
     }
     // 失败回调
     function error(data) {}
-    return dark['echo'];
+    return dark['echo']['value'];
 };
 
 /**
@@ -259,6 +280,10 @@ fxView['store']['supply'] = function() {
                 // 主键
                 'key': 'id'
             },
+            // 接口
+            'api': {},
+            // 页面
+            'page': {},
             // 参数
             'param': null
         }
@@ -345,15 +370,24 @@ fxView['machine']['elem'] = function() {
         'title': '',
         // 必填
         'require': 0,
+        // 选项
+        'option': {},
         // 货架
         'shelf': {},
         // 皮肤
-        'skin': null
+        'skin': null,
+        // 视图
+        'view': null
     }, arguments[1]);
     dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
     dark['requireText'] = dark['require'] == 1 ? 'required' : null;
     return dark;
 };
+
+/**
+ * 云纹加工-路径
+ */
+fxApp['env']['factory'] = fxApp['env']['script'] + '/view/';
 
 /**
  * 云纹加工-加载器
@@ -368,14 +402,18 @@ fxView['machine']['loader'] = function() {
             // 车间
             'workshop': null,
             // 装配
-            'assembly': null
+            'assembly': null,
+            // 门面
+            'facade': 'facade.js',
+            // 版本
+            'version': fxApp['env']['version'],
         },
         // 回调
         null,
         // 路径
-        fxApp['env']['script']
+        fxApp['env']['factory']
     ];
-    dark = fxBase['param']['merge'](1, dark, arguments);
+    dark = fxBase['param']['merge'](dark, arguments);
     // 疏理数据
     dark['plugin'] = dark[0];
     dark['module'] = dark[1];
@@ -388,15 +426,21 @@ fxView['machine']['loader'] = function() {
     }
     // 加载插件
     $.each(dark['plugin'], function(key, value) {
+        // 检查装配
         if (isFunction(fxView[dark['module']['workshop']][dark['module']['assembly']][value])) return true;
-        dark['model'] = fxBase['text']['implode']('/', [dark['module']['workshop'], dark['module']['assembly'], value]);
-        document.write('<script type="text/javascript" src="' +
-            dark['path'] + '/view/' + dark['model'] + '/facade.js?version=' + fxApp['env']['version'] + '"></script>');
+        // 疏理模块
+        dark['model'] = fxBase['text']['implode']('/', [dark['module']['workshop'], dark['module']['assembly'], value, dark['module']['facade']]);
+        // 疏理版本
+        if (!isBlank(dark['module']['version'])) {
+            dark['model'] = fxBase['text']['implode']('?', [dark['model'], 'version=' + dark['module']['version']]);
+        }
+        // 加载模块
+        document.write('<script type="text/javascript" src="' + dark['path'] + dark['model'] + '"></script>');
     });
     // 执行回调
-    $(document).ready(function() {
-        if (isFunction(dark['callback'])) {
+    if (isFunction(dark['callback'])) {
+        $(document).ready(function() {
             dark['callback']();
-        }
-    });
+        });
+    }
 };

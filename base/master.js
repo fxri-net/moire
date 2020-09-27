@@ -109,11 +109,14 @@ fxBase['base'] = {
             // 类型
             'type': null,
             // 单元
-            'cell': null
+            'cell': null,
+            // 参数
+            'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         dark['type'] = !isNull(dark['type']) ? 'moire-type,' + dark['type'] : null;
         dark['cell'] = !isNull(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
+        if (isArray(dark['param'])) dark['param'].unshift({});
         return fxBase['dom']['mould'](dark);
     },
 
@@ -124,13 +127,14 @@ fxBase['base'] = {
         // 初始化变量
         var dark = {};
         dark = {
-            // 类型
-            'type': null,
             // 单元
-            'cell': null
+            'cell': null,
+            // 参数
+            'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         dark['cell'] = !isNull(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
+        if (isArray(dark['param'])) dark['param'].unshift({});
         return fxBase['dom']['template'](dark);
     },
 
@@ -251,12 +255,7 @@ fxBase['base'] = {
                 } else if (isObject(data)) {
                     data = Object.values(data);
                 } else if (isString(data)) {
-                    var echo = {};
-                    $.each(fxBase['text']['explode']('&', data), function(key, value) {
-                        value = fxBase['text']['explode']('=', value);
-                        echo[value[0]] = value[1];
-                    });
-                    data = echo;
+                    data = fxBase['text']['strDecode'](data);
                 } else if (!isArray(data)) {
                     data = !isNull(data) ? [data] : [];
                 }
@@ -387,19 +386,31 @@ fxBase['dom'] = {
             'type': null,
             // 单元
             'cell': null,
-            // 单元名称
-            'cellName': null
+            // 标题
+            'title': null,
+            // 参数
+            'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         if (isNull(dark['elem'])) {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
+        // 疏理数据
+        if (isBlank(dark['type'])) {
+            dark['type'] = [];
+        } else if (!isArray(dark['type']) && !isObject(dark['type'])) {
+            dark['type'] = fxBase['text']['explode'](',', dark['type']);
+        }
+        if (isBlank(dark['title'])) {
+            dark['title'] = [];
+        } else if (!isArray(dark['title']) && !isObject(dark['title'])) {
+            dark['title'] = fxBase['text']['explode'](',', dark['title']);
+        }
         // 疏理元素
         dark['pack'] = $('<div></div>');
         dark['elem'] = $('<div></div>').append($(dark['elem']).html());
         // 疏理类型
-        dark['type'] = fxBase['text']['explode'](',', dark['type']);
         $(dark['type']).each(function(key, value) {
             if (key === 0 || value === '') return true;
             if (value != '*') {
@@ -422,17 +433,18 @@ fxBase['dom'] = {
                 }
                 // 疏理单元列表
                 dark['pack'].find(value).each(function(key2, value2) {
-                    dark['elem'].append($(value2).prop('outerHTML'));
+                    dark['elem'].append($(value2).attr(dark['param'][key]).prop('outerHTML'));
                 });
             });
-            // 疏理单元名称
-            dark['cellName'] = !isNull(dark['cellName']) ? fxBase['text']['explode'](',', dark['cellName']) : [];
+            // 疏理参数
+            dark['param'][key] = isObject(dark['param'][key]) ? dark['param'][key] : {};
+            // 疏理标题
             dark['elem'].children().each(function(key, value) {
-                // 疏理单元名称
-                if (isNull(dark['cellName'][key]) || dark['cellName'][key] == '') {
-                    dark['cellName'][key] = $(value).html();
+                // 疏理标题
+                if (isNull(dark['title'][key]) || dark['title'][key] == '') {
+                    dark['title'][key] = $(value).html();
                 }
-                $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['cellName'][key])));
+                $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['title'][key])));
             });
         } else {
             dark['elem'].html(dark['pack'].children());
@@ -454,19 +466,31 @@ fxBase['dom'] = {
             'type': null,
             // 单元
             'cell': null,
-            // 单元名称
-            'cellName': null
+            // 标题
+            'title': null,
+            // 参数
+            'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
         if (isNull(dark['elem'])) {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
+        // 疏理数据
+        if (isBlank(dark['type'])) {
+            dark['type'] = [];
+        } else if (!isArray(dark['type']) && !isObject(dark['type'])) {
+            dark['type'] = fxBase['text']['explode'](',', dark['type']);
+        }
+        if (isBlank(dark['title'])) {
+            dark['title'] = [];
+        } else if (!isArray(dark['title']) && !isObject(dark['title'])) {
+            dark['title'] = fxBase['text']['explode'](',', dark['title']);
+        }
         // 疏理元素
         dark['pack'] = $('<div></div>');
         dark['elem'] = dark['stock'][dark['elem']];
         // 疏理类型
-        dark['type'] = fxBase['text']['explode'](',', dark['type']);
         $(dark['type']).each(function(key, value) {
             if (value != '*') {
                 value = dark['elem'][value];
@@ -486,19 +510,20 @@ fxBase['dom'] = {
                 } else {
                     value = '[' + dark['cell'][0] + ']';
                 }
+                // 疏理参数
+                dark['param'][key] = isObject(dark['param'][key]) ? dark['param'][key] : {};
                 // 疏理单元列表
                 dark['pack'].find(value).each(function(key2, value2) {
-                    dark['elem'].append($(value2).prop('outerHTML'));
+                    dark['elem'].append($(value2).attr(dark['param'][key]).prop('outerHTML'));
                 });
             });
-            // 疏理单元名称
-            dark['cellName'] = !isNull(dark['cellName']) ? fxBase['text']['explode'](',', dark['cellName']) : [];
+            // 疏理标题
             dark['elem'].children().each(function(key, value) {
-                // 疏理单元名称
-                if (isNull(dark['cellName'][key]) || dark['cellName'][key] == '') {
-                    dark['cellName'][key] = $(value).html();
+                // 疏理标题
+                if (isNull(dark['title'][key]) || dark['title'][key] == '') {
+                    dark['title'][key] = $(value).html();
                 }
-                $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['cellName'][key])));
+                $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['title'][key])));
             });
         } else {
             dark['elem'].html(dark['pack'].children());
@@ -515,7 +540,7 @@ fxBase['dom'] = {
             // 类型
             'type': null,
             // 窗口
-            'window': !isBlank(arguments[0].window) ? arguments[0].window : window,
+            'window': window,
             // 地址
             'url': null,
             // 名称
@@ -523,58 +548,39 @@ fxBase['dom'] = {
             // 参数
             'param': {}
         };
-        // 设置窗口
-        delete arguments[0]['window'];
         dark = fxBase['param']['merge'](dark, arguments[0]);
         switch (dark['type']) {
             case '1.1':
-                // 链接组装
-                // 设置地址
+                // 组装地址
+                dark['param'] = fxBase['param']['merge'](fxBase['dom']['url']({
+                    'type': '2.1',
+                    'window': dark['window']
+                }), dark['param']);
+            case '1.2':
+                // 组装地址
+                // 解析地址
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.pathname;
-                var param = fxBase['param']['merge'](fxBase['dom']['url']({
-                        'type': '2.1',
-                        'window': dark['window']
-                    }), dark['param']),
-                    search = '';
-                $.each(param, function(key, value) {
-                    if (isObject(value)) {
-                        value = JSON.stringify(value);
-                    }
-                    if (search == '') {
-                        search += '?' + key + '=' + value;
-                    } else {
-                        search += '&' + key + '=' + value;
-                    }
-                });
-                return dark['url'] + search;
+                dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
+                // 疏理数据
+                dark['url'] = [dark['url'][0]];
+                dark['param'] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), dark['param']);
+                dark['param'] = fxBase['text']['strEncode'](dark['param']);
+                // 拼接地址
+                if (!isBlank(dark['param'])) {
+                    dark['url'].push(dark['param']);
+                }
+                return fxBase['text']['implode']('?', dark['url']);
             case '2.1':
-                // 参数获取
-                // 设置地址
+                // 获取参数
+                // 解析地址
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.href;
-                // 取得Get参数
-                var query = fxBase['text']['explode']('?', dark['url']);
-                var param = {};
-                if (query.length > 1) {
-                    var buffer = fxBase['text']['explode']('&', query[1]);
-                    for (var i = 0; i < buffer.length; i++) {
-                        // 分离Key与Value
-                        var cache = fxBase['text']['explode']('=', buffer[i]);
-                        try {
-                            cache[0] = decodeURI(cache[0]);
-                        } catch (e) {}
-                        try {
-                            cache[1] = !isNull(cache[1]) ? decodeURI(cache[1]) : cache[1];
-                            if (isJson(cache[1])) {
-                                cache[1] = JSON.parse(cache[1]);
-                            }
-                        } catch (e) {}
-                        param[cache[0]] = cache[1];
-                    }
-                }
+                dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
+                // 解析数据
+                dark['param'] = fxBase['text']['strDecode'](dark['url'][1]);
                 if (!isNull(dark['name'])) {
-                    return param[dark['name']];
+                    return dark['param'][dark['name']];
                 }
-                return param;
+                return dark['param'];
         }
     },
 
@@ -719,10 +725,12 @@ fxBase['dom'] = {
      */
     'trigger': function() {
         // 初始化变量
-        $('a[fxy-href]').on('click', function() {
+        function trigger() {
             // 替换地址
-            top.location.replace($(this).attr('fxy-href'));
-        });
+            window.location.replace($(this).attr('fxy-href'));
+        }
+        $(document).off('click', trigger);
+        $(document).on('click', 'a[fxy-href]', trigger);
     },
 
     /**
@@ -1157,6 +1165,7 @@ fxBase['text'] = {
     'replace': function(find, replace, string) {
         // 初始化变量
         var find = new RegExp(find, 'g');
+        string += '';
         return string.replace(find, replace);
     },
 
@@ -1165,9 +1174,22 @@ fxBase['text'] = {
      */
     'explode': function() {
         // 初始化变量
-        var separator = !isNull(arguments[0]) ? arguments[0] : null,
-            data = !isNull(arguments[1]) ? arguments[1] : null,
-            type = !isNull(arguments[2]) ? arguments[2] : null;
+        var dark = [
+            // 表达式
+            null,
+            // 数据
+            null,
+            // 疏理
+            null,
+            // 类型
+            null
+        ];
+        dark = fxBase['param']['merge'](dark, arguments);
+        // 疏理数据
+        separator = dark[0];
+        data = dark[1];
+        howmany = isNumeric(dark[2]) ? dark[2] : null;
+        type = isString(dark[2]) ? dark[2] : dark[3];
         // 疏理类型
         switch (type) {
             case 'regular':
@@ -1176,8 +1198,18 @@ fxBase['text'] = {
                 break;
         }
         // 处理数据
-        if (isString(data)) {
+        if (isString(data) || isNumeric(data)) {
+            data += '';
             data = data.split(separator);
+            if (!isNull(howmany) && howmany == 0) {
+                data = [fxBase['text']['implode'](separator, data)];
+            } else if (!isNull(howmany) && howmany >= 0 && data.length > howmany) {
+                data.unshift(fxBase['text']['implode'](separator, data.slice(howmany - 1)));
+                data = data.slice(0, howmany);
+                data.push(data.shift());
+            } else if (!isNull(howmany) && howmany < 0) {
+                data = data.slice(0, howmany);
+            }
         } else if (isNull(data)) {
             data = [''];
         } else if (!isArray(data) && !isObject(data)) {
@@ -1229,6 +1261,90 @@ fxBase['text'] = {
                 break;
         }
         return string;
+    },
+
+    /**
+     * 查询字符串-分离
+     */
+    'strSeparate': function() {
+        // 初始化变量
+        var array = !isNull(arguments[0]) ? arguments[0] : {},
+            echo = {};
+        // 合并数组
+        function merge(data) {
+            var tray = [];
+            if (!isArray(data) && !isObject(data)) {
+                return '=' + data;
+            }
+            $.each(data, function(key, value) {
+                value = merge(value);
+                if (isArray(value)) {
+                    $.each(value, function(key2, value2) {
+                        tray.push('[' + key + ']' + value2);
+                    });
+                } else {
+                    tray.push('[' + key + ']' + value);
+                }
+            });
+            return tray;
+        }
+        // 解析数据
+        $.each(array, function(key, value) {
+            // 解析数据
+            value = merge(value);
+            if (!isArray(value)) {
+                value = [value];
+            }
+            // 疏理数据
+            $.each(value, function(key2, value2) {
+                value2 = fxBase['text']['explode']('=', key + value2, 2);
+                echo[value2[0]] = value2[1];
+            });
+        });
+        return echo;
+    },
+
+    /**
+     * 查询字符串-编码
+     */
+    'strEncode': function() {
+        // 初始化变量
+        var array = !isNull(arguments[0]) ? arguments[0] : {},
+            echo = [];
+        // 解析数据
+        $.each(fxBase['text']['strSeparate'](array), function(key, value) {
+            // 疏理数据
+            echo.push(key + '=' + value);
+        });
+        echo = fxBase['text']['implode']('&', echo);
+        return echo;
+    },
+
+    /**
+     * 查询字符串-解码
+     */
+    'strDecode': function() {
+        // 初始化变量
+        var string = !isNull(arguments[0]) ? arguments[0] : null,
+            echo = {};
+        // 解析数据
+        $.each(fxBase['text']['explode']('&', string), function(key, value) {
+            // 解析数据
+            value = fxBase['text']['explode']('=', value, 2);
+            if (isBlank(value[0]) && isNull(value[1])) return true;
+            // 疏理数据
+            value[1] = value[1];
+            value[1] = !isNull(value[1]) ? decodeURI(value[1]) : value[1];
+            // 解析键钥
+            $.each(fxBase['text']['explode']('[', fxBase['text']['replace'](']', '', value[0])).reverse(), function(key2, value2) {
+                var data = {};
+                data[value2] = value[1];
+                value[1] = data;
+            });
+            // 合并数据
+            echo = fxBase['param']['merge'](echo, value[1]);
+        });
+        return echo;
     }
 };
 
@@ -1451,8 +1567,6 @@ fxApp['console'] = {
         var dark = {
             // 环境
             'env': {
-                // IE版本
-                'ie': fxBase['client']['ieVersion'](),
                 // 标题
                 'title': $('title').html()
             }
@@ -1509,3 +1623,8 @@ fxApp['console'] = {
         }, 60 * 60 * 1000);
     }
 };
+
+/**
+ * 记录IE版本
+ */
+fxApp['env']['ie'] = fxBase['client']['ieVersion']();

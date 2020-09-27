@@ -1,4 +1,12 @@
-
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
 
 /**
  * 云纹模具-视图-视图
@@ -41,13 +49,17 @@ fxView['mould']['view']['view'] = function() {
         },
         // 工具栏
         'toolbar': {
-            1: fxBase['base']['template']({ 'elem': 'tool', 'type': 'view-edit', 'cell': 'close' }).html()
+            1: fxBase['base']['template']({
+                'elem': 'tool',
+                'type': 'view-edit',
+                'cell': 'close'
+            }).html()
         }
     }, tray['view']);
     // 判断顶页面
     if (tray['view']['window']['title'] && self != top) {
         // 替换标题
-        $(top.document).find('title').html(fxApp['view']['title'] + ' - ' + top.window.fxApp['env']['title']);
+        $(top.document).find('title').html(fxApp['view']['title'] + ' - ' + top.fxApp['env']['title']);
     }
     // 检查配置
     if (!isFunction(tray['view']['data'])) {
@@ -91,8 +103,8 @@ fxView['mould']['view']['view'] = function() {
     tray['echo']['data']['_worldline'] = fxBase['text']['mtime']();
     $.each(tray['view']['data'](tray['echo']['data']), function(key, value) {
         // 解析数据
-        value['id'] = fxBase['base']['explode'](',', value['id']);
-        value['type'] = fxBase['base']['explode'](',', value['type']);
+        value['id'] = fxBase['text']['explode'](',', value['id']);
+        value['type'] = fxBase['text']['explode'](',', value['type']);
         $.each(value['type'], function(key2, value2) {
             // 校验元素
             if (!isFunction(fxView['material']['elem'][value2])) return true;
@@ -101,8 +113,9 @@ fxView['mould']['view']['view'] = function() {
                 'field': key,
                 'skin': dark['base']['skin']
             }, value);
+            tray['data']['mould'] = dark;
             tray['data']['pack'] = tray['elem'].find('.moire-tbody');
-            tray['data']['id'] = !isNull(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
+            tray['data']['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
             tray['data']['type'] = value2;
             tray['list'][tray['data']['id']] = fxView['material']['elem'][value2]();
             tray['list'][tray['data']['id']]['init'](tray['data']);

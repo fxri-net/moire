@@ -1,3 +1,13 @@
+// +----------------------------------------------------------------------
+// | Name 云纹框架
+// +----------------------------------------------------------------------
+// | Author 唐启云 <tqy@fxri.net>
+// +----------------------------------------------------------------------
+// | Copyright Copyright © 2017-2099 方弦研究所. All rights reserved.
+// +----------------------------------------------------------------------
+// | Link https://www.fxri.net
+// +----------------------------------------------------------------------
+
 /**
  * 云纹模具-视图-搜索
  */
@@ -12,7 +22,11 @@ fxView['mould']['view']['search'] = function() {
         // 数据
         'data': null,
         // 工具栏
-        'toolbar': fxBase['base']['template']({ 'elem': 'tool', 'type': 'view-search', 'cell': 'submit,reset,clear' }).html()
+        'toolbar': fxBase['base']['template']({
+            'elem': 'tool',
+            'type': 'view-search',
+            'cell': 'submit,reset,clear'
+        }).html()
     };
     var tray = {};
     dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -26,8 +40,8 @@ fxView['mould']['view']['search'] = function() {
     tray['list'] = fxView['deploy']['cache']['search'] = {};
     $.each(dark['data'](dark['base']['param']), function(key, value) {
         // 解析数据
-        value['id'] = fxBase['base']['explode'](',', value['id']);
-        value['type'] = fxBase['base']['explode'](',', value['type']);
+        value['id'] = fxBase['text']['explode'](',', value['id']);
+        value['type'] = fxBase['text']['explode'](',', value['type']);
         $.each(value['type'], function(key2, value2) {
             // 校验元素
             if (!isFunction(fxView['material']['elem'][value2])) return true;
@@ -36,8 +50,9 @@ fxView['mould']['view']['search'] = function() {
                 'field': key,
                 'skin': dark['base']['skin']
             }, value);
+            tray['data']['mould'] = dark;
             tray['data']['pack'] = tray['elem'];
-            tray['data']['id'] = !isNull(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
+            tray['data']['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
             tray['data']['type'] = value2;
             tray['list'][tray['data']['id']] = fxView['material']['elem'][value2]();
             tray['list'][tray['data']['id']]['init'](tray['data']);

@@ -33,7 +33,9 @@ fxView['material']['elem']['mapping'] = function() {
                     'name': dark['id']
                 },
                 // 动画时间
-                'animation': 150
+                'animation': 150,
+                // 过滤元素
+                'filter': '.moire-delete'
             },
             // 添加
             'add': {
@@ -88,7 +90,8 @@ fxView['material']['elem']['mapping'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    var echo = [];
+                    var tray = {};
+                    tray['echo'] = [];
                     // 疏理数据
                     if (isBlank(data[dark['field']])) {
                         data[dark['field']] = [];
@@ -100,14 +103,14 @@ fxView['material']['elem']['mapping'] = function() {
                     // 疏理输出
                     $.each(data[dark['field']], function(key, value) {
                         // 初始化变量
-                        echo[key] = [];
+                        tray['echo'][key] = [];
                         $.each(dark['shelf']['data'], function(key2, value2) {
-                            echo[key].push(value[key2]);
+                            tray['echo'][key].push(value[key2]);
                         });
-                        echo[key] = fxBase['text']['implode'](fxBase['base']['lang'](':'), echo[key]);
+                        tray['echo'][key] = fxBase['text']['implode'](fxBase['base']['lang'](':'), tray['echo'][key]);
                     });
-                    echo = fxBase['text']['implode'](fxBase['base']['lang']('|'), echo);
-                    return echo;
+                    tray['echo'] = fxBase['text']['implode'](fxBase['base']['lang']('|'), tray['echo']);
+                    return tray['echo'];
                 };
                 break;
             case 'view':
@@ -192,6 +195,10 @@ fxView['material']['elem']['mapping'] = function() {
                     dark['plugin']['echo'] = new Sortable(dark['elem'].find('.moire-elem-inline')[0], dark['plugin']);
                 }
                 break;
+        }
+        // 疏理视图
+        if (isFunction(dark['view'])) {
+            dark['view'](dark);
         }
     };
     // 输出

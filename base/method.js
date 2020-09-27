@@ -61,6 +61,14 @@ function isEmpty(data) {
 }
 
 /**
+ * 校验UNDEFINED
+ */
+function isUndefined(data) {
+    // 初始化变量
+    return data === undefined ? true : false;
+}
+
+/**
  * 校验NULL
  */
 function isNull(data) {
@@ -161,4 +169,11 @@ function inArray() {
         }
     }
     return false;
+}
+
+/**
+ * 初始化未知方法
+ */
+if (!isFunction(history.replaceState)) {
+    history.replaceState = function() {}
 }
