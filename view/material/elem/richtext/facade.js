@@ -62,14 +62,14 @@ fxView['material']['elem']['richtext'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title'] + dark['requireMark']);
+                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'class': 'layui-textarea',
                     'lay-verify': dark['requireText']
                 });
                 // 识别IE浏览器兼容插件
-                if (inArray(fxApp['env']['ie'], [-1, 11])) {
+                if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
                     // 设置语言
                     var echo = {};
                     switch (dark['plugin']['lang']) {
@@ -163,7 +163,7 @@ fxView['material']['elem']['richtext'] = function() {
     echo['echo'] = function() {
         // 疏理数据
         // 识别IE浏览器兼容插件
-        if (inArray(fxApp['env']['ie'], [-1, 11])) {
+        if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             dark['echo'] = tinymce.get(dark['id']).getContent();
         } else {
             dark['echo'] = dark['elem'].val();
@@ -173,7 +173,7 @@ fxView['material']['elem']['richtext'] = function() {
     echo['reset'] = function() {
         // 疏理数据
         // 识别IE浏览器兼容插件
-        if (inArray(fxApp['env']['ie'], [-1, 11])) {
+        if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             tinymce.get(dark['id']).setContent(dark['data']);
         } else {
             dark['elem'].val(dark['data']);
@@ -183,7 +183,7 @@ fxView['material']['elem']['richtext'] = function() {
     echo['clean'] = function() {
         // 疏理数据
         // 识别IE浏览器兼容插件
-        if (inArray(fxApp['env']['ie'], [-1, 11])) {
+        if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             tinymce.get(dark['id']).setContent('');
         } else {
             dark['elem'].val(dark['data']);

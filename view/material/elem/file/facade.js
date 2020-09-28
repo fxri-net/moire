@@ -111,7 +111,7 @@ fxView['material']['elem']['file'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title'] + dark['requireMark']);
+                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'class': 'moire-div'
@@ -181,6 +181,8 @@ fxView['material']['elem']['file'] = function() {
                                 'format': 'json'
                             })
                         },
+                        // 选择回调
+                        'choose': choose,
                         // 上传进度
                         'before': before,
                         // 成功回调
@@ -188,6 +190,10 @@ fxView['material']['elem']['file'] = function() {
                         // 异常回调
                         'error': error
                     }, dark['upload']);
+                    // 选择回调
+                    function choose(data) {
+                        // console.log(data);
+                    }
                     // 上传进度
                     function before(data) {
                         // 弹出进度
@@ -270,7 +276,7 @@ fxView['material']['elem']['file'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title'] + dark['requireMark']);
+                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'class': 'moire-div'

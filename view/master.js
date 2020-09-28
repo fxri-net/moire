@@ -379,6 +379,12 @@ fxView['machine']['elem'] = function() {
         // 视图
         'view': null
     }, arguments[1]);
+    dark = fxBase['param']['merge'](dark, {
+        // 标签
+        'label': [dark['title']]
+    }, dark);
+    // 疏理数据
+    dark['label'] = fxBase['base']['lang'](dark['label']);
     dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
     dark['requireText'] = dark['require'] == 1 ? 'required' : null;
     return dark;

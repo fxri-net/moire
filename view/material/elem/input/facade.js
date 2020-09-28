@@ -69,7 +69,7 @@ fxView['material']['elem']['input'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title'] + dark['requireMark']);
+                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'class': 'layui-input',

@@ -158,18 +158,6 @@ function isMoney(data) {
     return reg.test(data);
 }
 
-/**
- * 搜索数组
- */
-function inArray() {
-    // 初始化变量
-    for (var i in arguments[1]) {
-        if (arguments[1][i] == arguments[0]) {
-            return true;
-        }
-    }
-    return false;
-}
 
 /**
  * 初始化未知方法

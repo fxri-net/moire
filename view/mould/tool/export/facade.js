@@ -39,14 +39,14 @@ fxView['mould']['tool']['export'] = function() {
     // 成功回调
     function success() {
         // 获取参数
-        tray['param'] = fxBase['dom']['url']({
+        tray['param'] = fxBase['param']['url']({
             'type': '2.1'
         });
         tray['param']['base']['token'] = fxApp['user']['base']['token'];
         tray['param']['base']['page'] = 1;
         tray['param']['base']['limit'] = -1;
         // 配置地址
-        tray['url'] = fxBase['dom']['url']({
+        tray['url'] = fxBase['param']['url']({
             'type': '1.1',
             'url': dark['api']['export'],
             'param': tray['param']

@@ -54,12 +54,12 @@ fxView['mould']['view']['list'] = function() {
             // 头部工具栏右侧
             'defaultToolbar': ['filter'],
             // 请求条件
-            'where': fxBase['text']['strSeparate']({
+            'where': {
                 'base': {
                     'token': fxApp['user']['base']['token']
                 },
                 'data': fxApp['data']
-            }),
+            },
             // 响应分页
             'page': {
                 'limits': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -80,7 +80,7 @@ fxView['mould']['view']['list'] = function() {
                 // 疏理数据
                 fxApp = fxBase['param']['merge'](fxApp, this.where);
                 // 替换地址
-                var url = fxBase['dom']['url']({
+                var url = fxBase['param']['url']({
                     'type': '1.1',
                     'param': {
                         'base': {
@@ -94,7 +94,7 @@ fxView['mould']['view']['list'] = function() {
                 window.history.replaceState(null, null, url);
                 // 判断顶页面
                 if (self != top) {
-                    url = fxBase['dom']['url']({
+                    url = fxBase['param']['url']({
                         'type': '1.1',
                         'window': top,
                         'param': {
@@ -124,7 +124,7 @@ fxView['mould']['view']['list'] = function() {
                 // 绘制界面
                 $(window).trigger('resize');
                 // 初始化layui设定
-                fxApp['layui']['init']({ 'type': 'table' });
+                fxView['layui']['init']({ 'type': 'table' });
                 // 更新图片加载器
                 $('[lay-id=moire-table] img').viewer('update');
             }
@@ -273,12 +273,12 @@ fxView['mould']['view']['list'] = function() {
         });
         // 重载表格
         tray['table'].reload({
-            'where': fxBase['text']['strSeparate']({
+            'where': {
                 'base': {
                     'order': fxApp['base']['order']
                 },
                 'data': tray['data']
-            })
+            }
         });
         return false;
     });
@@ -679,7 +679,7 @@ fxView['mould']['view']['list'] = function() {
                 break;
 
                 // // 替换地址
-                // var url = fxBase['dom']['url']({
+                // var url = fxBase['param']['url']({
                 //     'type': '1.1',
                 //     'param': {
                 //         'base': {
@@ -693,7 +693,7 @@ fxView['mould']['view']['list'] = function() {
                 // window.history.replaceState(null, null, url);
                 // // 判断顶页面
                 // if (self != top) {
-                //     url = fxBase['dom']['url']({
+                //     url = fxBase['param']['url']({
                 //         'type': '1.1',
                 //         'window': top,
                 //         'param': {
@@ -709,7 +709,7 @@ fxView['mould']['view']['list'] = function() {
                 // var tray = {};
                 // tray['echo'] = '';
                 // // 疏理链接
-                // tray['link'] = fxBase['dom']['url']({
+                // tray['link'] = fxBase['param']['url']({
                 //     'type': '1.1',
                 //     'url': dark['option']['link'],
                 //     'param': dark['option']['param'](data[dark['field']])

@@ -32,3 +32,4 @@ fxApp['env']['script'] = fxApp['env']['script'].replace(/\/[^\/]*$/, '');
 document.write('<script type="text/javascript" src="' + fxApp['env']['script'] + '/base/method.js?version=' + fxApp['env']['version'] + '"></script>');
 document.write('<script type="text/javascript" src="' + fxApp['env']['script'] + '/base/master.js?version=' + fxApp['env']['version'] + '"></script>');
 document.write('<script type="text/javascript" src="' + fxApp['env']['script'] + '/view/master.js?version=' + fxApp['env']['version'] + '"></script>');
+document.write('<script type="text/javascript" src="' + fxApp['env']['script'] + '/view/facade.js?version=' + fxApp['env']['version'] + '"></script>');

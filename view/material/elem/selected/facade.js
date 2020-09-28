@@ -73,7 +73,7 @@ fxView['material']['elem']['selected'] = function() {
                     var tray = {};
                     tray['echo'] = '';
                     // 疏理链接
-                    tray['url'] = fxBase['dom']['url']({
+                    tray['url'] = fxBase['param']['url']({
                         'type': '1.1',
                         'url': dark['option']['url'],
                         'param': dark['option']['param'](dark['field'], data)
@@ -99,7 +99,7 @@ fxView['material']['elem']['selected'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title']);
+                dark['wrap'].children('[moire-key]').html(dark['label']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'class': 'moire-div'

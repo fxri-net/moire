@@ -63,7 +63,7 @@ fxView['material']['elem']['selects'] = function() {
         });
         dark['elem'].append('<option value="">' + dark['default'] + '</option>');
         $.each(dark['shelf']['data'], function(key, value) {
-            dark['elem'].append('<option value="' + key + '"' + (inArray(key, dark['data']) ? ' selected' : '') + '>' + value + '</option>');
+            dark['elem'].append('<option value="' + key + '"' + (fxBase['param']['inArray'](key, dark['data']) ? ' selected' : '') + '>' + value + '</option>');
         });
         // 疏理皮肤
         switch (dark['skin']) {
@@ -83,7 +83,7 @@ fxView['material']['elem']['selects'] = function() {
                 });
                 // 初始化layui设定
                 layui.use(['formSelects'], function() {
-                    fxApp['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
+                    fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
                     layui.formSelects.value(dark['field'], dark['data']);
                 });
                 break;
@@ -94,7 +94,7 @@ fxView['material']['elem']['selects'] = function() {
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
                 dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['title'] + dark['requireMark']);
+                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
                     'xm-select': dark['field'],
@@ -105,7 +105,7 @@ fxView['material']['elem']['selects'] = function() {
                 });
                 // 初始化layui设定
                 layui.use(['formSelects'], function() {
-                    fxApp['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
+                    fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
                     layui.formSelects.value(dark['field'], dark['data']);
                 });
                 break;
