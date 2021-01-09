@@ -18,9 +18,7 @@ fxView['material']['template']['view'] = {
         '<div id="moire-table" class="moire-table" lay-filter="moire-table"></div>',
     'view': '' +
         '<form class="layui-form moire-view view">' +
-        '<div class="layui-table moire-table">' +
-        '<div class="moire-tbody"></div>' +
-        '<div class="moire-tfoot"></div>' +
+        '<div class="layui-table moire-clear moire-table">' +
         '</div>' +
         '<div class="moire-buttons">' +
         '<div class="moire-button"></div>' +
@@ -29,9 +27,7 @@ fxView['material']['template']['view'] = {
         '</form>',
     'edit': '' +
         '<form class="layui-form moire-view edit">' +
-        '<div class="layui-table moire-table">' +
-        '<div class="moire-tbody"></div>' +
-        '<div class="moire-tfoot"></div>' +
+        '<div class="layui-table moire-clear moire-table">' +
         '</div>' +
         '<div class="moire-buttons">' +
         '<div class="moire-button"></div>' +

@@ -16,6 +16,8 @@ fxView['mould']['view']['list'] = function() {
     var dark = {
         // 基础
         'base': fxBase['param']['merge']({
+            // 调试
+            'debug': false,
             // 皮肤
             'skin': 'table'
         }, fxView['shelf']['view']),
@@ -99,7 +101,7 @@ fxView['mould']['view']['list'] = function() {
                         'window': top,
                         'param': {
                             'data': {
-                                'frame': encodeURIComponent(encodeURIComponent(url))
+                                'frame': encodeURIComponent(url)
                             }
                         }
                     });
@@ -120,13 +122,27 @@ fxView['mould']['view']['list'] = function() {
             // 渲染完成
             'done': function(data, curr, count) {
                 // 记录数据
-                fxView['deploy']['echo']['list'] = data;
+                fxView['cache']['echo']['list'] = data;
                 // 绘制界面
                 $(window).trigger('resize');
                 // 初始化layui设定
                 fxView['layui']['init']({ 'type': 'table' });
                 // 更新图片加载器
                 $('[lay-id=moire-table] img').viewer('update');
+                // 绘制表单
+                $('.layui-table-main>.layui-table').off('resize');
+                $('.layui-table-main>.layui-table').on('resize', function() {
+                    // 初始化变量
+                    tray['tableMain'] = $('.layui-table-box>.layui-table-header tr,.layui-table-box>.layui-table-body tr');
+                    tray['tableLeft'] = $('.layui-table-fixed-l tr');
+                    tray['tableRight'] = $('.layui-table-fixed-r tr');
+                    // 重置表格
+                    $.each(tray['tableMain'], function(key, value) {
+                        tray['tableLeft'].eq(key).height($(value).height());
+                        tray['tableRight'].eq(key).height($(value).height());
+                    });
+                });
+                $('.layui-table-main>.layui-table').trigger('resize');
             }
         }
     };
@@ -149,7 +165,7 @@ fxView['mould']['view']['list'] = function() {
     }
     // 执行视图-表格
     // 疏理数据
-    tray['list'] = fxView['deploy']['cache']['table'] = {};
+    tray['list'] = fxView['cache']['elem']['table'] = {};
     $.each(dark['table']['cols'], function(key, value) {
         $.each(value, function(key2, value2) {
             // 疏理属性
@@ -161,19 +177,28 @@ fxView['mould']['view']['list'] = function() {
             value2['extend']['type'] = fxBase['text']['explode'](',', value2['extend']['type']);
             $.each(value2['extend']['type'], function(key3, value3) {
                 // 校验元素
-                if (!isFunction(fxView['material']['elem'][value3])) return true;
+                if (!isFunction(fxView['material']['elem'][value3])) {
+                    if (dark['base']['debug']) {
+                        console.log(fxBase['base']['lang'](['material', 'element', '[', fxApp["view"]["langc"]["prefix"] + value2, ']', 'not2', 'load']));
+                    }
+                    return true;
+                }
+                // 配置基础
+                tray['base'] = {};
+                tray['base']['cache'] = tray['list'];
+                tray['base']['mould'] = dark;
+                tray['base']['pack'] = value2;
                 // 配置数据
                 tray['data'] = fxBase['param']['merge'](1, {
                     'field': value2['field'],
                     'title': value2['title'],
                     'skin': dark['base']['skin']
                 }, value2['extend']);
-                tray['data']['mould'] = dark;
-                tray['data']['pack'] = value2;
                 tray['data']['id'] = !isBlank(value2['extend']['id'][key3]) ? value2['extend']['id'][key3] : key + '-' + value2['field'] + '-' + key3;
                 tray['data']['type'] = value3;
+                // 初始化元素
                 tray['list'][tray['data']['id']] = fxView['material']['elem'][value3]();
-                tray['list'][tray['data']['id']]['init'](tray['data']);
+                tray['list'][tray['data']['id']]['init'](tray['data'], tray['base']);
             })
         })
     });
@@ -182,7 +207,7 @@ fxView['mould']['view']['list'] = function() {
         // 执行部署
         value['deploy']();
         // 设置模板
-        value['dark']['pack']['templet'] = value['dark']['templet'];
+        value['base']['pack']['templet'] = value['dark']['templet'];
     });
     // 绘制界面
     $(window).on('resize', function() {
@@ -242,10 +267,10 @@ fxView['mould']['view']['list'] = function() {
     layui.form.on('submit(moire-submit)', function(data) {
         // 渲染数据
         tray['data'] = {};
-        $.each(fxView['deploy']['cache']['search'], function(key, value) {
+        $.each(fxView['cache']['elem']['search'], function(key, value) {
             // 执行输出
             value['echo']();
-            if (isNull(value['dark']['echo'])) return true;
+            if (isNull(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
             // 疏理输出
             $.each(fxBase['text']['explode']('-', value['dark']['field']).reverse(), function(key2, value2) {
                 var data = {};
@@ -698,7 +723,7 @@ fxView['mould']['view']['list'] = function() {
                 //         'window': top,
                 //         'param': {
                 //             'data': {
-                //                 'frame': encodeURIComponent(encodeURIComponent(url))
+                //                 'frame': encodeURIComponent(url)
                 //             }
                 //         }
                 //     });

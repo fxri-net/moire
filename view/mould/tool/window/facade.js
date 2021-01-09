@@ -37,6 +37,7 @@ fxView['mould']['tool']['window'] = function() {
         'content': dark['page'][dark['elem']] + dark['data'],
         'skin': dark['skin'],
         'area': ['100%', '100%'],
+        'maxmin': false,
         'scrollbar': false,
         'zIndex': fxBase['base']['maxZIndex']()
     });

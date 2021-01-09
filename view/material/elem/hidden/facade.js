@@ -13,17 +13,24 @@
  */
 fxView['material']['elem']['hidden'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
-            'data': ''
+            'data': '',
+            // 输出-开关
+            'echoSwitch': 1
         }, dark);
         // 疏理数据
         dark['title'] = fxBase['base']['lang'](dark['title']);
@@ -35,40 +42,58 @@ fxView['material']['elem']['hidden'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<input>',
+                // 属性
+                'attr': {
+                    'type': 'hidden',
+                    'id': dark['id'],
+                    'name': dark['field']
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理元素
-        dark['elem'] = $('<input>');
-        dark['elem'].attr({
-            'type': 'hidden',
-            'id': dark['id'],
-            'name': dark['field']
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].val(dark['data']);
         // 疏理皮肤
         switch (dark['skin']) {
             case 'search':
                 // 搜索
-                dark['elem'].attr({
-                    'lay-verify': dark['requireText']
-                });
-                dark['pack'].append(dark['elem']);
+                base['pack'].append(dark['elem']);
                 break;
             case 'view':
                 // 视图
-                dark['elem'].attr({
-                    'lay-verify': dark['requireText']
-                });
-                dark['pack'].append(dark['elem']);
+                base['pack'].append(dark['elem']);
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出
     echo['echo'] = function() {
         // 疏理数据
         dark['echo'] = dark['elem'].val();
+        if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
+            layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
+            return false;
+        }
     };
     // 重置
     echo['reset'] = function() {

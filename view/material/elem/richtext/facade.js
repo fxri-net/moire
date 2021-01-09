@@ -13,17 +13,24 @@
  */
 fxView['material']['elem']['richtext'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
             'data': '',
+            // 输出-开关
+            'echoSwitch': 1,
             // 默认
             'default': ['input', dark['title']],
             // 插件
@@ -38,26 +45,47 @@ fxView['material']['elem']['richtext'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 包装盒子
+            'wrapBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'moire-elem': 'elem'
+                }
+            },
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<textarea></textarea>',
+                // 属性
+                'attr': {
+                    'type': 'text',
+                    'id': dark['id'],
+                    'name': dark['field'],
+                    'placeholder': dark['default'],
+                    'autocomplete': 'off'
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理包装
-        dark['wrap'] = $('<div></div>');
-        dark['wrap'].attr({
-            'moire-elem': 'elem'
-        });
+        dark['wrap'] = $(dark['wrapBox']['elem']);
+        dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
-        dark['elem'] = $('<textarea></textarea>');
-        dark['elem'].attr({
-            'type': 'text',
-            'id': dark['id'],
-            'name': dark['field'],
-            'placeholder': dark['default'],
-            'autocomplete': 'off'
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].val(dark['data']);
         // 疏理皮肤
         switch (dark['skin']) {
             case 'view':
                 // 视图
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -65,8 +93,7 @@ fxView['material']['elem']['richtext'] = function() {
                 dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
-                    'class': 'layui-textarea',
-                    'lay-verify': dark['requireText']
+                    'class': 'layui-textarea'
                 });
                 // 识别IE浏览器兼容插件
                 if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
@@ -146,17 +173,20 @@ fxView['material']['elem']['richtext'] = function() {
                         // 提示未保存变更内容
                         'autosave_ask_before_unload': false,
                         // 初始化回调
-                        'init_instance_callback': function(editor) {
-                            // 执行瀑布流
-                            $('div[moire-elem=elem]').trigger('resize');
-                        }
+                        'init_instance_callback': function(editor) {}
                     });
                 }
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出
@@ -165,8 +195,19 @@ fxView['material']['elem']['richtext'] = function() {
         // 识别IE浏览器兼容插件
         if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             dark['echo'] = tinymce.get(dark['id']).getContent();
+            dark['elem'].val(dark['echo']);
         } else {
             dark['echo'] = dark['elem'].val();
+        }
+        if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
+            // 识别IE浏览器兼容插件
+            if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
+                tinymce.get(dark['id']).focus();
+            } else {
+                dark['elem'].trigger('focus');
+            }
+            layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
+            return false;
         }
     };
     // 重置
@@ -175,6 +216,7 @@ fxView['material']['elem']['richtext'] = function() {
         // 识别IE浏览器兼容插件
         if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             tinymce.get(dark['id']).setContent(dark['data']);
+            dark['elem'].val(dark['data']);
         } else {
             dark['elem'].val(dark['data']);
         }
@@ -185,8 +227,9 @@ fxView['material']['elem']['richtext'] = function() {
         // 识别IE浏览器兼容插件
         if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
             tinymce.get(dark['id']).setContent('');
+            dark['elem'].val('');
         } else {
-            dark['elem'].val(dark['data']);
+            dark['elem'].val('');
         }
     };
     return echo;

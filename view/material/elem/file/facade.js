@@ -13,21 +13,28 @@
  */
 fxView['material']['elem']['file'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
             'data': '',
+            // 输出-开关
+            'echoSwitch': 1,
             // 默认
             'default': ['upload', dark['title']],
             // 替代
-            'alt': null,
+            'alt': '',
             // 选项
             'option': {
                 // 类型
@@ -64,23 +71,43 @@ fxView['material']['elem']['file'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 包装盒子
+            'wrapBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'moire-elem': 'elem'
+                }
+            },
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<div><div class="moire-elem-inline"></div></div>',
+                // 属性
+                'attr': {
+                    'id': dark['id']
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理包装
-        dark['wrap'] = $('<div></div>');
-        dark['wrap'].attr({
-            'moire-elem': 'elem'
-        });
+        dark['wrap'] = $(dark['wrapBox']['elem']);
+        dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
-        dark['elem'] = $('<div><div class="moire-elem-inline"></div></div>');
-        dark['elem'].attr({
-            'id': dark['id'],
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].val(dark['data']);
         // 疏理皮肤
         switch (dark['skin']) {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    var tray = {};
                     tray['echo'] = '';
                     // 疏理数据
                     switch (dark['option']['type']) {
@@ -106,7 +133,7 @@ fxView['material']['elem']['file'] = function() {
                 break;
             case 'view':
                 // 视图
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -137,11 +164,12 @@ fxView['material']['elem']['file'] = function() {
                             // 疏理隐藏图片值
                             echo['data'] = fxBase['text']['explode'](',', $('input[name=' + dark['field'] + ']').val());
                             // 移除图片
+                            dark['elem'].find('.moire-elem-inline').masonry('destroy', echo['elem']);
                             echo['data'].splice(echo['elem'].index(), 1);
                             $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['data']));
                             echo['elem'].remove();
                             // 执行瀑布流
-                            $('div[moire-elem=elem]').trigger('resize');
+                            dark['elem'].find('.moire-elem-inline').trigger('resize');
                             // 关闭弹窗
                             layui.layer.close(index);
                         });
@@ -167,13 +195,34 @@ fxView['material']['elem']['file'] = function() {
                 // 疏理上传
                 if (dark['upload']['switch']) {
                     dark['elem'].append('<div class="moire-elem-operate">' +
-                        '<button type="button" class="layui-btn moire-operate" id="' + dark['id'] + '">' +
+                        '<button type="button" class="layui-btn moire-operate">' +
                         '<i class="layui-icon">&#xe67c;</i>' + fxBase['base']['lang'](dark['default']) +
-                        '</button></div>');
+                        '</button>' +
+                        '<input type="hidden" class="moire-operate-hidden"></div>');
+                    // 疏理分支
+                    dark['elem'].find('.moire-operate').on('click', function() {
+                        layui.layer.prompt({
+                            'title': '地址',
+                            'btn': ['保存', '本地上传'],
+                            'btn2': function(index, layero) {
+                                // 本地上传
+                                dark['elem'].find('.moire-operate-hidden').trigger('click');
+                            },
+                            'shadeClose': true
+                        }, function(value, index, elem) {
+                            // 外链地址
+                            success({
+                                'code': 200,
+                                'message': fxBase['base']['lang'](['save', 'success']),
+                                'data': [value]
+                            });
+                            layer.close(index);
+                        });
+                    });
                     // 疏理配置
                     dark['upload'] = fxBase['param']['merge'](dark['upload'], {
                         // 元素
-                        'elem': dark['elem'].find('.moire-operate'),
+                        'elem': dark['elem'].find('.moire-operate-hidden'),
                         // 数据
                         'data': {
                             'base': JSON.stringify({
@@ -203,6 +252,8 @@ fxView['material']['elem']['file'] = function() {
                     function success(data, index, upload) {
                         // 初始化变量
                         var echo = {};
+                        // 移除文件缓存
+                        dark['elem'].find('.moire-elem-operate input').val('');
                         // 关闭进度
                         layui.layer.close(fxApp['rank']['file.load']);
                         // 疏理隐藏图片值
@@ -245,7 +296,7 @@ fxView['material']['elem']['file'] = function() {
                             // 执行瀑布流
                             dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
                             dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                                $('div[moire-elem=elem]').trigger('resize');
+                                dark['elem'].find('.moire-elem-inline').trigger('resize');
                             });
                         } else {
                             layui.layer.msg(data['message'], {
@@ -265,13 +316,20 @@ fxView['material']['elem']['file'] = function() {
                     layui.upload.render(dark['upload']);
                 }
                 // 执行瀑布流
-                dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                    $('div[moire-elem=elem]').trigger('resize');
+                dark['elem'].find('.moire-elem-inline').on('resize', function() {
+                    // 文件容器
+                    dark['elem'].find('.moire-elem-inline').masonry({
+                        'itemSelector': 'div'
+                    });
                 });
+                dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
+                    dark['elem'].find('.moire-elem-inline').trigger('resize');
+                });
+                dark['elem'].find('.moire-elem-inline').trigger('resize');
                 break;
             case 'view_alioss':
                 // 视图-阿里oss
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -302,11 +360,12 @@ fxView['material']['elem']['file'] = function() {
                             // 疏理隐藏图片值
                             echo['data'] = fxBase['text']['explode'](',', $('input[name=' + dark['field'] + ']').val());
                             // 移除图片
+                            dark['elem'].find('.moire-elem-inline').masonry('destroy', echo['elem']);
                             echo['data'].splice(echo['elem'].index(), 1);
                             $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['data']));
                             echo['elem'].remove();
                             // 执行瀑布流
-                            $('div[moire-elem=elem]').trigger('resize');
+                            dark['elem'].find('.moire-elem-inline').trigger('resize');
                             // 关闭弹窗
                             layui.layer.close(index);
                         });
@@ -332,13 +391,32 @@ fxView['material']['elem']['file'] = function() {
                 // 疏理上传
                 if (dark['upload']['switch']) {
                     dark['elem'].append('<div class="moire-elem-operate">' +
-                        '<button type="button" class="layui-btn moire-operate" id="' + dark['id'] + '">' +
+                        '<button type="button" class="layui-btn moire-operate">' +
                         '<i class="layui-icon">&#xe67c;</i>' + fxBase['base']['lang'](dark['default']) +
-                        '</button></div>');
+                        '</button>' +
+                        '<input type="hidden" class="moire-operate-hidden"></div>');
+                    // 疏理分支
+                    dark['elem'].find('.moire-operate').on('click', function() {
+                        layui.layer.prompt({
+                            'title': '地址',
+                            'btn': ['保存', '本地上传'],
+                            'btn2': function(index, layero) {
+                                // 本地上传
+                                tray['message'] = ['upload', 'success'];
+                                dark['elem'].find('.moire-operate-hidden').trigger('click');
+                            },
+                            'shadeClose': true
+                        }, function(value, index, elem) {
+                            // 外链地址
+                            tray['message'] = ['save', 'success'];
+                            success([{ 'ossUrl': value }]);
+                            layer.close(index);
+                        });
+                    });
                     // 疏理配置
                     dark['upload'] = fxBase['param']['merge'](dark['upload'], {
                         // 元素
-                        'elm': dark['elem'].find('.moire-operate'),
+                        'elm': dark['elem'].find('.moire-operate-hidden'),
                         // 类型
                         'fileType': dark['option']['type'],
                         // 多选
@@ -399,6 +477,8 @@ fxView['material']['elem']['file'] = function() {
                     function success(data, index, upload) {
                         // 初始化变量
                         var echo = {};
+                        // 移除文件缓存
+                        dark['elem'].find('.moire-elem-operate input').val('');
                         // 疏理隐藏图片值
                         echo['data'] = fxBase['text']['explode'](',', $('input[name=' + dark['field'] + ']').val());
                         // 输出子项
@@ -427,14 +507,14 @@ fxView['material']['elem']['file'] = function() {
                         });
                         $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['list']));
                         // 请求成功
-                        layui.layer.msg(fxBase['base']['lang'](['上传成功']), {
+                        layui.layer.msg(fxBase['base']['lang'](tray['message']), {
                             'icon': 1,
                             'time': 800
                         });
                         // 执行瀑布流
                         dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
                         dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                            $('div[moire-elem=elem]').trigger('resize');
+                            dark['elem'].find('.moire-elem-inline').trigger('resize');
                         });
                         // 更新图片加载器
                         dark['elem'].parents('div[moire-cell]').viewer('update');
@@ -447,14 +527,27 @@ fxView['material']['elem']['file'] = function() {
                     });
                 }
                 // 执行瀑布流
-                dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                    $('div[moire-elem=elem]').trigger('resize');
+                dark['elem'].find('.moire-elem-inline').on('resize', function() {
+                    // 文件容器
+                    dark['elem'].find('.moire-elem-inline').masonry({
+                        'itemSelector': 'div'
+                    });
                 });
+                dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
+                    dark['elem'].find('.moire-elem-inline').trigger('resize');
+                });
+                dark['elem'].find('.moire-elem-inline').trigger('resize');
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出
@@ -477,6 +570,11 @@ fxView['material']['elem']['file'] = function() {
             }
         });
         dark['echo'] = fxBase['text']['implode'](',', dark['echo']);
+        if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
+            dark['elem'].find('.moire-operate').trigger('click');
+            layer.msg(fxBase['base']['lang'](['please', 'upload', dark['label']]), { 'icon': 5, 'anim': 6 });
+            return false;
+        }
     };
     // 重置
     echo['reset'] = function() {
@@ -502,7 +600,7 @@ fxView['material']['elem']['file'] = function() {
         // 执行瀑布流
         dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
         dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-            $('div[moire-elem=elem]').trigger('resize');
+            dark['elem'].find('.moire-elem-inline').trigger('resize');
         });
         // 更新图片加载器
         dark['elem'].parents('div[moire-cell]').viewer('update');

@@ -13,17 +13,24 @@
  */
 fxView['material']['elem']['switch'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
-            'data': ''
+            'data': '',
+            // 输出-开关
+            'echoSwitch': 1
         }, dark);
         // 疏理数据
         dark['title'] = fxBase['base']['lang'](dark['title']);
@@ -36,34 +43,54 @@ fxView['material']['elem']['switch'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 包装盒子
+            'wrapBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'moire-elem': 'elem'
+                }
+            },
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<input>',
+                // 属性
+                'attr': {
+                    'type': 'checkbox',
+                    'id': dark['id'],
+                    'name': dark['field'],
+                    'lay-skin': 'switch',
+                    'lay-text': dark['shelf']['data']
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理包装
-        dark['wrap'] = $('<div></div>');
-        dark['wrap'].attr({
-            'moire-elem': 'elem'
-        });
+        dark['wrap'] = $(dark['wrapBox']['elem']);
+        dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
-        dark['elem'] = $('<input>');
-        dark['elem'].attr({
-            'type': 'checkbox',
-            'id': dark['id'],
-            'name': dark['field'],
-            'lay-skin': 'switch',
-            'lay-text': dark['shelf']['data']
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].prop('checked', !!parseInt(dark['data']));
         // 疏理皮肤
         switch (dark['skin']) {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    var tray = {};
                     tray['echo'] = '';
                     if (!isBlank(dark['shelf']['data'][data[dark['field']]])) {
                         tray['echo'] = $('<input>');
                         tray['echo'].attr({
                             'type': 'checkbox',
                             'name': dark['field'],
-                            'value': data[dark['mould']['base']['model']['key']],
+                            'value': data[base['mould']['base']['model']['key']],
                             'lay-skin': 'switch',
                             'lay-text': dark['shelf']['data'],
                             'lay-filter': dark['field'],
@@ -77,7 +104,7 @@ fxView['material']['elem']['switch'] = function() {
                 break;
             case 'view':
                 // 视图
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -85,14 +112,19 @@ fxView['material']['elem']['switch'] = function() {
                 dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
                 dark['wrap'].children('[moire-cell]').append(dark['elem']);
                 dark['elem'].attr({
-                    'class': 'layui-input',
-                    'lay-verify': dark['requireText']
+                    'class': 'layui-input'
                 });
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出

@@ -16,6 +16,8 @@ fxView['mould']['view']['search'] = function() {
     var dark = {
         // 基础
         'base': fxBase['param']['merge']({
+            // 调试
+            'debug': false,
             // 皮肤
             'skin': 'search'
         }, fxView['shelf']['view']),
@@ -37,25 +39,34 @@ fxView['mould']['view']['search'] = function() {
     // 疏理元素
     tray['elem'] = $('.moire-search');
     // 疏理数据
-    tray['list'] = fxView['deploy']['cache']['search'] = {};
+    tray['list'] = fxView['cache']['elem']['search'] = {};
     $.each(dark['data'](dark['base']['param']), function(key, value) {
         // 解析数据
         value['id'] = fxBase['text']['explode'](',', value['id']);
         value['type'] = fxBase['text']['explode'](',', value['type']);
         $.each(value['type'], function(key2, value2) {
             // 校验元素
-            if (!isFunction(fxView['material']['elem'][value2])) return true;
+            if (!isFunction(fxView['material']['elem'][value2])) {
+                if (dark['base']['debug']) {
+                    console.log(fxBase['base']['lang'](['material', 'element', '[', fxApp["view"]["langc"]["prefix"] + value2, ']', 'not2', 'load']));
+                }
+                return true;
+            }
+            // 配置基础
+            tray['base'] = {};
+            tray['base']['cache'] = tray['list'];
+            tray['base']['mould'] = dark;
+            tray['base']['pack'] = tray['elem'];
             // 配置数据
             tray['data'] = fxBase['param']['merge'](1, {
                 'field': key,
                 'skin': dark['base']['skin']
             }, value);
-            tray['data']['mould'] = dark;
-            tray['data']['pack'] = tray['elem'];
             tray['data']['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
             tray['data']['type'] = value2;
+            // 初始化元素
             tray['list'][tray['data']['id']] = fxView['material']['elem'][value2]();
-            tray['list'][tray['data']['id']]['init'](tray['data']);
+            tray['list'][tray['data']['id']]['init'](tray['data'], tray['base']);
         })
     });
     // 渲染数据

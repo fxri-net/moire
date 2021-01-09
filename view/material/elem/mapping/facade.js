@@ -13,17 +13,24 @@
  */
 fxView['material']['elem']['mapping'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
             'data': '',
+            // 输出-开关
+            'echoSwitch': 1,
             // 默认
             'default': ['add', dark['title']],
             // 插件
@@ -75,22 +82,42 @@ fxView['material']['elem']['mapping'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 包装盒子
+            'wrapBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'moire-elem': 'elem'
+                }
+            },
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<div><div class="moire-elem-inline"></div></div>',
+                // 属性
+                'attr': {
+                    'id': dark['id']
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理包装
-        dark['wrap'] = $('<div></div>');
-        dark['wrap'].attr({
-            'moire-elem': 'elem'
-        });
+        dark['wrap'] = $(dark['wrapBox']['elem']);
+        dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
-        dark['elem'] = $('<div><div class="moire-elem-inline"></div></div>');
-        dark['elem'].attr({
-            'id': dark['id']
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         // 疏理皮肤
         switch (dark['skin']) {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
-                    var tray = {};
                     tray['echo'] = [];
                     // 疏理数据
                     if (isBlank(data[dark['field']])) {
@@ -105,7 +132,7 @@ fxView['material']['elem']['mapping'] = function() {
                         // 初始化变量
                         tray['echo'][key] = [];
                         $.each(dark['shelf']['data'], function(key2, value2) {
-                            tray['echo'][key].push(value[key2]);
+                            tray['echo'][key].push(value[value2['field']]);
                         });
                         tray['echo'][key] = fxBase['text']['implode'](fxBase['base']['lang'](':'), tray['echo'][key]);
                     });
@@ -115,7 +142,7 @@ fxView['material']['elem']['mapping'] = function() {
                 break;
             case 'view':
                 // 视图
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -157,18 +184,35 @@ fxView['material']['elem']['mapping'] = function() {
                 if (dark['add']['switch']) {
                     dark['add']['disabled'] = null;
                 }
+                // 疏理货架
+                tray['width'] = [dark['delete']['width']];
+                tray['count'] = 0;
+                $.each(dark['shelf']['data'], function(key, value) {
+                    if (!isBlank(value['width'])) {
+                        tray['width'].push(value['width']);
+                    } else {
+                        tray['count']++;
+                    }
+                });
+                tray['width'] = fxBase['text']['implode'](' - ', tray['width']);
+                $.each(dark['shelf']['data'], function(key, value) {
+                    if (isBlank(value['width'])) {
+                        value['width'] = 'calc((100% - ' + tray['width'] + ') / ' + tray['count'] + ')';
+                    }
+                });
                 $.each(dark['data'], function(key, value) {
                     // 初始化变量
                     var echo = $('<div class="moire-clear"></div>');
                     $.each(dark['shelf']['data'], function(key2, value2) {
-                        echo.append('<input type="text" class="layui-input" moire-type="' + key2 + '"' +
-                            ' placeholder="' + fxBase['base']['lang'](value2) + '" autocomplete="off">')
-                        echo.find('[moire-type=' + key2 + ']')
+                        echo.append('<input type="text" class="layui-input" moire-type="' + value2['field'] + '"' +
+                            ' placeholder="' + fxBase['base']['lang'](value2['title']) + '" autocomplete="off">')
+                        echo.find('[moire-type=' + value2['field'] + ']')
                             .attr({
-                                'disabled': dark['add']['disabled']
+                                'disabled': dark['add']['disabled'],
+                                'style': value2['style']
                             })
-                            .css('width', 'calc((100% - ' + dark['delete']['width'] + ') / ' + Object.keys(dark['shelf']['data']).length + ')')
-                            .val(value[key2]);
+                            .css('width', value2['width'])
+                            .val(value[value2['field']]);
                     });
                     echo.append(dark['delete']['elem']);
                     dark['elem'].find('.moire-elem-inline').append(echo);
@@ -184,10 +228,13 @@ fxView['material']['elem']['mapping'] = function() {
                         // 初始化变量
                         var echo = $('<div class="moire-clear"></div>');
                         $.each(dark['shelf']['data'], function(key, value) {
-                            echo.append('<input type="text" class="layui-input" moire-type="' + key + '"' +
-                                ' placeholder="' + fxBase['base']['lang'](value) + '" autocomplete="off">')
-                            echo.find('[moire-type=' + key + ']')
-                                .css('width', 'calc((100% - ' + dark['delete']['width'] + ') / ' + Object.keys(dark['shelf']['data']).length + ')');
+                            echo.append('<input type="text" class="layui-input" moire-type="' + value['field'] + '"' +
+                                ' placeholder="' + fxBase['base']['lang'](value['title']) + '" autocomplete="off">')
+                            echo.find('[moire-type=' + value['field'] + ']')
+                                .attr({
+                                    'style': value['style']
+                                })
+                                .css('width', value['width']);
                         });
                         echo.append(dark['delete']['elem']);
                         dark['elem'].find('.moire-elem-inline').append(echo);
@@ -196,9 +243,15 @@ fxView['material']['elem']['mapping'] = function() {
                 }
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出
@@ -212,6 +265,10 @@ fxView['material']['elem']['mapping'] = function() {
                 dark['echo'][key][$(value2).attr('moire-type')] = $(value2).val();
             });
         })
+        if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isEmpty(dark['echo'])) {
+            layer.msg(fxBase['base']['lang'](['please', 'add', dark['label']]), { 'icon': 5, 'anim': 6 });
+            return false;
+        }
         dark['echo'] = JSON.stringify(dark['echo']);
     };
     // 重置
@@ -220,13 +277,17 @@ fxView['material']['elem']['mapping'] = function() {
         dark['elem'].find('.moire-elem-inline>div').remove();
         $.each(dark['data'], function(key, value) {
             // 初始化变量
-            var echo = $('<div></div>');
+            var echo = $('<div class="moire-clear"></div>');
             $.each(dark['shelf']['data'], function(key2, value2) {
-                echo.append('<input type="text" class="layui-input" moire-type="' + key2 + '"' +
-                    ' placeholder="' + fxBase['base']['lang'](value2) + '" autocomplete="off">')
-                echo.find('[moire-type=' + key2 + ']')
-                    .val(value[key2])
-                    .css('width', 'calc((100% - 80px) / ' + Object.keys(dark['shelf']['data']).length + ')');
+                echo.append('<input type="text" class="layui-input" moire-type="' + value2['field'] + '"' +
+                    ' placeholder="' + fxBase['base']['lang'](value2['title']) + '" autocomplete="off">')
+                echo.find('[moire-type=' + value2['field'] + ']')
+                    .attr({
+                        'disabled': dark['add']['disabled'],
+                        'style': value2['style']
+                    })
+                    .css('width', value2['width'])
+                    .val(value[value2['field']]);
             });
             echo.append(dark['delete']['elem']);
             dark['elem'].find('.moire-elem-inline').append(echo);

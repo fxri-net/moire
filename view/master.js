@@ -14,6 +14,26 @@
 var fxView = new function() { return isObject(fxView) ? fxView : {}; };
 
 /**
+ * 缓存
+ */
+fxView['cache'] = {
+    /**
+     * 输出
+     */
+    'echo': {},
+
+    /**
+     * 元素
+     */
+    'elem': {},
+
+    /**
+     * 视图
+     */
+    'view': {}
+};
+
+/**
  * 定制
  */
 fxView['custom'] = {};
@@ -22,16 +42,6 @@ fxView['custom'] = {};
  * 部署
  */
 fxView['deploy'] = {
-    /**
-     * 缓存
-     */
-    'cache': {},
-
-    /**
-     * 输出
-     */
-    'echo': {},
-
     /**
      * 视图
      */
@@ -201,11 +211,11 @@ fxView['store']['purchase'] = function() {
             // 键钥
             'key': null,
             // 键钥-联结
-            'key_nexus': '-',
+            'keyNexus': '-',
             // 键值
             'value': null,
             // 键值-联结
-            'value_nexus': ' - '
+            'valueNexus': ' - '
         }
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
@@ -242,14 +252,14 @@ fxView['store']['purchase'] = function() {
                     $.each(dark['extend']['key'], function(key3, value3) {
                         dark['echo']['key'].push(!isUndefined(value2[value3]) ? value2[value3] : value3);
                     });
-                    dark['echo']['key'] = fxBase['text']['implode'](dark['extend']['key_nexus'], dark['echo']['key']);
+                    dark['echo']['key'] = fxBase['text']['implode'](dark['extend']['keyNexus'], dark['echo']['key']);
                     // 疏理键值
                     dark['echo']['value'][key][dark['echo']['key']] = [];
                     $.each(dark['extend']['value'], function(key3, value3) {
                         dark['echo']['value'][key][dark['echo']['key']].push(!isUndefined(value2[value3]) ? value2[value3] : value3);
                     });
                     dark['echo']['value'][key][dark['echo']['key']] =
-                        fxBase['text']['implode'](dark['extend']['value_nexus'], dark['echo']['value'][key][dark['echo']['key']]);
+                        fxBase['text']['implode'](dark['extend']['valueNexus'], dark['echo']['value'][key][dark['echo']['key']]);
                 });
             });
         }
@@ -359,13 +369,16 @@ fxView['store']['facade'] = function() {
  */
 fxView['machine']['elem'] = function() {
     // 初始化变量
-    dark = fxBase['param']['merge'](arguments[0], {
+    var dark = fxBase['param']['merge'](arguments[0], {
+        // 基础属性->↓
         // 编号
         'id': '',
         // 字段
         'field': '',
         // 输出
         'echo': null,
+        // 基础属性->↑
+        // 视图属性->↓
         // 标题
         'title': '',
         // 必填
@@ -376,8 +389,13 @@ fxView['machine']['elem'] = function() {
         'shelf': {},
         // 皮肤
         'skin': null,
-        // 视图
-        'view': null
+        // 开始
+        'before': null,
+        // 之后
+        'after': null,
+        // 完成
+        'done': null
+        // 视图属性->↑
     }, arguments[1]);
     dark = fxBase['param']['merge'](dark, {
         // 标签
@@ -386,7 +404,6 @@ fxView['machine']['elem'] = function() {
     // 疏理数据
     dark['label'] = fxBase['base']['lang'](dark['label']);
     dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
-    dark['requireText'] = dark['require'] == 1 ? 'required' : null;
     return dark;
 };
 
@@ -400,11 +417,11 @@ fxApp['env']['factory'] = fxApp['env']['script'] + '/view/';
  */
 fxView['machine']['loader'] = function() {
     // 初始化变量
-    var dark = [
+    var dark = {
         // 插件
-        [],
+        0: [],
         // 模块
-        {
+        1: {
             // 车间
             'workshop': null,
             // 装配
@@ -415,25 +432,27 @@ fxView['machine']['loader'] = function() {
             'version': fxApp['env']['version'],
         },
         // 回调
-        null,
+        2: null,
         // 路径
-        fxApp['env']['factory']
-    ];
+        3: fxApp['env']['factory']
+    };
     dark = fxBase['param']['merge'](dark, arguments);
     // 疏理数据
-    dark['plugin'] = dark[0];
+    dark['plugins'] = dark[0];
     dark['module'] = dark[1];
     dark['callback'] = isFunction(dark[2]) ? dark[2] : null;
     dark['path'] = isString(dark[2]) ? dark[2] : dark[3];
-    if (isBlank(dark['plugin'])) {
-        dark['plugin'] = [];
-    } else if (!isArray(dark['plugin']) && !isObject(dark['plugin'])) {
-        dark['plugin'] = fxBase['text']['explode'](',', dark['plugin']);
+    if (isBlank(dark['plugins'])) {
+        dark['plugins'] = [];
+    } else if (!isArray(dark['plugins']) && !isObject(dark['plugins'])) {
+        dark['plugins'] = fxBase['text']['explode'](',', dark['plugins']);
     }
     // 加载插件
-    $.each(dark['plugin'], function(key, value) {
+    $.each(dark['plugins'], function(key, value) {
         // 检查装配
-        if (isFunction(fxView[dark['module']['workshop']][dark['module']['assembly']][value])) return true;
+        dark['plugin'] = fxView[dark['module']['workshop']][dark['module']['assembly']][value];
+        if (isFunction(dark['plugin']) || dark['plugin'] === true) return true;
+        fxView[dark['module']['workshop']][dark['module']['assembly']][value] = true;
         // 疏理模块
         dark['model'] = fxBase['text']['implode']('/', [dark['module']['workshop'], dark['module']['assembly'], value, dark['module']['facade']]);
         // 疏理版本

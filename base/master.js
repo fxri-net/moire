@@ -9,88 +9,6 @@
 // +----------------------------------------------------------------------
 
 /**
- * 创建本地存储
- */
-var fxLocal = new function() { return isObject(fxLocal) ? fxLocal : {}; };
-
-/**
- * 设置数据
- */
-fxLocal['set'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null,
-        value = !isNull(arguments[1]) ? arguments[1] : null;
-    return localStorage.setItem(key, JSON.stringify(value));
-};
-
-/**
- * 获取数据
- */
-fxLocal['get'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
-    return JSON.parse(localStorage.getItem(key));
-};
-
-/**
- * 移除数据
- */
-fxLocal['remove'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
-    return localStorage.removeItem(key);
-};
-
-/**
- * 清除数据
- */
-fxLocal['clear'] = function() {
-    // 初始化变量
-    return localStorage.clear();
-};
-
-/**
- * 创建会话存储
- */
-var fxSession = new function() { return isObject(fxSession) ? fxSession : {}; };
-
-/**
- * 设置数据
- */
-fxSession['set'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null,
-        value = !isNull(arguments[1]) ? arguments[1] : null;
-    return sessionStorage.setItem(key, JSON.stringify(value));
-};
-
-/**
- * 获取数据
- */
-fxSession['get'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
-    return JSON.parse(sessionStorage.getItem(key));
-};
-
-/**
- * 移除数据
- */
-fxSession['remove'] = function() {
-    // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
-    return sessionStorage.removeItem(key);
-};
-
-/**
- * 清除数据
- */
-fxSession['clear'] = function() {
-    // 初始化变量
-    return sessionStorage.clear();
-};
-
-/**
  * 创建风音基础
  */
 var fxBase = new function() { return isObject(fxBase) ? fxBase : {}; };
@@ -769,7 +687,7 @@ fxBase['param'] = {
         // 初始化变量
         var param = !isNull(arguments[0]) ? arguments[0] : null,
             mode = !isNull(arguments[1]) ? arguments[1] : null,
-            echo = [];
+            echo = {};
         // 校验入参
         if (!isArray(param)) {
             return false;
@@ -839,11 +757,11 @@ fxBase['param'] = {
                 echo = param[0];
                 $.each(param[1], function(key, value) {
                     if (isNull(echo[value]) || '' === echo[value]) {
-                        echo[value] = [];
+                        echo[value] = {};
                     } else if (isString(echo[value]) || isNumeric(echo[value])) {
                         echo[value] = fxBase['text']['explode'](',', echo[value]);
                     } else if (!isArray(echo[value])) {
-                        echo[value] = [];
+                        echo[value] = {};
                     }
                 });
                 break;
@@ -1187,16 +1105,16 @@ fxBase['text'] = {
      */
     'explode': function() {
         // 初始化变量
-        var dark = [
+        var dark = {
             // 表达式
-            null,
+            0: null,
             // 数据
-            null,
+            1: null,
             // 疏理
-            null,
+            2: null,
             // 类型
-            null
-        ];
+            3: null
+        };
         dark = fxBase['param']['merge'](dark, arguments);
         // 疏理数据
         separator = dark[0];
@@ -1238,7 +1156,10 @@ fxBase['text'] = {
         // 初始化变量
         var separator = !isNull(arguments[0]) ? arguments[0] : null,
             data = !isNull(arguments[1]) ? arguments[1] : null;
-        if (isArray(data) || isObject(data)) {
+        if (isObject(data)) {
+            data = Object.values(data);
+        }
+        if (isArray(data)) {
             data = data.join(separator);
         } else if (isNull(data)) {
             data = [];
@@ -1277,47 +1198,6 @@ fxBase['text'] = {
     },
 
     /**
-     * 处理字符串-分离
-     */
-    'strSeparate': function() {
-        // 初始化变量
-        var array = !isNull(arguments[0]) ? arguments[0] : {},
-            echo = {};
-        // 合并数组
-        function merge(data) {
-            var tray = [];
-            if (!isArray(data) && !isObject(data)) {
-                return '=' + data;
-            }
-            $.each(data, function(key, value) {
-                value = merge(value);
-                if (isArray(value)) {
-                    $.each(value, function(key2, value2) {
-                        tray.push('[' + key + ']' + value2);
-                    });
-                } else {
-                    tray.push('[' + key + ']' + value);
-                }
-            });
-            return tray;
-        }
-        // 解析数据
-        $.each(array, function(key, value) {
-            // 解析数据
-            value = merge(value);
-            if (!isArray(value)) {
-                value = [value];
-            }
-            // 疏理数据
-            $.each(value, function(key2, value2) {
-                value2 = fxBase['text']['explode']('=', key + value2, 2);
-                echo[value2[0]] = value2[1];
-            });
-        });
-        return echo;
-    },
-
-    /**
      * 处理字符串-编码
      */
     'strEncode': function() {
@@ -1325,12 +1205,40 @@ fxBase['text'] = {
         var array = !isNull(arguments[0]) ? arguments[0] : {},
             echo = [];
         // 解析数据
-        $.each(fxBase['text']['strSeparate'](array), function(key, value) {
+        $.each(array, function(key, value) {
+            // 解析数据
+            value = fxBase['text']['strEncodeMerge'](value);
+            if (!isArray(value)) {
+                value = [value];
+            }
             // 疏理数据
-            echo.push(key + '=' + value);
+            $.each(value, function(key2, value2) {
+                echo.push(key + value2);
+            });
         });
         echo = fxBase['text']['implode']('&', echo);
         return echo;
+    },
+
+    /**
+     * 处理字符串-编码-合并数组
+     */
+    'strEncodeMerge': function(data) {
+        // 初始化变量
+        var tray = [];
+        if (!isArray(data) && !isObject(data)) {
+            data = encodeURIComponent(data);
+            return '=' + data;
+        }
+        $.each(data, function(key, value) {
+            value = fxBase['text']['strEncodeMerge'](value);
+            if (isObject(data)) {
+                tray.push('[' + key + ']' + value);
+            } else {
+                tray.push('[]' + value);
+            }
+        });
+        return tray;
     },
 
     /**
@@ -1341,22 +1249,59 @@ fxBase['text'] = {
         var string = !isNull(arguments[0]) ? arguments[0] : null,
             echo = {};
         // 解析数据
-        $.each(fxBase['text']['explode']('&', string), function(key, value) {
+        string = fxBase['text']['explode']('&', string);
+        $.each(string, function(key, value) {
             // 解析数据
             value = fxBase['text']['explode']('=', value, 2);
             if (isBlank(value[0]) && isNull(value[1])) return true;
-            // 疏理数据
-            value[1] = !isNull(value[1]) ? decodeURI(value[1]) : value[1];
+            // 疏理键值
+            try {
+                value[1] = !isNull(value[1]) ? decodeURIComponent(value[1]) : value[1];
+            } catch (e) {}
             // 解析键钥
-            $.each(fxBase['text']['explode']('[', fxBase['text']['replace'](']', '', value[0])).reverse(), function(key2, value2) {
-                var data = {};
-                data[value2] = value[1];
-                value[1] = data;
-            });
+            value[0] = fxBase['text']['replace']('^([^\[]*)', '[$1]', value[0]);
+            value[2] = echo;
+            value = fxBase['text']['strDecodeMerge'](value);
             // 合并数据
-            echo = fxBase['param']['merge'](echo, value[1]);
+            echo = fxBase['param']['merge'](echo, value[2]);
         });
         return echo;
+    },
+
+    /**
+     * 处理字符串-解码-合并数组
+     */
+    'strDecodeMerge': function(data) {
+        // 初始化变量
+        var tray = {};
+        tray['find'] = new RegExp(/^\[([^\]]*)\]/);
+        tray['key'] = data[0].match(tray['find']);
+        data[0] = fxBase['text']['replace']('^\\[[^\\]]*\\]', '', data[0]);
+        if (isEmpty(tray['key'])) {
+            return {};
+        }
+        // 解析数据
+        data[2] = !isNull(data[2]) ? data[2] : [];
+        if (tray['key'][0] != '[]' && isArray(data[2])) {
+            data[2] = fxBase['param']['merge']({}, data[2]);
+        }
+        if (tray['key'][0] == '[]') {
+            tray['key'][1] = -1;
+            $.each(data[2], function(key, value) {
+                if (!isNumeric(key) || Math.floor(key) != key) return true;
+                tray['key'][1] = tray['key'][1] > key ? tray['key'][1] : key;
+            });
+            tray['key'][1]++;
+        }
+        // 疏理数据
+        if (!isNull(data[0].match(tray['find']))) {
+            data[2][tray['key'][1]] = fxBase['text']['strDecodeMerge']([data[0], data[1], data[2][tray['key'][1]]])[2];
+        } else if (isArray(data[2])) {
+            data[2].push(data[1]);
+        } else {
+            data[2][tray['key'][1]] = data[1];
+        }
+        return data;
     }
 };
 

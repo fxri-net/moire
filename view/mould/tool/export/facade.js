@@ -23,7 +23,20 @@ fxView['mould']['tool']['export'] = function() {
     // 检查配置
     if (isNull(dark['api']['export'])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
-    } else if (!isObject(fxView['deploy']['echo']['list']) || fxView['deploy']['echo']['list']['extend']['total_count'] > dark['limit']) {
+    }
+    // 疏理数据
+    if (!isArray(dark['param'])) {
+        dark['param'] = [dark['param']];
+    }
+    // 提取数据
+    $.each(dark['param'], function(key, value) {
+        if (isNumeric(value) || isString(value)) {
+            tray[dark['model']['key']].push(value);
+        } else if (isObject(value) && !isNull(value[dark['model']['key']])) {
+            tray[dark['model']['key']].push(value[dark['model']['key']]);
+        }
+    });
+    if (isEmpty(tray[dark['model']['key']]) && (!isObject(fxView['cache']['echo']['list']) || fxView['cache']['echo']['list']['extend']['total_count'] > dark['limit'])) {
         tray['message'] = '推荐将数据筛选至' + dark['limit'] + '条以内，数据过多将有可能导出失败';
         // 导出数据过多提示
         layui.layer.confirm(tray['message'], { 'title': false, 'closeBtn': false }, function(index) {
@@ -42,7 +55,14 @@ fxView['mould']['tool']['export'] = function() {
         tray['param'] = fxBase['param']['url']({
             'type': '2.1'
         });
+        // 设置令牌
         tray['param']['base']['token'] = fxApp['user']['base']['token'];
+        // 设置数据
+        tray['param']['data'][dark['model']['key']] = tray[dark['model']['key']];
+        if (isEmpty(tray['param']['data'][dark['model']['key']])) {
+            tray['param']['data'][dark['model']['key']] = null;
+        }
+        // 设置条数
         tray['param']['base']['page'] = 1;
         tray['param']['base']['limit'] = -1;
         // 配置地址

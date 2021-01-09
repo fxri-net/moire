@@ -13,21 +13,30 @@
  */
 fxView['material']['elem']['text'] = function() {
     // 初始化变量
-    var dark,
-        echo = {};
+    var base,
+        dark,
+        echo = {},
+        tray = {};
+    // 基础
+    echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
         fxView['machine']['elem'](dark, arguments[0]);
+        base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 数据
             'data': '',
+            // 输出-开关
+            'echoSwitch': 0,
             // 选项
             'option': {
                 // 地址
                 'url': null,
+                // 类名
+                'class': dark['id'] + '-elem',
                 // 文本
                 'text': '点击跳转',
                 // 样式
@@ -42,16 +51,37 @@ fxView['material']['elem']['text'] = function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 初始化变量
+        dark = fxBase['param']['merge'](dark, {
+            // 包装盒子
+            'wrapBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'moire-elem': 'elem'
+                }
+            },
+            // 元素盒子
+            'elemBox': {
+                // 元素
+                'elem': '<div></div>',
+                // 属性
+                'attr': {
+                    'id': dark['id']
+                }
+            }
+        }, dark);
+        // 渲染之前
+        if (isFunction(dark['before'])) {
+            dark['before'](dark, base);
+        }
         // 疏理包装
-        dark['wrap'] = $('<div></div>');
-        dark['wrap'].attr({
-            'moire-elem': 'elem'
-        });
+        dark['wrap'] = $(dark['wrapBox']['elem']);
+        dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
-        dark['elem'] = $('<div></div>');
-        dark['elem'].attr({
-            'id': dark['id']
-        });
+        dark['elem'] = $(dark['elemBox']['elem']);
+        dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].text(dark['data']);
         // 疏理皮肤
         switch (dark['skin']) {
@@ -64,7 +94,6 @@ fxView['material']['elem']['text'] = function() {
             case 'table_link':
                 // 表格-链接
                 dark['templet'] = function(data) {
-                    var tray = {};
                     tray['echo'] = '';
                     // 疏理链接
                     if (!isBlank(dark['option']['url'])) {
@@ -81,6 +110,7 @@ fxView['material']['elem']['text'] = function() {
                     // 疏理元素
                     if (!isBlank(tray['url'])) {
                         tray['attr'] = {
+                            'class': dark['option']['class'],
                             'title': dark['title'],
                             'style': dark['option']['style'],
                             'target': dark['option']['target']
@@ -96,7 +126,7 @@ fxView['material']['elem']['text'] = function() {
                 break;
             case 'view':
                 // 视图
-                dark['pack'].append(dark['wrap']);
+                base['pack'].append(dark['wrap']);
                 dark['wrap'].attr({
                     'class': 'layui-col-xs12 layui-col-md6'
                 });
@@ -108,14 +138,21 @@ fxView['material']['elem']['text'] = function() {
                 });
                 break;
         }
-        // 疏理视图
-        if (isFunction(dark['view'])) {
-            dark['view'](dark);
+        // 渲染之后
+        if (isFunction(dark['after'])) {
+            dark['after'](dark, base);
+        }
+        // 渲染完成
+        if (isFunction(dark['done'])) {
+            $(document).ready(function() {
+                dark['done'](dark, base);
+            });
         }
     };
     // 输出
     echo['echo'] = function() {
         // 疏理数据
+        dark['echo'] = dark['elem'].text();
     };
     // 重置
     echo['reset'] = function() {

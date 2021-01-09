@@ -9,6 +9,88 @@
 // +----------------------------------------------------------------------
 
 /**
+ * 创建本地存储
+ */
+var fxLocal = new function() { return isObject(fxLocal) ? fxLocal : {}; };
+
+/**
+ * 设置数据
+ */
+fxLocal['set'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null,
+        value = !isNull(arguments[1]) ? arguments[1] : null;
+    return localStorage.setItem(key, JSON.stringify(value));
+};
+
+/**
+ * 获取数据
+ */
+fxLocal['get'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    return JSON.parse(localStorage.getItem(key));
+};
+
+/**
+ * 移除数据
+ */
+fxLocal['remove'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    return localStorage.removeItem(key);
+};
+
+/**
+ * 清除数据
+ */
+fxLocal['clear'] = function() {
+    // 初始化变量
+    return localStorage.clear();
+};
+
+/**
+ * 创建会话存储
+ */
+var fxSession = new function() { return isObject(fxSession) ? fxSession : {}; };
+
+/**
+ * 设置数据
+ */
+fxSession['set'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null,
+        value = !isNull(arguments[1]) ? arguments[1] : null;
+    return sessionStorage.setItem(key, JSON.stringify(value));
+};
+
+/**
+ * 获取数据
+ */
+fxSession['get'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    return JSON.parse(sessionStorage.getItem(key));
+};
+
+/**
+ * 移除数据
+ */
+fxSession['remove'] = function() {
+    // 初始化变量
+    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    return sessionStorage.removeItem(key);
+};
+
+/**
+ * 清除数据
+ */
+fxSession['clear'] = function() {
+    // 初始化变量
+    return sessionStorage.clear();
+};
+
+/**
  * 校验Json
  */
 function isJson(str) {
@@ -128,7 +210,14 @@ function isString(data) {
  */
 function isNumeric(data) {
     // 初始化变量
-    return typeof data === 'number' && !isNaN(data);
+    switch (typeof data) {
+        case 'string':
+            // 字符串
+        case 'number':
+            // 数值
+            return parseFloat(data) == data && !isNaN(data);
+    }
+    return false;
 }
 
 /**

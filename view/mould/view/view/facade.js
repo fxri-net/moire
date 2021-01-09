@@ -16,6 +16,8 @@ fxView['mould']['view']['view'] = function() {
     var dark = {
         // 基础
         'base': fxBase['param']['merge']({
+            // 调试
+            'debug': false,
             // 皮肤
             'skin': 'view'
         }, fxView['shelf']['view'])
@@ -96,10 +98,10 @@ fxView['mould']['view']['view'] = function() {
     tray['elem'] = $('.moire-view .moire-table');
     // 疏理标题
     if (!isNull(tray['view']['title'])) {
-        tray['elem'].find('.moire-tbody').before('<div class="moire-thead"><div moire-elem="title">' + tray['view']['title'] + '</div></div>');
+        tray['elem'].before('<div class="moire-thead"><div moire-elem="title">' + tray['view']['title'] + '</div></div>');
     }
     // 疏理数据
-    tray['list'] = fxView['deploy']['cache']['view'] = {};
+    tray['list'] = fxView['cache']['elem']['view'] = {};
     tray['echo']['data']['_worldline'] = fxBase['text']['mtime']();
     $.each(tray['view']['data'](tray['echo']['data']), function(key, value) {
         // 解析数据
@@ -107,18 +109,27 @@ fxView['mould']['view']['view'] = function() {
         value['type'] = fxBase['text']['explode'](',', value['type']);
         $.each(value['type'], function(key2, value2) {
             // 校验元素
-            if (!isFunction(fxView['material']['elem'][value2])) return true;
+            if (!isFunction(fxView['material']['elem'][value2])) {
+                if (dark['base']['debug']) {
+                    console.log(fxBase['base']['lang'](['material', 'element', '[', fxApp["view"]["langc"]["prefix"] + value2, ']', 'not2', 'load']));
+                }
+                return true;
+            }
+            // 配置基础
+            tray['base'] = {};
+            tray['base']['cache'] = tray['list'];
+            tray['base']['mould'] = dark;
+            tray['base']['pack'] = tray['elem'];
             // 配置数据
             tray['data'] = fxBase['param']['merge'](1, {
                 'field': key,
                 'skin': dark['base']['skin']
             }, value);
-            tray['data']['mould'] = dark;
-            tray['data']['pack'] = tray['elem'].find('.moire-tbody');
             tray['data']['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
             tray['data']['type'] = value2;
+            // 初始化元素
             tray['list'][tray['data']['id']] = fxView['material']['elem'][value2]();
-            tray['list'][tray['data']['id']]['init'](tray['data']);
+            tray['list'][tray['data']['id']]['init'](tray['data'], tray['base']);
         })
     });
     // 渲染数据
@@ -137,16 +148,4 @@ fxView['mould']['view']['view'] = function() {
         'title': false,
         'zIndex': fxBase['base']['maxZIndex']()
     });
-    // 执行瀑布流
-    $('div[moire-elem=elem]').on('resize', function() {
-        // 文件容器
-        $('div[moire-cell=file]>.moire-div .moire-elem-inline').masonry({
-            'itemSelector': 'div[moire-cell=file]>.moire-div .moire-elem-inline>div'
-        });
-        // 主容器
-        $('.moire-tbody').masonry({
-            'itemSelector': 'div[moire-elem=elem]'
-        });
-    });
-    $('div[moire-elem=elem]').trigger('resize');
 };
