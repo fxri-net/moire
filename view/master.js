@@ -303,16 +303,18 @@ fxView['store']['supply'] = function() {
     $.each(fxView['shelf']['base'], function(key, value) {
         if (!isBlank(value['url'])) {
             value = fxBase['param']['merge']({
+                // 类型
+                'type': 'get',
                 // 扩展
                 'extend': {
-                    // 映射
-                    'mapping': { 0: key }
+                    // 索引
+                    'index': { 0: key }
                 }
             }, value);
             $.each(fxView['store']['purchase'](value), function(key2, value2) {
                 // 数据上架
-                value['extend']['mapping'][key2] = !isBlank(value['extend']['mapping'][key2]) ? value['extend']['mapping'][key2] : key2;
-                fxView['shelf']['data'][value['extend']['mapping'][key2]] = value2;
+                value['extend']['index'][key2] = !isBlank(value['extend']['index'][key2]) ? value['extend']['index'][key2] : key2;
+                fxView['shelf']['data'][value['extend']['index'][key2]] = value2;
             });
         } else {
             // 数据上架

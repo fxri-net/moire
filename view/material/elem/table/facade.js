@@ -9,9 +9,9 @@
 // +----------------------------------------------------------------------
 
 /**
- * 云纹物料-元素-映射
+ * 云纹物料-元素-表格
  */
-fxView['material']['elem']['mapping'] = function() {
+fxView['material']['elem']['table'] = function() {
     // 初始化变量
     var base,
         dark,
