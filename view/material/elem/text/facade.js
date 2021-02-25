@@ -27,8 +27,6 @@ fxView['material']['elem']['text'] = function() {
         fxView['machine']['elem'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
-            // 数据
-            'data': '',
             // 输出-开关
             'echoSwitch': 0,
             // 选项
@@ -38,9 +36,7 @@ fxView['material']['elem']['text'] = function() {
                 // 类名
                 'class': dark['id'] + '-elem',
                 // 文本
-                'text': '点击跳转',
-                // 样式
-                'style': 'display: block;width: 100%;height: 100%',
+                'text': ['click', 'jump'],
                 // 目标
                 'target': '_blank'
             }
@@ -59,7 +55,12 @@ fxView['material']['elem']['text'] = function() {
                 'elem': '<div></div>',
                 // 属性
                 'attr': {
-                    'moire-elem': 'elem'
+                    // 元素
+                    'moire-elem': 'elem',
+                    // 类型
+                    'moire-type': dark['type'],
+                    // 皮肤
+                    'moire-skin': dark['skin']
                 }
             },
             // 元素盒子
@@ -88,12 +89,15 @@ fxView['material']['elem']['text'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    dark['list'].push(data);
                     return !isBlank(data[dark['field']]) ? data[dark['field']] : '';
                 }
                 break;
             case 'table_link':
                 // 表格-链接
+                dark['wrapBox']['attr']['moire-elem'] = 'link';
                 dark['templet'] = function(data) {
+                    dark['list'].push(data);
                     tray['echo'] = '';
                     // 疏理链接
                     if (!isBlank(dark['option']['url'])) {
@@ -110,15 +114,16 @@ fxView['material']['elem']['text'] = function() {
                     // 疏理元素
                     if (!isBlank(tray['url'])) {
                         tray['attr'] = {
-                            'class': dark['option']['class'],
                             'title': dark['title'],
-                            'style': dark['option']['style'],
                             'target': dark['option']['target']
                         };
                         tray['attr'][tray['href']] = tray['url'];
-                        tray['echo'] = $('<a></a>');
+                        tray['echo'] = $('<a><div></div></a>');
                         tray['echo'].attr(tray['attr']);
-                        tray['echo'].text(dark['option']['text']);
+                        tray['attr'] = {
+                            'class': dark['option']['class'],
+                        };
+                        tray['echo'].find('div').attr(tray['attr']).text(dark['option']['text']);
                         tray['echo'] = tray['echo'].prop('outerHTML');
                     }
                     return tray['echo'];
@@ -142,11 +147,12 @@ fxView['material']['elem']['text'] = function() {
         if (isFunction(dark['after'])) {
             dark['after'](dark, base);
         }
+    };
+    // 完成
+    echo['done'] = function() {
         // 渲染完成
         if (isFunction(dark['done'])) {
-            $(document).ready(function() {
-                dark['done'](dark, base);
-            });
+            dark['done'](dark, base);
         }
     };
     // 输出

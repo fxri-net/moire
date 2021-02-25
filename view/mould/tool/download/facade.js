@@ -17,7 +17,7 @@ fxView['mould']['tool']['download'] = function() {
     var tray = {};
     tray[dark['model']['key']] = [];
     // 检查配置
-    if (isNull(dark['api']['download'])) {
+    if (!isSet(dark['api']['download'])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
     }
     window.open(dark['api']['download']);

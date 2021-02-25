@@ -73,6 +73,10 @@ fxView['mould']['view']['search'] = function() {
     $.each(tray['list'], function(key, value) {
         // 执行部署
         value['deploy']();
+        // 执行完成
+        $(document).ready(function() {
+            value['done']();
+        });
     });
     // 疏理元素
     tray['elem'].append('<div class="layui-col-xs12 moire-button">' + dark['toolbar'] + '</div>');

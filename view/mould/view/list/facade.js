@@ -123,6 +123,21 @@ fxView['mould']['view']['list'] = function() {
             'done': function(data, curr, count) {
                 // 记录数据
                 fxView['cache']['echo']['list'] = data;
+                // 渲染数据
+                $.each(tray['list'], function(key, value) {
+                    // 疏理皮肤
+                    switch (value['dark']['skin']) {
+                        case 'table':
+                            // 表格
+                        case 'table_link':
+                            // 表格-链接
+                            value['base']['pack']['elem'] = $('tbody [data-field=' + value['base']['pack']['field'] + ']');
+                            value['base']['pack']['elem'].attr(value['dark']['wrapBox']['attr']);
+                            break;
+                    }
+                    // 执行完成
+                    value['done']();
+                });
                 // 绘制界面
                 $(window).trigger('resize');
                 // 初始化layui设定
@@ -160,7 +175,7 @@ fxView['mould']['view']['list'] = function() {
     tray['search'] = $('.moire-search');
     tray['height'] = $(window).height() - tray['search'].outerHeight(true);
     // 检查配置
-    if (isNull(dark['base']['api']['list'])) {
+    if (!isSet(dark['base']['api']['list'])) {
         return fxView['mould']['tool']['message']({ 'text': ['list', 'not configured'] });
     }
     // 执行视图-表格
@@ -224,7 +239,7 @@ fxView['mould']['view']['list'] = function() {
             tray['height'] = $(window).height() - tray['search'].outerHeight(true);
         }
         // 重置表格
-        if (!isNull(tray['table'])) {
+        if (isSet(tray['table'])) {
             tray['view'].css('height', tray['height']);
             tray['table'].config.height = tray['height'];
             tray['table'].resize();
@@ -270,7 +285,7 @@ fxView['mould']['view']['list'] = function() {
         $.each(fxView['cache']['elem']['search'], function(key, value) {
             // 执行输出
             value['echo']();
-            if (isNull(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
+            if (!isSet(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
             // 疏理输出
             $.each(fxBase['text']['explode']('-', value['dark']['field']).reverse(), function(key2, value2) {
                 var data = {};
@@ -284,17 +299,6 @@ fxView['mould']['view']['list'] = function() {
             // 初始化变量
             if (!isArray(value) && !isObject(value)) return true;
             tray['data'][key] = JSON.stringify(value);
-        });
-        // 处理数据
-        tray['echo'] = fxView['store']['deal']({
-            'url': tray['view']['url'],
-            'async': false,
-            'data': {
-                'data': tray['data']
-            },
-            'extend': {
-                'tips': false
-            }
         });
         // 重载表格
         tray['table'].reload({
@@ -321,7 +325,7 @@ fxView['mould']['view']['list'] = function() {
                 return false;
             }
         });
-        if (!isNull(event.type)) {
+        if (isSet(event.type)) {
             param.unshift(event.field + ' ' + event.type);
         }
         param = param.join(',');
@@ -353,14 +357,21 @@ fxView['mould']['view']['list'] = function() {
         echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         fxView['store']['deal']({
+            // 地址
             'url': dark['base']['api']['edit'],
+            // 数据
             'data': {
+                // 基础
                 'base': {
+                    // 严格
                     'strict': 0
                 },
+                // 数据
                 'data': echo['data']
             },
+            // 扩展
             'extend': {
+                // 元素
                 'elem': event.othis
             }
         });
@@ -384,16 +395,25 @@ fxView['mould']['view']['list'] = function() {
         echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         tray['echo'] = fxView['store']['deal']({
+            // 地址
             'url': dark['base']['api']['edit'],
+            // 异步
             'async': false,
+            // 数据
             'data': {
+                // 基础
                 'base': {
+                    // 严格
                     'strict': 0
                 },
+                // 数据
                 'data': echo['data']
             },
+            // 扩展
             'extend': {
+                // 元素
                 'elem': $(this).parent(),
+                // 提示
                 'tips': false
             }
         });
@@ -536,7 +556,7 @@ fxView['mould']['view']['list'] = function() {
                 break;
             case 'media_video':
                 // 查看
-                layer.open({
+                layui.layer.open({
                     'type': 1,
                     'title': fxy_lang(['view', ' - ', fxyCore.data.site.title]),
                     'content': fxy_mould({
@@ -656,7 +676,7 @@ fxView['mould']['view']['list'] = function() {
                                         }
                                     });
                                     if (thumb.width == 0 && thumb.height == 0) {
-                                        layer.msg(fxy_lang(['image', 'load', 'fail']), {
+                                        layui.layer.msg(fxy_lang(['image', 'load', 'fail']), {
                                             'icon': 2,
                                             'time': 800
                                         });
@@ -665,7 +685,7 @@ fxView['mould']['view']['list'] = function() {
                                     break;
                             }
                             // 界面弹出
-                            layer.open(cace.conf);
+                            layui.layer.open(cace.conf);
                         });
                     }
                 });

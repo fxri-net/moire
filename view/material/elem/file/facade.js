@@ -27,8 +27,6 @@ fxView['material']['elem']['file'] = function() {
         fxView['machine']['elem'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
-            // 数据
-            'data': '',
             // 输出-开关
             'echoSwitch': 1,
             // 默认
@@ -79,7 +77,12 @@ fxView['material']['elem']['file'] = function() {
                 'elem': '<div></div>',
                 // 属性
                 'attr': {
-                    'moire-elem': 'elem'
+                    // 元素
+                    'moire-elem': 'elem',
+                    // 类型
+                    'moire-type': dark['type'],
+                    // 皮肤
+                    'moire-skin': dark['skin']
                 }
             },
             // 元素盒子
@@ -108,6 +111,7 @@ fxView['material']['elem']['file'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    dark['list'].push(data);
                     tray['echo'] = '';
                     // 疏理数据
                     switch (dark['option']['type']) {
@@ -216,7 +220,7 @@ fxView['material']['elem']['file'] = function() {
                                 'message': fxBase['base']['lang'](['save', 'success']),
                                 'data': [value]
                             });
-                            layer.close(index);
+                            layui.layer.close(index);
                         });
                     });
                     // 疏理配置
@@ -410,7 +414,7 @@ fxView['material']['elem']['file'] = function() {
                             // 外链地址
                             tray['message'] = ['save', 'success'];
                             success([{ 'ossUrl': value }]);
-                            layer.close(index);
+                            layui.layer.close(index);
                         });
                     });
                     // 疏理配置
@@ -543,11 +547,12 @@ fxView['material']['elem']['file'] = function() {
         if (isFunction(dark['after'])) {
             dark['after'](dark, base);
         }
+    };
+    // 完成
+    echo['done'] = function() {
         // 渲染完成
         if (isFunction(dark['done'])) {
-            $(document).ready(function() {
-                dark['done'](dark, base);
-            });
+            dark['done'](dark, base);
         }
     };
     // 输出
@@ -572,7 +577,7 @@ fxView['material']['elem']['file'] = function() {
         dark['echo'] = fxBase['text']['implode'](',', dark['echo']);
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
             dark['elem'].find('.moire-operate').trigger('click');
-            layer.msg(fxBase['base']['lang'](['please', 'upload', dark['label']]), { 'icon': 5, 'anim': 6 });
+            layui.layer.msg(fxBase['base']['lang'](['please', 'upload', dark['label']]), { 'icon': 5, 'anim': 6 });
             return false;
         }
     };

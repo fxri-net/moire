@@ -18,7 +18,7 @@ fxView['mould']['tool']['import'] = function() {
     dark = fxBase['param']['merge'](dark, arguments[0]);
     tray[dark['model']['key']] = [];
     // 检查配置
-    if (isNull(dark['api']['import'])) {
+    if (!isSet(dark['api']['import'])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
     }
 };

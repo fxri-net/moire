@@ -21,7 +21,7 @@ fxView['mould']['tool']['export'] = function() {
     dark = fxBase['param']['merge'](dark, arguments[0]);
     tray[dark['model']['key']] = [];
     // 检查配置
-    if (isNull(dark['api']['export'])) {
+    if (!isSet(dark['api']['export'])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
     }
     // 疏理数据
@@ -32,7 +32,7 @@ fxView['mould']['tool']['export'] = function() {
     $.each(dark['param'], function(key, value) {
         if (isNumeric(value) || isString(value)) {
             tray[dark['model']['key']].push(value);
-        } else if (isObject(value) && !isNull(value[dark['model']['key']])) {
+        } else if (isObject(value) && isSet(value[dark['model']['key']])) {
             tray[dark['model']['key']].push(value[dark['model']['key']]);
         }
     });
@@ -58,9 +58,8 @@ fxView['mould']['tool']['export'] = function() {
         // 设置令牌
         tray['param']['base']['token'] = fxApp['user']['base']['token'];
         // 设置数据
-        tray['param']['data'][dark['model']['key']] = tray[dark['model']['key']];
-        if (isEmpty(tray['param']['data'][dark['model']['key']])) {
-            tray['param']['data'][dark['model']['key']] = null;
+        if (!isEmpty(tray[dark['model']['key']])) {
+            tray['param']['data'][dark['model']['key']] = tray[dark['model']['key']];
         }
         // 设置条数
         tray['param']['base']['page'] = 1;

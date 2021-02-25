@@ -25,7 +25,7 @@ fxView['mould']['view']['view'] = function() {
     var tray = {};
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
-    if (isNull(dark['base']['api']['elem'])) {
+    if (!isSet(dark['base']['api']['elem'])) {
         parent.layui.layer.closeAll();
         return fxView['mould']['tool']['message']({ 'text': ['elem', 'not configured'] });
     }
@@ -52,8 +52,11 @@ fxView['mould']['view']['view'] = function() {
         // 工具栏
         'toolbar': {
             1: fxBase['base']['template']({
+                // 元素
                 'elem': 'tool',
+                // 类型
                 'type': 'view-edit',
+                // 单元
                 'cell': 'close'
             }).html()
         }
@@ -70,12 +73,20 @@ fxView['mould']['view']['view'] = function() {
     }
     // 请求数据
     tray['echo'] = {
+        // 地址
         'url': dark['base']['api']['elem'],
+        // 类型
+        'type': 'get',
+        // 异步
         'async': false,
+        // 数据
         'data': {
+            // 数据
             'data': {}
         },
+        // 扩展
         'extend': {
+            // 提示
             'tips': false
         }
     };
@@ -97,7 +108,7 @@ fxView['mould']['view']['view'] = function() {
     // 成功回调
     tray['elem'] = $('.moire-view .moire-table');
     // 疏理标题
-    if (!isNull(tray['view']['title'])) {
+    if (isSet(tray['view']['title'])) {
         tray['elem'].before('<div class="moire-thead"><div moire-elem="title">' + tray['view']['title'] + '</div></div>');
     }
     // 疏理数据
@@ -136,6 +147,10 @@ fxView['mould']['view']['view'] = function() {
     $.each(tray['list'], function(key, value) {
         // 执行部署
         value['deploy']();
+        // 执行完成
+        $(document).ready(function() {
+            value['done']();
+        });
     });
     // 渲染表单
     layui.form.render();

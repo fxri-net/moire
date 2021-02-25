@@ -18,8 +18,8 @@ var fxLocal = new function() { return isObject(fxLocal) ? fxLocal : {}; };
  */
 fxLocal['set'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null,
-        value = !isNull(arguments[1]) ? arguments[1] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null,
+        value = isSet(arguments[1]) ? arguments[1] : null;
     return localStorage.setItem(key, JSON.stringify(value));
 };
 
@@ -28,7 +28,7 @@ fxLocal['set'] = function() {
  */
 fxLocal['get'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null;
     return JSON.parse(localStorage.getItem(key));
 };
 
@@ -37,7 +37,7 @@ fxLocal['get'] = function() {
  */
 fxLocal['remove'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null;
     return localStorage.removeItem(key);
 };
 
@@ -59,8 +59,8 @@ var fxSession = new function() { return isObject(fxSession) ? fxSession : {}; };
  */
 fxSession['set'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null,
-        value = !isNull(arguments[1]) ? arguments[1] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null,
+        value = isSet(arguments[1]) ? arguments[1] : null;
     return sessionStorage.setItem(key, JSON.stringify(value));
 };
 
@@ -69,7 +69,7 @@ fxSession['set'] = function() {
  */
 fxSession['get'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null;
     return JSON.parse(sessionStorage.getItem(key));
 };
 
@@ -78,7 +78,7 @@ fxSession['get'] = function() {
  */
 fxSession['remove'] = function() {
     // 初始化变量
-    var key = !isNull(arguments[0]) ? arguments[0] : null;
+    var key = isSet(arguments[0]) ? arguments[0] : null;
     return sessionStorage.removeItem(key);
 };
 
@@ -155,7 +155,15 @@ function isUndefined(data) {
  */
 function isNull(data) {
     // 初始化变量
-    return data === null || data === undefined ? true : false;
+    return data === null ? true : false;
+}
+
+/**
+ * 校验变量
+ */
+function isSet(data) {
+    // 初始化变量
+    return data !== null && data !== undefined ? true : false;
 }
 
 /**
@@ -163,7 +171,7 @@ function isNull(data) {
  */
 function isBlank(data) {
     // 初始化变量
-    return isNull(data) || data === '' ? true : false;
+    return !isSet(data) || data === '' ? true : false;
 }
 
 /**
@@ -247,10 +255,33 @@ function isMoney(data) {
     return reg.test(data);
 }
 
-
 /**
- * 初始化未知方法
+ * 历史-替换当前URL
  */
 if (!isFunction(history.replaceState)) {
     history.replaceState = function() {}
+}
+
+/**
+ * 对象-合并元素
+ */
+if (!isFunction(Object.assign)) {
+    Object.assign = function(target) {
+        'use strict';
+        if (target == null) {
+            throw new TypeError('Cannot convert undefined or null to object');
+        }
+        target = Object(target);
+        for (var index = 1; index < arguments.length; index++) {
+            var source = arguments[index];
+            if (source != null) {
+                for (var key in source) {
+                    if (Object.prototype.hasOwnProperty.call(source, key)) {
+                        target[key] = source[key];
+                    }
+                }
+            }
+        }
+        return target;
+    };
 }

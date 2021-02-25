@@ -27,8 +27,6 @@ fxView['material']['elem']['html'] = function() {
         fxView['machine']['elem'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
-            // 数据
-            'data': '',
             // 输出-开关
             'echoSwitch': 0
         }, dark);
@@ -45,7 +43,12 @@ fxView['material']['elem']['html'] = function() {
                 'elem': '<div></div>',
                 // 属性
                 'attr': {
-                    'moire-elem': 'elem'
+                    // 元素
+                    'moire-elem': 'elem',
+                    // 类型
+                    'moire-type': dark['type'],
+                    // 皮肤
+                    'moire-skin': dark['skin']
                 }
             },
             // 元素盒子
@@ -89,11 +92,12 @@ fxView['material']['elem']['html'] = function() {
         if (isFunction(dark['after'])) {
             dark['after'](dark, base);
         }
+    };
+    // 完成
+    echo['done'] = function() {
         // 渲染完成
         if (isFunction(dark['done'])) {
-            $(document).ready(function() {
-                dark['done'](dark, base);
-            });
+            dark['done'](dark, base);
         }
     };
     // 输出

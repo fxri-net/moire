@@ -25,7 +25,7 @@ fxView['mould']['view']['edit'] = function() {
     var tray = {};
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
-    if (isNull(dark['base']['api']['elem'])) {
+    if (!isSet(dark['base']['api']['elem'])) {
         parent.layui.layer.closeAll();
         return fxView['mould']['tool']['message']({ 'text': ['elem', 'not configured'] });
     }
@@ -57,13 +57,19 @@ fxView['mould']['view']['edit'] = function() {
         // 工具栏
         'toolbar': {
             0: fxBase['base']['template']({
+                // 元素
                 'elem': 'tool',
+                // 类型
                 'type': 'view-edit',
+                // 单元
                 'cell': 'submit,reset,clear'
             }).html(),
             1: fxBase['base']['template']({
+                // 元素
                 'elem': 'tool',
+                // 类型
                 'type': 'view-edit',
+                // 单元
                 'cell': 'close'
             }).html()
         }
@@ -83,12 +89,20 @@ fxView['mould']['view']['edit'] = function() {
     if (dark['base']['elem'] == 'edit') {
         // 请求数据
         tray['echo'] = {
+            // 地址
             'url': dark['base']['api']['elem'],
+            // 类型
+            'type': 'get',
+            // 异步
             'async': false,
+            // 数据
             'data': {
+                // 数据
                 'data': {}
             },
+            // 扩展
             'extend': {
+                // 提示
                 'tips': false
             }
         };
@@ -113,7 +127,7 @@ fxView['mould']['view']['edit'] = function() {
     // 成功回调
     tray['elem'] = $('.moire-view .moire-table');
     // 疏理标题
-    if (!isNull(tray['view']['title'])) {
+    if (isSet(tray['view']['title'])) {
         tray['elem'].before('<div class="moire-thead"><div moire-elem="title">' + tray['view']['title'] + '</div></div>');
     }
     // 疏理数据
@@ -152,6 +166,10 @@ fxView['mould']['view']['edit'] = function() {
     $.each(tray['list'], function(key, value) {
         // 执行部署
         value['deploy']();
+        // 执行完成
+        $(document).ready(function() {
+            value['done']();
+        });
     });
     // 渲染表单
     layui.form.render();
@@ -165,7 +183,7 @@ fxView['mould']['view']['edit'] = function() {
             tray['data'] = {};
             $.each(tray['list'], function(key, value) {
                 // 执行输出
-                if (isNull(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
+                if (!isSet(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
                 // 疏理输出
                 $.each(fxBase['text']['explode']('-', value['dark']['field']).reverse(), function(key2, value2) {
                     var data = {};
@@ -182,12 +200,18 @@ fxView['mould']['view']['edit'] = function() {
             });
             // 处理数据
             tray['echo'] = fxView['store']['deal']({
+                // 地址
                 'url': tray['view']['url'],
+                // 异步
                 'async': false,
+                // 数据
                 'data': {
+                    // 数据
                     'data': tray['data']
                 },
+                // 扩展
                 'extend': {
+                    // 提示
                     'tips': false
                 }
             });
@@ -211,7 +235,7 @@ fxView['mould']['view']['edit'] = function() {
                 if (isObject(tray['echo']['extend']['error'])) {
                     tray['echo']['message'] = [];
                     $.each(tray['echo']['extend']['error']['data'], function(key, value) {
-                        key = !isNull(tray['list'][key + '-0']) ? fxBase['base']['lang'](tray['list'][key + '-0']['dark']['label']) : key;
+                        key = isSet(tray['list'][key + '-0']) ? fxBase['base']['lang'](tray['list'][key + '-0']['dark']['label']) : key;
                         if (tray['echo']['message'].length > 0) {
                             tray['echo']['message'].push('and2');
                         }

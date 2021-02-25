@@ -16,7 +16,7 @@ var fxView = new function() { return isObject(fxView) ? fxView : {}; };
 /**
  * 缓存
  */
-fxView['cache'] = {
+fxView['cache'] = Object.assign(isObject(fxView['cache']) ? fxView['cache'] : {}, {
     /**
      * 输出
      */
@@ -31,32 +31,32 @@ fxView['cache'] = {
      * 视图
      */
     'view': {}
-};
+});
 
 /**
  * 定制
  */
-fxView['custom'] = {};
+fxView['custom'] = Object.assign(isObject(fxView['custom']) ? fxView['custom'] : {}, {});
 
 /**
  * 部署
  */
-fxView['deploy'] = {
+fxView['deploy'] = Object.assign(isObject(fxView['deploy']) ? fxView['deploy'] : {}, {
     /**
      * 视图
      */
     'view': {}
-};
+});
 
 /**
  * 加工
  */
-fxView['machine'] = {};
+fxView['machine'] = Object.assign(isObject(fxView['machine']) ? fxView['machine'] : {}, {});
 
 /**
  * 物料
  */
-fxView['material'] = {
+fxView['material'] = Object.assign(isObject(fxView['material']) ? fxView['material'] : {}, {
     /**
      * 元素
      */
@@ -66,12 +66,12 @@ fxView['material'] = {
      * 模板
      */
     'template': {}
-};
+});
 
 /**
  * 模具
  */
-fxView['mould'] = {
+fxView['mould'] = Object.assign(isObject(fxView['mould']) ? fxView['mould'] : {}, {
     /**
      * 工具
      */
@@ -81,17 +81,17 @@ fxView['mould'] = {
      * 视图
      */
     'view': {}
-};
+});
 
 /**
  * 货架
  */
-fxView['shelf'] = {};
+fxView['shelf'] = Object.assign(isObject(fxView['shelf']) ? fxView['shelf'] : {}, {});
 
 /**
  * 商店
  */
-fxView['store'] = {};
+fxView['store'] = Object.assign(isObject(fxView['store']) ? fxView['store'] : {}, {});
 
 /**
  * 云纹商店-处理
@@ -141,7 +141,7 @@ fxView['store']['deal'] = function() {
             // 系统异常
             data['message'] = fxBase['base']['lang'](['system', 'abend']);
         }
-        if (data['code'] == 200 && !isNull(dark['extend']['elem'])) {
+        if (data['code'] == 200 && isSet(dark['extend']['elem'])) {
             // 请求成功
             layui.layer.tips(data['message'], $(dark['extend']['elem']), {
                 'time': 800,
@@ -186,6 +186,8 @@ fxView['store']['purchase'] = function() {
     var dark = {
         // 地址
         'url': null,
+        // 类型
+        'type': 'get',
         // 异步
         'async': false,
         // 数据
@@ -303,14 +305,16 @@ fxView['store']['supply'] = function() {
     $.each(fxView['shelf']['base'], function(key, value) {
         if (!isBlank(value['url'])) {
             value = fxBase['param']['merge']({
-                // 类型
-                'type': 'get',
                 // 扩展
                 'extend': {
                     // 索引
-                    'index': { 0: key }
+                    'index': {}
                 }
             }, value);
+            // 疏理索引
+            if (isEmpty(value['extend']['index'])) {
+                value['extend']['index'] = { 0: key };
+            }
             $.each(fxView['store']['purchase'](value), function(key2, value2) {
                 // 数据上架
                 value['extend']['index'][key2] = !isBlank(value['extend']['index'][key2]) ? value['extend']['index'][key2] : key2;
@@ -377,8 +381,12 @@ fxView['machine']['elem'] = function() {
         'id': '',
         // 字段
         'field': '',
+        // 数据
+        'data': null,
         // 输出
         'echo': null,
+        // 列表
+        'list': [],
         // 基础属性->↑
         // 视图属性->↓
         // 标题

@@ -18,7 +18,7 @@ fxView['mould']['tool']['delete'] = function() {
     dark = fxBase['param']['merge'](dark, arguments[0]);
     tray[dark['model']['key']] = [];
     // 检查配置
-    if (isNull(dark['api']['delete'])) {
+    if (!isSet(dark['api']['delete'])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
     }
     // 疏理数据
@@ -37,7 +37,7 @@ fxView['mould']['tool']['delete'] = function() {
     $.each(dark['param'], function(key, value) {
         if (isNumeric(value) || isString(value)) {
             tray[dark['model']['key']].push(value);
-        } else if (isObject(value) && !isNull(value[dark['model']['key']])) {
+        } else if (isObject(value) && isSet(value[dark['model']['key']])) {
             tray[dark['model']['key']].push(value[dark['model']['key']]);
         }
     });
@@ -45,9 +45,13 @@ fxView['mould']['tool']['delete'] = function() {
     layui.layer.confirm('是否确认删除？', { 'icon': 0, 'title': null, 'closeBtn': 0 }, function(index) {
         // 处理数据
         tray['echo'] = {
+            // 地址
             'url': dark['api']['delete'],
+            // 异步
             'async': false,
+            // 数据
             'data': {
+                // 数据
                 'data': {}
             }
         };

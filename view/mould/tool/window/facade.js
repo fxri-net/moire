@@ -21,7 +21,7 @@ fxView['mould']['tool']['window'] = function() {
     }, fxView['shelf']['view']);
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
-    if (isNull(dark['page'][dark['elem']])) {
+    if (!isSet(dark['page'][dark['elem']])) {
         return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
     }
     // 疏理数据

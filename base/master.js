@@ -16,7 +16,7 @@ var fxBase = new function() { return isObject(fxBase) ? fxBase : {}; };
 /**
  * 基础
  */
-fxBase['base'] = {
+fxBase['base'] = Object.assign(isObject(fxBase['base']) ? fxBase['base'] : {}, {
     /**
      * 获取模具
      */
@@ -32,8 +32,8 @@ fxBase['base'] = {
             'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        dark['type'] = !isNull(dark['type']) ? 'moire-type,' + dark['type'] : null;
-        dark['cell'] = !isNull(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
+        dark['type'] = isSet(dark['type']) ? 'moire-type,' + dark['type'] : null;
+        dark['cell'] = isSet(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
         if (isArray(dark['param'])) dark['param'].unshift({});
         return fxBase['dom']['mould'](dark);
     },
@@ -51,7 +51,7 @@ fxBase['base'] = {
             'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        dark['cell'] = !isNull(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
+        dark['cell'] = isSet(dark['cell']) ? 'moire-cell,' + dark['cell'] : null;
         if (isArray(dark['param'])) dark['param'].unshift({});
         return fxBase['dom']['template'](dark);
     },
@@ -61,7 +61,7 @@ fxBase['base'] = {
      */
     'lang': function(name) {
         // 初始化变量
-        if (isNull(fxApp['view']['lang']) || isNull(fxApp['view']['langs'])) return name;
+        if (!isSet(fxApp['view']['lang']) || !isSet(fxApp['view']['langs'])) return name;
         var langs = fxBase['base']['langList'](name),
             string = fxBase['base']['langParse'](langs);
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -79,7 +79,7 @@ fxBase['base'] = {
             });
         } else {
             name += '';
-            if (isNull(name)) {
+            if (!isSet(name)) {
                 langs = 'null';
             } else if (name.indexOf(fxApp['view']['langc']['prefix']) === 0) {
                 langs = name.substr(fxApp['view']['langc']['prefix'].length);
@@ -142,7 +142,7 @@ fxBase['base'] = {
         // 初始化变量
         var dark = fxBase['text']['explode'].apply(null, arguments),
             echo = [];
-        if (isNull(arguments[1]) || '' == arguments[1]) return echo;
+        if (!isSet(arguments[1]) || '' == arguments[1]) return echo;
         $.each(dark, function(key, value) {
             if (!fxBase['param']['inArray'](value, echo)) {
                 echo.push(value);
@@ -156,8 +156,8 @@ fxBase['base'] = {
      */
     'json': function() {
         // 初始化变量
-        var data = !isNull(arguments[0]) ? arguments[0] : null,
-            type = !isNull(arguments[1]) ? arguments[1] : '';
+        var data = isSet(arguments[0]) ? arguments[0] : null,
+            type = isSet(arguments[1]) ? arguments[1] : '';
         type = type.toLowerCase();
         switch (type) {
             case 'encode':
@@ -175,18 +175,18 @@ fxBase['base'] = {
                 } else if (isString(data)) {
                     data = fxBase['text']['strDecode'](data);
                 } else if (!isArray(data)) {
-                    data = !isNull(data) ? [data] : [];
+                    data = isSet(data) ? [data] : [];
                 }
                 break;
         }
         return data;
     }
-};
+});
 
 /**
  * 客户端
  */
-fxBase['client'] = {
+fxBase['client'] = Object.assign(isObject(fxBase['client']) ? fxBase['client'] : {}, {
     /**
      * 判断IE浏览器版本
      */
@@ -225,22 +225,22 @@ fxBase['client'] = {
             return -1;
         }
     }
-};
+});
 
 /**
  * HTML元素
  */
-fxBase['dom'] = {
+fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
     /**
      * 设置/获取样式
      */
     'css': function() {
         // 初始化变量
         var dark = {};
-        dark['elem'] = !isNull(arguments[0]) ? arguments[0] : null;
-        dark['name'] = !isNull(arguments[1]) ? arguments[1] : null;
-        dark['value'] = !isNull(arguments[2]) ? arguments[2] : null;
-        if (isNull(dark['elem'])) return;
+        dark['elem'] = isSet(arguments[0]) ? arguments[0] : null;
+        dark['name'] = isSet(arguments[1]) ? arguments[1] : null;
+        dark['value'] = isSet(arguments[2]) ? arguments[2] : null;
+        if (!isSet(dark['elem'])) return;
         if (undefined == dark['elem'].length) {
             dark['elem'] = [dark['elem']];
         }
@@ -249,10 +249,10 @@ fxBase['dom'] = {
             $.each(dark['name'], function(key, value) {
                 dark['elem'].style[key] = value;
             });
-        } else if (isNull(dark['value'])) {
+        } else if (!isSet(dark['value'])) {
             dark['style'] = window.getComputedStyle(dark['elem'], null) || dark['elem'].currentStyle;
             return dark['style'][dark['name']];
-        } else if (!isNull(dark['name'])) {
+        } else if (isSet(dark['name'])) {
             dark['elem'].style[dark['name']] = dark['value'];
         }
     },
@@ -263,18 +263,18 @@ fxBase['dom'] = {
     'style': function() {
         // 初始化变量
         var dark = {};
-        dark['elem'] = !isNull(arguments[0]) ? arguments[0] : null;
-        dark['name'] = !isNull(arguments[1]) ? arguments[1] : null;
-        dark['value'] = !isNull(arguments[2]) ? arguments[2] : null;
-        if (isNull(dark['elem'])) return;
+        dark['elem'] = isSet(arguments[0]) ? arguments[0] : null;
+        dark['name'] = isSet(arguments[1]) ? arguments[1] : null;
+        dark['value'] = isSet(arguments[2]) ? arguments[2] : null;
+        if (!isSet(dark['elem'])) return;
         dark['elem'] = $(dark['elem']);
         if (isObject(dark['name'])) {
             $.each(dark['name'], function(key, value) {
                 dark['elem'].css(key, value);
             });
-        } else if (isNull(dark['value'])) {
+        } else if (!isSet(dark['value'])) {
             dark['list'] = dark['elem'].attr('style');
-            if (isNull(dark['list'])) {
+            if (!isSet(dark['list'])) {
                 dark['list'] = '';
             } else if (!isString(dark['list'])) {
                 dark['list'] = Stzring(dark['list']);
@@ -287,7 +287,7 @@ fxBase['dom'] = {
                 dark['style'][$.trim(dark['split'][0])] = $.trim(dark['split'][1]);
             });
             return dark['style'][dark['name']];
-        } else if (!isNull(dark['name'])) {
+        } else if (isSet(dark['name'])) {
             dark['elem'].css(dark['name'], dark['value']);
         }
     },
@@ -310,7 +310,7 @@ fxBase['dom'] = {
             'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        if (isNull(dark['elem'])) {
+        if (!isSet(dark['elem'])) {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
@@ -339,7 +339,7 @@ fxBase['dom'] = {
             dark['pack'].append(dark['elem'].children(value).html());
         });
         // 疏理单元
-        if (!isNull(dark['cell'])) {
+        if (isSet(dark['cell'])) {
             dark['elem'].html('');
             dark['cell'] = fxBase['text']['explode'](',', dark['cell']);
             $(dark['cell']).each(function(key, value) {
@@ -359,7 +359,7 @@ fxBase['dom'] = {
             // 疏理标题
             dark['elem'].children().each(function(key, value) {
                 // 疏理标题
-                if (isNull(dark['title'][key]) || dark['title'][key] == '') {
+                if (!isSet(dark['title'][key]) || dark['title'][key] == '') {
                     dark['title'][key] = $(value).html();
                 }
                 $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['title'][key])));
@@ -390,7 +390,7 @@ fxBase['dom'] = {
             'param': []
         };
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        if (isNull(dark['elem'])) {
+        if (!isSet(dark['elem'])) {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
@@ -419,7 +419,7 @@ fxBase['dom'] = {
         });
         // 疏理单元
         dark['elem'] = $('<div></div>');
-        if (!isNull(dark['cell'])) {
+        if (isSet(dark['cell'])) {
             dark['cell'] = fxBase['text']['explode'](',', dark['cell']);
             $(dark['cell']).each(function(key, value) {
                 if (key === 0 || value === '') return true;
@@ -438,7 +438,7 @@ fxBase['dom'] = {
             // 疏理标题
             dark['elem'].children().each(function(key, value) {
                 // 疏理标题
-                if (isNull(dark['title'][key]) || dark['title'][key] == '') {
+                if (!isSet(dark['title'][key]) || dark['title'][key] == '') {
                     dark['title'][key] = $(value).html();
                 }
                 $(value).html(fxBase['base']['lang'](fxBase['text']['explode']('.', dark['title'][key])));
@@ -478,7 +478,7 @@ fxBase['dom'] = {
         };
         var tray = {};
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        if (isNull(dark['elem'])) {
+        if (!isSet(dark['elem'])) {
             console.log(fxBase['base']['lang'](['please', 'choice', 'valid', 'HTML', 'label']));
             return;
         }
@@ -541,8 +541,8 @@ fxBase['dom'] = {
             if (true === dark['wall']) {
                 nowW = tray['elem'].outerWidth(true);
                 nowH = tray['elem'].outerHeight(true);
-                edgeX = !isNull(dark['edgeX']) ? dark['edgeX'] : dark['edge'].scrollLeft();
-                edgeY = !isNull(dark['edgeY']) ? dark['edgeY'] : dark['edge'].scrollTop();
+                edgeX = isSet(dark['edgeX']) ? dark['edgeX'] : dark['edge'].scrollLeft();
+                edgeY = isSet(dark['edgeY']) ? dark['edgeY'] : dark['edge'].scrollTop();
                 if (nowX < edgeX) {
                     nowX = edgeX;
                 } else if (nowX > $(document).outerWidth(true) - nowW + edgeX) {
@@ -571,7 +571,7 @@ fxBase['dom'] = {
             $(this).off('touchmove', move);
             $(this).off('touchend', end);
             tray['elem'].css('z-index', tray['z_index']);
-            if (isNull(tray['href'])) {
+            if (!isSet(tray['href'])) {
                 tray['elem'].removeAttr('href');
             } else if (!dark['is_move']) {
                 tray['elem'].attr('href', tray['href']);
@@ -615,12 +615,12 @@ fxBase['dom'] = {
             }));
         return selfZ > parentZ ? selfZ : parentZ;
     }
-};
+});
 
 /**
  * 文件
  */
-fxBase['file'] = {
+fxBase['file'] = Object.assign(isObject(fxBase['file']) ? fxBase['file'] : {}, {
     /**
      * 获取类方法
      */
@@ -651,12 +651,12 @@ fxBase['file'] = {
         ext = path.substring(last_len + 1, len);
         return ext;
     }
-};
+});
 
 /**
  * 数学
  */
-fxBase['math'] = {
+fxBase['math'] = Object.assign(isObject(fxBase['math']) ? fxBase['math'] : {}, {
     /**
      * 获取随机数
      */
@@ -673,20 +673,20 @@ fxBase['math'] = {
         }
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-};
+});
 
 /**
  * 参数
  */
-fxBase['param'] = {
+fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}, {
 
     /**
      * 定义参数
      */
     'define': function() {
         // 初始化变量
-        var param = !isNull(arguments[0]) ? arguments[0] : null,
-            mode = !isNull(arguments[1]) ? arguments[1] : null,
+        var param = isSet(arguments[0]) ? arguments[0] : null,
+            mode = isSet(arguments[1]) ? arguments[1] : null,
             echo = {};
         // 校验入参
         if (!isArray(param)) {
@@ -702,7 +702,7 @@ fxBase['param'] = {
                 // 数组覆盖-融合-值不存在
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[key])) {
+                    if (!isSet(echo[key])) {
                         echo[key] = value;
                     }
                 });
@@ -711,7 +711,7 @@ fxBase['param'] = {
                 // 数组覆盖-融合-值不存在或为空字符串
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[key]) || '' === echo[key]) {
+                    if (!isSet(echo[key]) || '' === echo[key]) {
                         echo[key] = value;
                     }
                 });
@@ -720,7 +720,7 @@ fxBase['param'] = {
                 // 数组覆盖-融合-值不存在或为非数组
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[key])) {
+                    if (!isSet(echo[key])) {
                         echo[key] = value;
                     }
                 });
@@ -732,7 +732,7 @@ fxBase['param'] = {
                 // 数组覆盖-赋空-值不存在
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[value])) {
+                    if (!isSet(echo[value])) {
                         echo[value] = null;
                     }
                 });
@@ -740,7 +740,7 @@ fxBase['param'] = {
             case '1.2.2':
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[value]) || '' === echo[value]) {
+                    if (!isSet(echo[value]) || '' === echo[value]) {
                         echo[value] = null;
                     }
                 });
@@ -749,14 +749,14 @@ fxBase['param'] = {
                 // 数组覆盖-赋空-值不存在或为非数组
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    echo[value] = fxBase['base']['json'](!isNull(echo[value]) ? echo[value] : null, 'decode');
+                    echo[value] = fxBase['base']['json'](isSet(echo[value]) ? echo[value] : null, 'decode');
                 });
                 break;
             case '1.2.4':
                 // 数组覆盖-赋空-值拆分数组
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (isNull(echo[value]) || '' === echo[value]) {
+                    if (!isSet(echo[value]) || '' === echo[value]) {
                         echo[value] = {};
                     } else if (isString(echo[value]) || isNumeric(echo[value])) {
                         echo[value] = fxBase['text']['explode'](',', echo[value]);
@@ -769,7 +769,7 @@ fxBase['param'] = {
                 // 数组覆盖-倒融合-值不存在
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (!isNull(value)) {
+                    if (isSet(value)) {
                         echo[key] = value;
                     }
                 });
@@ -778,9 +778,9 @@ fxBase['param'] = {
                 // 数组覆盖-倒融合-赋空-值不存在
                 echo = param[0];
                 $.each(param[1], function(key, value) {
-                    if (!isNull(value)) {
+                    if (isSet(value)) {
                         echo[key] = value;
-                    } else if (isNull(echo[key]) || '' === echo[key]) {
+                    } else if (!isSet(echo[key]) || '' === echo[key]) {
                         echo[key] = null;
                     }
                 });
@@ -788,7 +788,7 @@ fxBase['param'] = {
             case '2.1.1':
                 // 数组新建-融合-值不存在
                 $.each(param[1], function(key, value) {
-                    if (isNull(param[0][key])) {
+                    if (!isSet(param[0][key])) {
                         echo[key] = value;
                     } else {
                         echo[key] = param[0][key];
@@ -798,7 +798,7 @@ fxBase['param'] = {
             case '2.1.2':
                 // 数组新建-融合-值不存在或为空字符串
                 $.each(param[1], function(key, value) {
-                    if (isNull(param[0][key]) || '' === param[0][key]) {
+                    if (!isSet(param[0][key]) || '' === param[0][key]) {
                         echo[key] = value;
                     } else {
                         echo[key] = param[0][key];
@@ -808,7 +808,7 @@ fxBase['param'] = {
             case '2.2.1':
                 // 数组新建-赋空-值不存在
                 $.each(param[1], function(key, value) {
-                    if (isNull(param[0][value])) {
+                    if (!isSet(param[0][value])) {
                         echo[value] = null;
                     } else {
                         echo[value] = param[0][value];
@@ -818,7 +818,7 @@ fxBase['param'] = {
             case '2.2.2':
                 // 数组新建-赋空-值不存在或为空字符串
                 $.each(param[1], function(key, value) {
-                    if (isNull(param[0][value]) || '' === param[0][value]) {
+                    if (!isSet(param[0][value]) || '' === param[0][value]) {
                         echo[value] = null;
                     } else {
                         echo[value] = param[0][value];
@@ -843,7 +843,7 @@ fxBase['param'] = {
         });
         // 疏理限制
         limit = args.shift();
-        limit = !isNull(limit) ? limit : -1;
+        limit = isSet(limit) ? limit : -1;
         if (!isNumeric(limit)) {
             args.unshift(limit);
             limit = -1;
@@ -866,8 +866,8 @@ fxBase['param'] = {
      */
     'cover': function() {
         // 初始化变量
-        var args = !isNull(arguments[0]) ? arguments[0] : null,
-            limit = !isNull(arguments[1]) ? arguments[1] : -1;
+        var args = isSet(arguments[0]) ? arguments[0] : null,
+            limit = isSet(arguments[1]) ? arguments[1] : -1;
         if (limit > 0) {
             limit--;
         }
@@ -876,7 +876,7 @@ fxBase['param'] = {
         } else if (isArray(args[1]) || isObject(args[1])) {
             // 数组融合，已存在配置参数则覆盖
             $.each(args[1], function(key, value) {
-                if (isNull(args[0][key])) {
+                if (!isSet(args[0][key])) {
                     args[0][key] = value;
                 } else if ((isArray(value) || isObject(value)) && limit !== 0) {
                     args[0][key] = fxBase['param']['cover']([args[0][key], value], limit);
@@ -934,7 +934,7 @@ fxBase['param'] = {
                 dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
                 // 解析数据
                 dark['param'] = fxBase['text']['strDecode'](dark['url'][1]);
-                if (!isNull(dark['name'])) {
+                if (isSet(dark['name'])) {
                     return dark['param'][dark['name']];
                 }
                 return dark['param'];
@@ -953,19 +953,19 @@ fxBase['param'] = {
         }
         return false;
     }
-};
+});
 
 /**
  * 文本
  */
-fxBase['text'] = {
+fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
     /**
      * 获取时间
      */
     'time': function() {
         // 初始化变量
-        var time = !isNull(arguments[0]) ? arguments[0] : +new Date(),
-            milli = !isNull(arguments[1]) ? arguments[1] : false;
+        var time = isSet(arguments[0]) ? arguments[0] : +new Date(),
+            milli = isSet(arguments[1]) ? arguments[1] : false;
         time = parseInt(time);
         var date = new Date(time + 8 * 3600 * 1000);
         if (!isNumeric(date)) return date;
@@ -982,7 +982,7 @@ fxBase['text'] = {
      */
     'mtime': function() {
         // 初始化变量
-        var mtime = !isNull(arguments[0]) ? arguments[0] : null,
+        var mtime = isSet(arguments[0]) ? arguments[0] : null,
             echo = null;
         if (isNumeric(mtime)) {
             mtime = String(mtime);
@@ -1004,8 +1004,8 @@ fxBase['text'] = {
      */
     'ftime': function() {
         // 初始化变量
-        var time = !isNull(arguments[0]) ? arguments[0] : null,
-            type = !isNull(arguments[1]) ? arguments[1] : null,
+        var time = isSet(arguments[0]) ? arguments[0] : null,
+            type = isSet(arguments[1]) ? arguments[1] : null,
             echo = [];
         time = parseInt(time);
         // 时间列表
@@ -1082,7 +1082,7 @@ fxBase['text'] = {
             }
         });
         $.each(time_list, function(key, value) {
-            if (isNull(value)) return true;
+            if (!isSet(value)) return true;
             echo.unshift(time_name[key]);
             echo.unshift(String(value));
         });
@@ -1132,16 +1132,16 @@ fxBase['text'] = {
         if (isString(data) || isNumeric(data)) {
             data += '';
             data = data.split(separator);
-            if (!isNull(howmany) && howmany == 0) {
+            if (isSet(howmany) && howmany == 0) {
                 data = [fxBase['text']['implode'](separator, data)];
-            } else if (!isNull(howmany) && howmany >= 0 && data.length > howmany) {
+            } else if (isSet(howmany) && howmany >= 0 && data.length > howmany) {
                 data.unshift(fxBase['text']['implode'](separator, data.slice(howmany - 1)));
                 data = data.slice(0, howmany);
                 data.push(data.shift());
-            } else if (!isNull(howmany) && howmany < 0) {
+            } else if (isSet(howmany) && howmany < 0) {
                 data = data.slice(0, howmany);
             }
-        } else if (isNull(data)) {
+        } else if (!isSet(data)) {
             data = [''];
         } else if (!isArray(data) && !isObject(data)) {
             data = [data];
@@ -1154,14 +1154,14 @@ fxBase['text'] = {
      */
     'implode': function() {
         // 初始化变量
-        var separator = !isNull(arguments[0]) ? arguments[0] : null,
-            data = !isNull(arguments[1]) ? arguments[1] : null;
+        var separator = isSet(arguments[0]) ? arguments[0] : null,
+            data = isSet(arguments[1]) ? arguments[1] : null;
         if (isObject(data)) {
             data = Object.values(data);
         }
         if (isArray(data)) {
             data = data.join(separator);
-        } else if (isNull(data)) {
+        } else if (!isSet(data)) {
             data = [];
         }
         return data;
@@ -1172,10 +1172,10 @@ fxBase['text'] = {
      */
     'strPad': function() {
         // 初始化变量
-        var string = !isNull(arguments[0]) ? arguments[0] : null,
-            length = !isNull(arguments[1]) ? arguments[1] : null,
-            pad_string = !isNull(arguments[2]) ? arguments[2] : ' ',
-            pad_type = !isNull(arguments[3]) ? arguments[3] : '1';
+        var string = isSet(arguments[0]) ? arguments[0] : null,
+            length = isSet(arguments[1]) ? arguments[1] : null,
+            pad_string = isSet(arguments[2]) ? arguments[2] : ' ',
+            pad_type = isSet(arguments[3]) ? arguments[3] : '1';
         // 疏理数据
         string += '';
         pad_type += '';
@@ -1202,7 +1202,7 @@ fxBase['text'] = {
      */
     'strEncode': function() {
         // 初始化变量
-        var array = !isNull(arguments[0]) ? arguments[0] : {},
+        var array = isSet(arguments[0]) ? arguments[0] : {},
             echo = [];
         // 解析数据
         $.each(array, function(key, value) {
@@ -1246,17 +1246,17 @@ fxBase['text'] = {
      */
     'strDecode': function() {
         // 初始化变量
-        var string = !isNull(arguments[0]) ? arguments[0] : null,
+        var string = isSet(arguments[0]) ? arguments[0] : null,
             echo = {};
         // 解析数据
         string = fxBase['text']['explode']('&', string);
         $.each(string, function(key, value) {
             // 解析数据
             value = fxBase['text']['explode']('=', value, 2);
-            if (isBlank(value[0]) && isNull(value[1])) return true;
+            if (isBlank(value[0]) && !isSet(value[1])) return true;
             // 疏理键值
             try {
-                value[1] = !isNull(value[1]) ? decodeURIComponent(value[1]) : value[1];
+                value[1] = isSet(value[1]) ? decodeURIComponent(value[1]) : value[1];
             } catch (e) {}
             // 解析键钥
             value[0] = fxBase['text']['replace']('^([^\[]*)', '[$1]', value[0]);
@@ -1281,7 +1281,7 @@ fxBase['text'] = {
             return {};
         }
         // 解析数据
-        data[2] = !isNull(data[2]) ? data[2] : [];
+        data[2] = isSet(data[2]) ? data[2] : [];
         if (tray['key'][0] != '[]' && isArray(data[2])) {
             data[2] = fxBase['param']['merge']({}, data[2]);
         }
@@ -1294,7 +1294,7 @@ fxBase['text'] = {
             tray['key'][1]++;
         }
         // 疏理数据
-        if (!isNull(data[0].match(tray['find']))) {
+        if (isSet(data[0].match(tray['find']))) {
             data[2][tray['key'][1]] = fxBase['text']['strDecodeMerge']([data[0], data[1], data[2][tray['key'][1]]])[2];
         } else if (isArray(data[2])) {
             data[2].push(data[1]);
@@ -1303,7 +1303,7 @@ fxBase['text'] = {
         }
         return data;
     }
-};
+});
 
 /**
  * 创建风音应用
@@ -1338,7 +1338,7 @@ fxApp['rank'] = {};
 /**
  * 控制台
  */
-fxApp['console'] = {
+fxApp['console'] = Object.assign(isObject(fxApp['console']) ? fxApp['console'] : {}, {
     /**
      * 应用
      */
@@ -1360,7 +1360,7 @@ fxApp['console'] = {
     'env': function() {
         // 初始化变量
         var dark = $('.moire-data').html();
-        dark = JSON.parse(!isNull(dark) ? dark : '{}');
+        dark = JSON.parse(isSet(dark) ? dark : '{}');
         $.each(dark, function(key, value) {
             fxApp[key] = fxBase['param']['merge'](fxApp[key], value);
         });
@@ -1402,7 +1402,7 @@ fxApp['console'] = {
             console.log(fxBase['text']['time']() + '\n' + fxBase['base']['lang'](['log', 'auto', 'clear', ',', 'interval', '60', 'minute']));
         }, 60 * 60 * 1000);
     }
-};
+});
 
 /**
  * 记录IE版本

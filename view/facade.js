@@ -1,7 +1,7 @@
 /**
  * Layui设定
  */
-fxView['layui'] = {
+fxView['layui'] = Object.assign(isObject(fxView['layui']) ? fxView['layui'] : {}, {
     /**
      * 初始化
      */
@@ -26,7 +26,7 @@ fxView['layui'] = {
                 var elem = $('.layui-table-view .layui-table td[data-edit=text]');
                 elem.off('click');
                 elem.on('click', function() {
-                    if (isNull($(this).attr('fxy-edit'))) return false;
+                    if (!isSet($(this).attr('fxy-edit'))) return false;
                     $(this).removeAttr('fxy-edit');
                 });
                 elem.off('dblclick');
@@ -104,7 +104,7 @@ fxView['layui'] = {
         };
         var tray = {};
         dark = fxBase['param']['merge'](dark, arguments[0]);
-        if (isNull(dark['elem'])) {
+        if (!isSet(dark['elem'])) {
             console.log(fxBase['base']['lang'](['please', 'choice', 'valid', 'HTML', 'label']));
             return;
         }
@@ -173,4 +173,4 @@ fxView['layui'] = {
             $(this).off('touchend', end);
         }
     }
-};
+});

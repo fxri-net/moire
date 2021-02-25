@@ -27,8 +27,6 @@ fxView['material']['elem']['hidden'] = function() {
         fxView['machine']['elem'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
-            // 数据
-            'data': '',
             // 输出-开关
             'echoSwitch': 1
         }, dark);
@@ -79,11 +77,12 @@ fxView['material']['elem']['hidden'] = function() {
         if (isFunction(dark['after'])) {
             dark['after'](dark, base);
         }
+    };
+    // 完成
+    echo['done'] = function() {
         // 渲染完成
         if (isFunction(dark['done'])) {
-            $(document).ready(function() {
-                dark['done'](dark, base);
-            });
+            dark['done'](dark, base);
         }
     };
     // 输出
@@ -91,7 +90,7 @@ fxView['material']['elem']['hidden'] = function() {
         // 疏理数据
         dark['echo'] = dark['elem'].val();
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
-            layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
+            layui.layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
             return false;
         }
     };
