@@ -111,6 +111,19 @@ fxView['material']['elem']['file'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
                     tray['echo'] = '';
                     // 疏理数据
@@ -121,10 +134,10 @@ fxView['material']['elem']['file'] = function() {
                             // 视频
                         case 'image':
                             // 图片
-                            if (!isBlank(data[dark['field']])) {
+                            if (!isBlank(tray['data'])) {
                                 tray['echo'] = $('<img>');
                                 tray['echo'].attr({
-                                    'src': data[dark['field']],
+                                    'src': tray['data'],
                                     'title': dark['title'],
                                     'style': 'width: 100%;height: 100%'
                                 });

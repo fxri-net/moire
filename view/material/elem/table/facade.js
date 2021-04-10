@@ -42,7 +42,7 @@ fxView['material']['elem']['table'] = function() {
                 // 过滤元素
                 'filter': '.moire-delete'
             },
-            // 添加
+            // 新增
             'add': {
                 // 开关
                 'switch': true,
@@ -121,18 +121,31 @@ fxView['material']['elem']['table'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
                     tray['echo'] = [];
                     // 疏理数据
-                    if (isBlank(data[dark['field']])) {
-                        data[dark['field']] = [];
-                    } else if (isJson(data[dark['field']])) {
-                        data[dark['field']] = JSON.parse(data[dark['field']]);
-                    } else if (!isArray(data[dark['field']]) && !isObject(data[dark['field']])) {
-                        data[dark['field']] = fxBase['text']['explode'](',', data[dark['field']]);
+                    if (isBlank(tray['data'])) {
+                        tray['data'] = [];
+                    } else if (isJson(tray['data'])) {
+                        tray['data'] = JSON.parse(tray['data']);
+                    } else if (!isArray(tray['data']) && !isObject(tray['data'])) {
+                        tray['data'] = fxBase['text']['explode'](',', tray['data']);
                     }
                     // 疏理输出
-                    $.each(data[dark['field']], function(key, value) {
+                    $.each(tray['data'], function(key, value) {
                         // 初始化变量
                         tray['echo'][key] = [];
                         $.each(dark['shelf']['data'], function(key2, value2) {
@@ -184,7 +197,7 @@ fxView['material']['elem']['table'] = function() {
                         });
                     });
                 }
-                // 疏理添加
+                // 疏理新增
                 if (dark['add']['switch']) {
                     dark['add']['disabled'] = null;
                 }
@@ -221,7 +234,7 @@ fxView['material']['elem']['table'] = function() {
                     echo.append(dark['delete']['elem']);
                     dark['elem'].find('.moire-elem-inline').append(echo);
                 });
-                // 疏理添加
+                // 疏理新增
                 if (dark['add']['switch']) {
                     dark['elem'].append('<div class="moire-elem-operate">' +
                         '<button type="button" class="layui-btn moire-operate" id="' + dark['id'] + '">' +
@@ -286,7 +299,7 @@ fxView['material']['elem']['table'] = function() {
             //             });
             //         });
             //     }
-            //     // 疏理添加
+            //     // 疏理新增
             //     if (dark['add']['switch']) {
             //         dark['add']['disabled'] = null;
             //     }
@@ -323,7 +336,7 @@ fxView['material']['elem']['table'] = function() {
             //         echo.append(dark['delete']['elem']);
             //         dark['elem'].find('.moire-elem-inline').append(echo);
             //     });
-            //     // 疏理添加
+            //     // 疏理新增
             //     if (dark['add']['switch']) {
             //         dark['elem'].append('<div class="moire-elem-operate">' +
             //             '<button type="button" class="layui-btn moire-operate" id="' + dark['id'] + '">' +

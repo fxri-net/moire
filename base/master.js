@@ -1254,7 +1254,10 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
             // 解析数据
             value = fxBase['text']['explode']('=', value, 2);
             if (isBlank(value[0]) && !isSet(value[1])) return true;
-            // 疏理键值
+            // 疏理数据
+            try {
+                value[0] = isSet(value[0]) ? decodeURIComponent(value[0]) : value[0];
+            } catch (e) {}
             try {
                 value[1] = isSet(value[1]) ? decodeURIComponent(value[1]) : value[1];
             } catch (e) {}

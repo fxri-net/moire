@@ -14,10 +14,23 @@
 fxView['mould']['tool']['window'] = function() {
     // 初始化变量
     var dark = fxBase['param']['merge']({
-        // 皮肤
-        'skin': 'moire-view',
         // 副标题
-        'subtitle': null
+        'subtitle': null,
+        // 选项
+        'option': {
+            // 类型
+            'type': 2,
+            // 皮肤
+            'skin': 'moire-view',
+            // 宽高
+            'area': ['100%', '100%'],
+            // 最大最小化
+            'maxmin': false,
+            // 是否允许浏览器出现滚动条
+            'scrollbar': false,
+            // 层叠顺序
+            'zIndex': fxBase['base']['maxZIndex']()
+        }
     }, fxView['shelf']['view']);
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
@@ -31,14 +44,11 @@ fxView['mould']['tool']['window'] = function() {
         dark['data'] = '';
     }
     // 打开弹窗
-    layui.layer.open({
-        'type': 2,
+    dark['option'] = fxBase['param']['merge']({
+        // 标题
         'title': fxBase['base']['lang']([fxApp['view']['name'], dark['subtitle']]),
+        // 内容
         'content': dark['page'][dark['elem']] + dark['data'],
-        'skin': dark['skin'],
-        'area': ['100%', '100%'],
-        'maxmin': false,
-        'scrollbar': false,
-        'zIndex': fxBase['base']['maxZIndex']()
-    });
+    }, dark['option']);
+    layui.layer.open(dark['option']);
 };

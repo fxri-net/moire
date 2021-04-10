@@ -87,9 +87,22 @@ fxView['material']['elem']['switch'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
                     tray['echo'] = '';
-                    if (!isBlank(dark['shelf']['data'][data[dark['field']]])) {
+                    if (!isBlank(dark['shelf']['data'][tray['data']])) {
                         tray['echo'] = $('<input>');
                         tray['echo'].attr({
                             'type': 'checkbox',
@@ -98,9 +111,9 @@ fxView['material']['elem']['switch'] = function() {
                             'lay-skin': 'switch',
                             'lay-text': dark['shelf']['data'],
                             'lay-filter': dark['field'],
-                            'checked': data[dark['field']] == 1 ? 'checked' : null
+                            'checked': tray['data'] == 1 ? 'checked' : null
                         });
-                        tray['echo'].text(dark['shelf']['data'][data[dark['field']]]);
+                        tray['echo'].text(dark['shelf']['data'][tray['data']]);
                         tray['echo'] = tray['echo'].prop('outerHTML');
                     }
                     return tray['echo'];

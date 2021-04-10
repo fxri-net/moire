@@ -185,7 +185,7 @@ fxView['mould']['view']['edit'] = function() {
                 // 执行输出
                 if (!isSet(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
                 // 疏理输出
-                $.each(fxBase['text']['explode']('-', value['dark']['field']).reverse(), function(key2, value2) {
+                $.each(fxBase['text']['explode']('-_', value['dark']['field']).reverse(), function(key2, value2) {
                     var data = {};
                     data[value2] = value['dark']['echo'];
                     value['dark']['echo'] = data;

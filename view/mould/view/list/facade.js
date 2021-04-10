@@ -287,7 +287,7 @@ fxView['mould']['view']['list'] = function() {
             value['echo']();
             if (!isSet(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
             // 疏理输出
-            $.each(fxBase['text']['explode']('-', value['dark']['field']).reverse(), function(key2, value2) {
+            $.each(fxBase['text']['explode']('-_', value['dark']['field']).reverse(), function(key2, value2) {
                 var data = {};
                 data[value2] = value['dark']['echo'];
                 value['dark']['echo'] = data;
@@ -349,7 +349,7 @@ fxView['mould']['view']['list'] = function() {
         echo['data'][dark['base']['model']['key']] = this.value;
         // 疏理多级
         echo['echo'] = event['elem']['checked'] ? 1 : 0;
-        $.each(fxBase['text']['explode']('-', event['elem']['name']).reverse(), function(key, value) {
+        $.each(fxBase['text']['explode']('-_', event['elem']['name']).reverse(), function(key, value) {
             var data = {};
             data[value] = echo['echo'];
             echo['echo'] = data;
@@ -387,7 +387,7 @@ fxView['mould']['view']['list'] = function() {
         echo['elem'] = $(event.tr).parents('.layui-table-view').find('.layui-table-header');
         // 疏理多级
         echo['echo'] = event.value;
-        $.each(fxBase['text']['explode']('-', event.field).reverse(), function(key, value) {
+        $.each(fxBase['text']['explode']('-_', event.field).reverse(), function(key, value) {
             var data = {};
             data[value] = echo['echo'];
             echo['echo'] = data;
@@ -502,7 +502,7 @@ fxView['mould']['view']['list'] = function() {
         // 执行事件
         switch (event.event) {
             case 'add':
-                // 添加
+                // 新增
             case 'upload':
                 // 上传
                 tray['param'] = {

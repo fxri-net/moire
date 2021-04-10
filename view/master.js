@@ -414,6 +414,11 @@ fxView['machine']['elem'] = function() {
     // 疏理数据
     dark['label'] = fxBase['base']['lang'](dark['label']);
     dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
+    if (!isSet(dark['data'])) {
+        dark['requireMark'] += fxBase['base']['lang']([
+            '<span>', '(', 'field', '[', fxApp['view']['langc']['prefix'] + dark['field'], ']', 'undefined', ')', '</span>'
+        ]);
+    }
     return dark;
 };
 

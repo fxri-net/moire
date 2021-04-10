@@ -89,14 +89,40 @@ fxView['material']['elem']['text'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
-                    return !isBlank(data[dark['field']]) ? data[dark['field']] : '';
+                    return !isBlank(tray['data']) ? tray['data'] : '';
                 }
                 break;
             case 'table_link':
                 // 表格-链接
                 dark['wrapBox']['attr']['moire-elem'] = 'link';
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
                     tray['echo'] = '';
                     // 疏理链接
@@ -109,7 +135,7 @@ fxView['material']['elem']['text'] = function() {
                         });
                     } else {
                         tray['href'] = 'href';
-                        tray['url'] = data[dark['field']];
+                        tray['url'] = tray['data'];
                     }
                     // 疏理元素
                     if (!isBlank(tray['url'])) {

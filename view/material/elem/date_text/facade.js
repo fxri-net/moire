@@ -78,8 +78,21 @@ fxView['material']['elem']['date_text'] = function() {
             case 'table':
                 // 表格
                 dark['templet'] = function(data) {
+                    // 初始化变量
+                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key, value) {
+                        if (!isBlank(tray['data'][value])) {
+                            tray['data'] = tray['data'][value];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    // 疏理数据
                     dark['list'].push(data);
-                    return !isBlank(data[dark['field']]) ? data[dark['field']] : '暂无时间';
+                    return !isBlank(tray['data']) ? tray['data'] : '暂无时间';
                 }
                 break;
             case 'view':
