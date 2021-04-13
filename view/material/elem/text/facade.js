@@ -33,6 +33,24 @@ fxView['material']['elem']['text'] = function() {
             'option': {
                 // 地址
                 'url': null,
+                // 参数
+                'param': function(key, data) {
+                    // 初始化变量
+                    var echo = { 'data': {} };
+                    tray['field'] = fxBase['text']['explode']('-_', key);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key2, value2) {
+                        if (!isBlank(tray['data'][value2])) {
+                            tray['data'] = tray['data'][value2];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    echo['data'][key] = tray['data'];
+                    return echo;
+                },
                 // 类名
                 'class': dark['id'] + '-elem',
                 // 文本

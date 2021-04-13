@@ -35,8 +35,20 @@ fxView['material']['elem']['selected'] = function() {
                 'url': null,
                 // 参数
                 'param': function(key, data) {
+                    // 初始化变量
                     var echo = { 'data': {} };
-                    echo['data'][key] = data[key];
+                    tray['field'] = fxBase['text']['explode']('-_', key);
+                    tray['data'] = data;
+                    // 疏理数据
+                    $.each(tray['field'], function(key2, value2) {
+                        if (!isBlank(tray['data'][value2])) {
+                            tray['data'] = tray['data'][value2];
+                        } else {
+                            tray['data'] = '';
+                            return false;
+                        }
+                    });
+                    echo['data'][key] = tray['data'];
                     return echo;
                 },
                 // 类名

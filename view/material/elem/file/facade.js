@@ -572,6 +572,7 @@ fxView['material']['elem']['file'] = function() {
     echo['echo'] = function() {
         // 疏理数据
         if (!dark['upload']['switch'] && !dark['delete']['switch']) return true;
+        // 初始化变量
         dark['echo'] = [];
         dark['elem'].find('.moire-elem-inline>div').each(function(key, value) {
             switch (dark['option']['type']) {

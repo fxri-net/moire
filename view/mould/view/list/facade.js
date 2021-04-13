@@ -287,12 +287,7 @@ fxView['mould']['view']['list'] = function() {
             value['echo']();
             if (!isSet(value['dark']['echo']) || value['dark']['echoSwitch'] != 1) return true;
             // 疏理输出
-            $.each(fxBase['text']['explode']('-_', value['dark']['field']).reverse(), function(key2, value2) {
-                var data = {};
-                data[value2] = value['dark']['echo'];
-                value['dark']['echo'] = data;
-            });
-            tray['data'] = fxBase['param']['merge'](tray['data'], value['dark']['echo']);
+            tray['data'][value['dark']['field']] = value['dark']['echo'];
         });
         // 渲染数据
         $.each(tray['data'], function(key, value) {
