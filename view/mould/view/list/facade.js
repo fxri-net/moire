@@ -114,7 +114,7 @@ fxView['mould']['view']['list'] = function() {
                         'page': {
                             'curr': data['extend']['total_page']
                         }
-                    });
+                    }, true);
                 }
                 data['count'] = data['extend']['total_count'];
                 return data;
@@ -303,7 +303,7 @@ fxView['mould']['view']['list'] = function() {
                 },
                 'data': tray['data']
             }
-        });
+        }, true);
         return false;
     });
     // 监听触发事件
@@ -332,7 +332,7 @@ fxView['mould']['view']['list'] = function() {
                     'order': param
                 }
             }
-        });
+        }, true);
     });
     // 监听开关操作
     layui.form.on('switch', function(event) {
