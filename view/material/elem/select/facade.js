@@ -11,7 +11,7 @@
 /**
  * 云纹物料-元素-下拉框
  */
-fxView['material']['elem']['select'] = function() {
+fxView['machine']['deployer'](['material', 'elem', 'select', 'main'], function() {
     // 初始化变量
     var base,
         dark,
@@ -24,7 +24,7 @@ fxView['material']['elem']['select'] = function() {
     // 初始化
     echo['init'] = function() {
         // 疏理数据
-        fxView['machine']['elem'](dark, arguments[0]);
+        fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 输出-开关
@@ -42,6 +42,8 @@ fxView['material']['elem']['select'] = function() {
         } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 部署
     echo['deploy'] = function() {
@@ -73,9 +75,7 @@ fxView['material']['elem']['select'] = function() {
             }
         }, dark);
         // 渲染之前
-        if (isFunction(dark['before'])) {
-            dark['before'](dark, base);
-        }
+        fxView['machine']['caller'](['before'], [dark, base], dark);
         // 疏理包装
         dark['wrap'] = $(dark['wrapBox']['elem']);
         dark['wrap'].attr(dark['wrapBox']['attr']);
@@ -86,50 +86,25 @@ fxView['material']['elem']['select'] = function() {
         $.each(dark['shelf']['data'], function(key, value) {
             dark['elem'].append('<option value="' + key + '"' + (dark['data'] == key ? ' selected' : '') + '>' + value + '</option>');
         });
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'search':
-                // 搜索
-                base['pack'].append(dark['wrap']);
-                dark['wrap'].attr({
-                    'class': 'layui-col-xs6 layui-col-sm3 layui-col-md2'
-                });
-                dark['wrap'].append(dark['elem']);
-                break;
-            case 'view':
-                // 视图
-                base['pack'].append(dark['wrap']);
-                dark['wrap'].attr({
-                    'class': 'layui-col-xs12 layui-col-md6'
-                });
-                dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
-                dark['wrap'].children('[moire-cell]').append(dark['elem']);
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
-        if (isFunction(dark['after'])) {
-            dark['after'](dark, base);
-        }
+        fxView['machine']['caller'](['after'], [dark, base], dark);
     };
     // 完成
     echo['done'] = function() {
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
-        if (isFunction(dark['done'])) {
-            dark['done'](dark, base);
-        }
+        fxView['machine']['caller'](['done'], [dark, base], dark);
     };
     // 输出
     echo['echo'] = function() {
         // 疏理数据
         dark['echo'] = dark['elem'].val();
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'view':
-                // 视图
-                dark['echo'] = dark['require'] == 1 || !isBlank(dark['echo']) ? dark['echo'] : dark['defaultValue'];
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'echo', dark['skin']], [dark, base, echo, tray], dark);
+        // 校验输出
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
             dark['elem'].parents('[moire-cell]').find('input').trigger('click');
             layui.layer.msg(fxBase['base']['lang'](['please', 'choice', dark['label']]), { 'icon': 5, 'anim': 6 });
@@ -141,11 +116,15 @@ fxView['material']['elem']['select'] = function() {
         // 疏理数据
         dark['elem'].val(dark['data']);
         dark['elem'].next().find('input').val(dark['elem'].find('option:selected').html());
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 清理
     echo['clean'] = function() {
         // 疏理数据
         dark['elem'].val('');
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
     };
     return echo;
-};
+});

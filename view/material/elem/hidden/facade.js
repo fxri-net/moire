@@ -11,7 +11,7 @@
 /**
  * 云纹物料-元素-隐藏字段
  */
-fxView['material']['elem']['hidden'] = function() {
+fxView['machine']['deployer'](['material', 'elem', 'hidden', 'main'], function() {
     // 初始化变量
     var base,
         dark,
@@ -24,7 +24,7 @@ fxView['material']['elem']['hidden'] = function() {
     // 初始化
     echo['init'] = function() {
         // 疏理数据
-        fxView['machine']['elem'](dark, arguments[0]);
+        fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 输出-开关
@@ -37,6 +37,8 @@ fxView['material']['elem']['hidden'] = function() {
         } else if (isObject(dark['data'])) {
             dark['data'] = fxBase['text']['implode'](',', Object.values(dark['data']));
         }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 部署
     echo['deploy'] = function() {
@@ -55,40 +57,30 @@ fxView['material']['elem']['hidden'] = function() {
             }
         }, dark);
         // 渲染之前
-        if (isFunction(dark['before'])) {
-            dark['before'](dark, base);
-        }
+        fxView['machine']['caller'](['before'], [dark, base], dark);
         // 疏理元素
         dark['elem'] = $(dark['elemBox']['elem']);
         dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].val(dark['data']);
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'search':
-                // 搜索
-                base['pack'].append(dark['elem']);
-                break;
-            case 'view':
-                // 视图
-                base['pack'].append(dark['elem']);
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
-        if (isFunction(dark['after'])) {
-            dark['after'](dark, base);
-        }
+        fxView['machine']['caller'](['after'], [dark, base], dark);
     };
     // 完成
     echo['done'] = function() {
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
-        if (isFunction(dark['done'])) {
-            dark['done'](dark, base);
-        }
+        fxView['machine']['caller'](['done'], [dark, base], dark);
     };
     // 输出
     echo['echo'] = function() {
         // 疏理数据
         dark['echo'] = dark['elem'].val();
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'echo', dark['skin']], [dark, base, echo, tray], dark);
+        // 校验输出
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
             layui.layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
             return false;
@@ -98,11 +90,15 @@ fxView['material']['elem']['hidden'] = function() {
     echo['reset'] = function() {
         // 疏理数据
         dark['elem'].val(dark['data']);
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 清理
     echo['clean'] = function() {
         // 疏理数据
         dark['elem'].val('');
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
     };
     return echo;
-};
+});

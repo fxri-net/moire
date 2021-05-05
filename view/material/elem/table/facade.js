@@ -11,7 +11,7 @@
 /**
  * 云纹物料-元素-表格
  */
-fxView['material']['elem']['table'] = function() {
+fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() {
     // 初始化变量
     var base,
         dark,
@@ -24,7 +24,7 @@ fxView['material']['elem']['table'] = function() {
     // 初始化
     echo['init'] = function() {
         // 疏理数据
-        fxView['machine']['elem'](dark, arguments[0]);
+        fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 输出-开关
@@ -77,6 +77,8 @@ fxView['material']['elem']['table'] = function() {
         } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 部署
     echo['deploy'] = function() {
@@ -107,220 +109,24 @@ fxView['material']['elem']['table'] = function() {
             }
         }, dark);
         // 渲染之前
-        if (isFunction(dark['before'])) {
-            dark['before'](dark, base);
-        }
+        fxView['machine']['caller'](['before'], [dark, base], dark);
         // 疏理包装
         dark['wrap'] = $(dark['wrapBox']['elem']);
         dark['wrap'].attr(dark['wrapBox']['attr']);
         // 疏理元素
         dark['elem'] = $(dark['elemBox']['elem']);
         dark['elem'].attr(dark['elemBox']['attr']);
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'table':
-                // 表格
-                dark['templet'] = function(data) {
-                    // 初始化变量
-                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-                    tray['data'] = data;
-                    // 疏理数据
-                    $.each(tray['field'], function(key, value) {
-                        if (!isBlank(tray['data'][value])) {
-                            tray['data'] = tray['data'][value];
-                        } else {
-                            tray['data'] = '';
-                            return false;
-                        }
-                    });
-                    // 疏理数据
-                    dark['list'].push(data);
-                    tray['echo'] = [];
-                    // 疏理数据
-                    if (isBlank(tray['data'])) {
-                        tray['data'] = [];
-                    } else if (isJson(tray['data'])) {
-                        tray['data'] = JSON.parse(tray['data']);
-                    } else if (!isArray(tray['data']) && !isObject(tray['data'])) {
-                        tray['data'] = fxBase['text']['explode'](',', tray['data']);
-                    }
-                    // 疏理输出
-                    $.each(tray['data'], function(key, value) {
-                        // 初始化变量
-                        tray['echo'][key] = [];
-                        $.each(dark['shelf']['data'], function(key2, value2) {
-                            tray['echo'][key].push(value[value2['field']]);
-                        });
-                        tray['echo'][key] = fxBase['text']['implode'](fxBase['base']['lang'](':'), tray['echo'][key]);
-                    });
-                    tray['echo'] = fxBase['text']['implode'](fxBase['base']['lang']('|'), tray['echo']);
-                    return tray['echo'];
-                };
-                break;
-            case 'table_row':
-                // 表格-行
-                dark['templet'] = function(data) {
-                    // 初始化变量
-                    tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-                    tray['data'] = data;
-                    // 疏理数据
-                    $.each(tray['field'], function(key, value) {
-                        if (!isBlank(tray['data'][value])) {
-                            tray['data'] = tray['data'][value];
-                        } else {
-                            tray['data'] = '';
-                            return false;
-                        }
-                    });
-                    // 疏理数据
-                    dark['list'].push(data);
-                    tray['echo'] = [];
-                    // 疏理数据
-                    if (isBlank(tray['data'])) {
-                        tray['data'] = [];
-                    } else if (isJson(tray['data'])) {
-                        tray['data'] = JSON.parse(tray['data']);
-                    } else if (!isArray(tray['data']) && !isObject(tray['data'])) {
-                        tray['data'] = fxBase['text']['explode'](',', tray['data']);
-                    }
-                    // 疏理输出
-                    $.each(tray['data'], function(key, value) {
-                        // 初始化变量
-                        tray['echo'].push(value);
-                    });
-                    tray['echo'] = fxBase['text']['implode'](fxBase['base']['lang']('|'), tray['echo']);
-                    return tray['echo'];
-                };
-                break;
-            case 'view':
-                // 视图
-            case 'view_row':
-                // 视图-行
-                base['pack'].append(dark['wrap']);
-                dark['wrap'].attr({
-                    'class': 'layui-col-xs12 layui-col-md6'
-                });
-                dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
-                dark['wrap'].children('[moire-cell]').append(dark['elem']);
-                dark['elem'].attr({
-                    'class': 'moire-div'
-                });
-                dark['elem'].find('.moire-elem-inline').attr({
-                    'name': dark['field']
-                });
-                // 疏理删除
-                if (dark['delete']['switch']) {
-                    dark['delete']['elem'] = '<button class="layui-btn layui-btn-sm layui-btn-danger moire-bg-red-light moire-delete" type="button">' +
-                        dark['delete']['text'] + '</button>';
-                    dark['delete']['width'] = '80px';
-                    // 点击事件
-                    dark['elem'].parents('div[moire-cell]').on('click', '.moire-delete', function() {
-                        // 初始化变量
-                        var echo = {};
-                        echo['elem'] = $(this).parents('.moire-elem-inline>div');
-                        echo['message'] = fxBase['base']['lang'](['是否删除', '[', dark['title'], ']', '选项', '[', (echo['elem'].index() + 1), ']', '？']);
-                        echo['config'] = {
-                            'title': null,
-                            'icon': 0,
-                            'closeBtn': 0,
-                            'shadeClose': true
-                        };
-                        // 删除确认
-                        layui.layer.confirm(echo['message'], echo['config'], function(index) {
-                            echo['elem'].remove();
-                            // 关闭弹窗
-                            layui.layer.close(index);
-                        });
-                    });
-                }
-                // 疏理新增
-                if (dark['add']['switch']) {
-                    dark['add']['disabled'] = null;
-                }
-                // 疏理货架
-                tray['width'] = [dark['delete']['width']];
-                tray['count'] = 0;
-                $.each(dark['shelf']['data'], function(key, value) {
-                    if (!isBlank(value['width'])) {
-                        tray['width'].push(value['width']);
-                    } else {
-                        tray['count']++;
-                    }
-                });
-                tray['width'] = fxBase['text']['implode'](' - ', tray['width']);
-                $.each(dark['shelf']['data'], function(key, value) {
-                    if (isBlank(value['width'])) {
-                        value['width'] = 'calc((100% - ' + tray['width'] + ') / ' + tray['count'] + ')';
-                    }
-                });
-                $.each(dark['data'], function(key, value) {
-                    // 初始化变量
-                    var echo = $('<div class="moire-clear"></div>');
-                    $.each(dark['shelf']['data'], function(key2, value2) {
-                        // 疏理数据
-                        if (true === value2['self'] && dark['skin'] == 'view_row') {
-                            tray['value'] = value;
-                        } else if (true === value2['self']) {
-                            tray['value'] = {};
-                            tray['value'][value2['field']] = value[value2['field']];
-                        } else {
-                            tray['value'] = value[value2['field']];
-                        }
-                        if (!isString(tray['value'])) {
-                            tray['value'] = JSON.stringify(tray['value']);
-                        }
-                        // 设置数据
-                        echo.append('<input type="text" class="layui-input" moire-type="' + value2['field'] + '"' +
-                            ' placeholder="' + fxBase['base']['lang'](value2['title']) + '" autocomplete="off">')
-                        echo.find('[moire-type=' + value2['field'] + ']')
-                            .attr({
-                                'disabled': dark['add']['disabled'],
-                                'style': value2['style']
-                            })
-                            .css('width', value2['width'])
-                            .val(tray['value']);
-                    });
-                    echo.append(dark['delete']['elem']);
-                    dark['elem'].find('.moire-elem-inline').append(echo);
-                });
-                // 疏理新增
-                if (dark['add']['switch']) {
-                    dark['elem'].append('<div class="moire-elem-operate">' +
-                        '<button type="button" class="layui-btn moire-operate" id="' + dark['id'] + '">' +
-                        fxBase['base']['lang'](dark['default']) +
-                        '</button></div>');
-                    // 点击事件
-                    dark['elem'].parents('div[moire-cell]').on('click', '.moire-operate', function() {
-                        // 初始化变量
-                        var echo = $('<div class="moire-clear"></div>');
-                        $.each(dark['shelf']['data'], function(key, value) {
-                            echo.append('<input type="text" class="layui-input" moire-type="' + value['field'] + '"' +
-                                ' placeholder="' + fxBase['base']['lang'](value['title']) + '" autocomplete="off">')
-                            echo.find('[moire-type=' + value['field'] + ']')
-                                .attr({
-                                    'style': value['style']
-                                })
-                                .css('width', value['width']);
-                        });
-                        echo.append(dark['delete']['elem']);
-                        dark['elem'].find('.moire-elem-inline').append(echo);
-                    });
-                    dark['plugin']['echo'] = new Sortable(dark['elem'].find('.moire-elem-inline')[0], dark['plugin']);
-                }
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
-        if (isFunction(dark['after'])) {
-            dark['after'](dark, base);
-        }
+        fxView['machine']['caller'](['after'], [dark, base], dark);
     };
     // 完成
     echo['done'] = function() {
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
-        if (isFunction(dark['done'])) {
-            dark['done'](dark, base);
-        }
+        fxView['machine']['caller'](['done'], [dark, base], dark);
     };
     // 输出
     echo['echo'] = function() {
@@ -328,35 +134,9 @@ fxView['material']['elem']['table'] = function() {
         if (!dark['add']['switch'] && !dark['delete']['switch']) return true;
         // 初始化变量
         dark['echo'] = [];
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'view':
-                // 视图
-                $(dark['plugin']['echo'].el).children().each(function(key, value) {
-                    dark['echo'][key] = {};
-                    $(value).children('input').each(function(key2, value2) {
-                        if (true === dark['shelf']['data'][key2]['self']) {
-                            tray['value'] = $(value2).val();
-                            if (!isJson(tray['value'])) {
-                                tray['value'] = '{}';
-                            }
-                            tray['value'] = JSON.parse(tray['value']);
-                            dark['echo'][key] = fxBase['param']['merge'](dark['echo'][key], tray['value']);
-                        } else {
-                            dark['echo'][key][$(value2).attr('moire-type')] = $(value2).val();
-                        }
-                    });
-                });
-                break;
-            case 'view_row':
-                // 视图-行
-                $(dark['plugin']['echo'].el).children().each(function(key, value) {
-                    $(value).children('input').each(function(key2, value2) {
-                        dark['echo'].push($(value2).val());
-                    });
-                });
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'echo', dark['skin']], [dark, base, echo, tray], dark);
+        // 校验输出
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isEmpty(dark['echo'])) {
             layui.layer.msg(fxBase['base']['lang'](['please', 'add', dark['label']]), { 'icon': 5, 'anim': 6 });
             return false;
@@ -396,11 +176,15 @@ fxView['material']['elem']['table'] = function() {
             echo.append(dark['delete']['elem']);
             dark['elem'].find('.moire-elem-inline').append(echo);
         });
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 清理
     echo['clean'] = function() {
         // 疏理数据
         dark['elem'].find('.moire-elem-inline>div').remove();
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
     };
     return echo;
-};
+});

@@ -11,7 +11,7 @@
 /**
  * 云纹物料-模板-工具
  */
-fxView['material']['template']['tool'] = {
+fxView['machine']['deployer'](['material', 'template', 'tool'], {
     'tips': '',
     'tips-text': '<textarea readonly></textarea>',
     'view-search': '' +
@@ -36,4 +36,4 @@ fxView['material']['template']['tool'] = {
         '<a moire-cell="edit" class="layui-btn layui-btn-xs moire-bg-green-light" lay-event="edit">edit</a>' +
         '<a moire-cell="delete" class="layui-btn layui-btn-xs layui-btn-danger moire-bg-red-light" lay-event="delete">delete</a>' +
         '<a moire-cell="link" class="layui-btn layui-btn-xs layui-btn-primary" lay-event="link">link</a>',
-};
+});

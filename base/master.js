@@ -377,7 +377,7 @@ fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
         // 初始化变量
         var dark = {
             // 库存
-            'stock': fxView['material']['template'],
+            'stock': fxView['machine']['caller'](['material', 'template']),
             // 元素
             'elem': null,
             // 类型
@@ -952,6 +952,19 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
             }
         }
         return false;
+    },
+
+    /**
+     * 搜索数组-返回键钥
+     */
+    'arraySearch': function() {
+        // 初始化变量
+        for (var i in arguments[1]) {
+            if (arguments[1][i] == arguments[0]) {
+                return i;
+            }
+        }
+        return false;
     }
 });
 
@@ -1316,27 +1329,27 @@ var fxApp = new function() { return isObject(fxApp) ? fxApp : {}; };
 /**
  * 基础
  */
-fxApp['base'] = {};
+fxApp['base'] = Object.assign(isObject(fxApp['base']) ? fxApp['base'] : {}, {});
 
 /**
  * 数据
  */
-fxApp['data'] = {};
+fxApp['data'] = Object.assign(isObject(fxApp['data']) ? fxApp['data'] : {}, {});
 
 /**
  * 用户
  */
-fxApp['user'] = {};
+fxApp['user'] = Object.assign(isObject(fxApp['user']) ? fxApp['user'] : {}, {});
 
 /**
  * 视图
  */
-fxApp['view'] = {};
+fxApp['view'] = Object.assign(isObject(fxApp['view']) ? fxApp['view'] : {}, {});
 
 /**
  * 天梯
  */
-fxApp['rank'] = {};
+fxApp['rank'] = Object.assign(isObject(fxApp['rank']) ? fxApp['rank'] : {}, {});
 
 /**
  * 控制台

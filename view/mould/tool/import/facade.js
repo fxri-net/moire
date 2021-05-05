@@ -11,14 +11,18 @@
 /**
  * 云纹模具-工具-导入
  */
-fxView['mould']['tool']['import'] = function() {
+fxView['machine']['deployer'](['mould', 'tool', 'import', 'main'], function() {
     // 初始化变量
-    var dark = fxBase['param']['merge']({}, fxView['shelf']['view']);
-    var tray = {};
-    dark = fxBase['param']['merge'](dark, arguments[0]);
-    tray[dark['model']['key']] = [];
-    // 检查配置
-    if (!isSet(dark['api']['import'])) {
-        return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
+    var dark = [
+        // 参数
+        null,
+        // 皮肤
+        'layui'
+    ];
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 执行插件
+    if (!isFunction(fxView['machine']['caller'](['mould', 'tool', 'import', 'skin', dark[1]]))) {
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark[1], 'plugin', 'not loaded'] }]);
     }
-};
+    fxView['machine']['caller'](['mould', 'tool', 'import', 'skin', dark[1]], dark);
+});

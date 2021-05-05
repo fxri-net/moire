@@ -11,14 +11,18 @@
 /**
  * 云纹模具-工具-下载
  */
-fxView['mould']['tool']['download'] = function() {
+fxView['machine']['deployer'](['mould', 'tool', 'download', 'main'], function() {
     // 初始化变量
-    var dark = fxBase['param']['merge']({}, fxView['shelf']['view']);
-    var tray = {};
-    tray[dark['model']['key']] = [];
-    // 检查配置
-    if (!isSet(dark['api']['download'])) {
-        return fxView['mould']['tool']['message']({ 'text': ['feature', 'not configured'] });
+    var dark = [
+        // 参数
+        null,
+        // 皮肤
+        'layui'
+    ];
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 执行插件
+    if (!isFunction(fxView['machine']['caller'](['mould', 'tool', 'download', 'skin', dark[1]]))) {
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark[1], 'plugin', 'not loaded'] }]);
     }
-    window.open(dark['api']['download']);
-};
+    fxView['machine']['caller'](['mould', 'tool', 'download', 'skin', dark[1]], dark);
+});

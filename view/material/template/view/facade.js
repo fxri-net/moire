@@ -11,7 +11,7 @@
 /**
  * 云纹物料-模板-视图
  */
-fxView['material']['template']['view'] = {
+fxView['machine']['deployer'](['material', 'template', 'view'], {
     'search': '' +
         '<form class="layui-form layui-elem-quote layui-col-space5 moire-clear moire-search"></form>',
     'table': '' +
@@ -36,4 +36,4 @@ fxView['material']['template']['view'] = {
         '</form>',
     'video': '<video class="video-js media-video"></video>',
     'image': '<img class="media-image">',
-};
+});

@@ -11,13 +11,18 @@
 /**
  * 云纹模具-视图-新增
  */
-fxView['mould']['view']['add'] = function() {
+fxView['machine']['deployer'](['mould', 'view', 'add', 'main'], function() {
     // 初始化变量
-    var dark = {
-        // 基础
-        'base': fxBase['param']['merge']({}, fxView['shelf']['view'])
-    };
-    dark = fxBase['param']['merge'](dark, arguments[0]);
-    // 执行视图
-    fxView['mould']['view']['edit'](dark);
-};
+    var dark = [
+        // 参数
+        null,
+        // 皮肤
+        'layui'
+    ];
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 执行插件
+    if (!isFunction(fxView['machine']['caller'](['mould', 'view', 'add', 'skin', dark[1]]))) {
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark[1], 'plugin', 'not loaded'] }]);
+    }
+    fxView['machine']['caller'](['mould', 'view', 'add', 'skin', dark[1]], dark);
+});

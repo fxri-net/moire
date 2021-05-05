@@ -33,6 +33,7 @@ Imagesloaded v4.1.4及以上
 masonry v4.2.2及以上
 Sortable v1.10.2及以上
 Viewer v1.5.0及以上
+LayX v2.5.4及以上
 ~~~
 
 ## 项目开发

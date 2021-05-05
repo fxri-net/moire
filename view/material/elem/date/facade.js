@@ -11,7 +11,7 @@
 /**
  * 云纹物料-元素-日期
  */
-fxView['material']['elem']['date'] = function() {
+fxView['machine']['deployer'](['material', 'elem', 'date', 'main'], function() {
     // 初始化变量
     var base,
         dark,
@@ -24,7 +24,7 @@ fxView['material']['elem']['date'] = function() {
     // 初始化
     echo['init'] = function() {
         // 疏理数据
-        fxView['machine']['elem'](dark, arguments[0]);
+        fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
         dark = fxBase['param']['merge'](dark, {
             // 输出-开关
@@ -40,6 +40,8 @@ fxView['material']['elem']['date'] = function() {
         // 疏理数据
         dark['title'] = fxBase['base']['lang'](dark['title']);
         dark['default'] = fxBase['base']['lang'](dark['default']);
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 部署
     echo['deploy'] = function() {
@@ -74,9 +76,7 @@ fxView['material']['elem']['date'] = function() {
             }
         }, dark);
         // 渲染之前
-        if (isFunction(dark['before'])) {
-            dark['before'](dark, base);
-        }
+        fxView['machine']['caller'](['before'], [dark, base], dark);
         // 疏理包装
         dark['wrap'] = $(dark['wrapBox']['elem']);
         dark['wrap'].attr(dark['wrapBox']['attr']);
@@ -84,78 +84,25 @@ fxView['material']['elem']['date'] = function() {
         dark['elem'] = $(dark['elemBox']['elem']);
         dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].val(dark['data']);
-        // 疏理皮肤
-        switch (dark['skin']) {
-            case 'search':
-                // 搜索
-                base['pack'].append(dark['wrap']);
-                dark['wrap'].attr({
-                    'class': 'layui-col-xs12 layui-col-sm6 layui-col-md4'
-                });
-                dark['wrap'].append(dark['elem']);
-                dark['elem'].attr({
-                    'class': 'layui-input'
-                });
-                // 疏理配置
-                dark['plugin']['elem'] = dark['elem'][0];
-                layui.laydate.render(dark['plugin']);
-                break;
-            case 'view':
-                // 视图
-                base['pack'].append(dark['wrap']);
-                dark['wrap'].attr({
-                    'class': 'layui-col-xs12 layui-col-md6'
-                });
-                dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-                dark['wrap'].children('[moire-key]').html(dark['label'] + dark['requireMark']);
-                dark['wrap'].children('[moire-cell]').append(dark['elem']);
-                dark['elem'].attr({
-                    'class': 'layui-input'
-                });
-                // 疏理配置
-                dark['plugin']['elem'] = dark['elem'][0];
-                dark['plugin'] = layui.laydate.render(dark['plugin']);
-                // 离开事件
-                dark['elem'].on('blur', function() {
-                    // 疏理日期
-                    tray['value'] = $(this).val();
-                    // 解析格式
-                    tray['regexp'] = '[^A-Za-z]+';
-                    tray['format'] = fxBase['text']['explode'](tray['regexp'], dark['plugin'].config.format, 'regular');
-                    tray['regexp'] = '[A-Za-z]+';
-                    tray['format_separator'] = fxBase['text']['explode'](tray['regexp'], dark['plugin'].config.format, 'regular').slice(1, -1);
-                    // 解析时间
-                    tray['regexp'] = '[^0-9]+';
-                    tray['value'] = fxBase['text']['explode'](tray['regexp'], tray['value'], 'regular').slice(0, tray['format'].length);
-                    // 填充时间
-                    $.each(tray['format'], function(key, value) {
-                        tray['value'][key] = fxBase['text']['strPad'](!isBlank(tray['value'][key]) ? tray['value'][key] : '0', value.length, 0, 0);
-                    });
-                    $.each(tray['format_separator'], function(key, value) {
-                        tray['value'][key] = tray['value'][key] + value;
-                    });
-                    // 组装时间
-                    tray['value'] = fxBase['text']['implode']('', tray['value']);
-                    $(this).val(tray['value']);
-                });
-                break;
-        }
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
-        if (isFunction(dark['after'])) {
-            dark['after'](dark, base);
-        }
+        fxView['machine']['caller'](['after'], [dark, base], dark);
     };
     // 完成
     echo['done'] = function() {
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
-        if (isFunction(dark['done'])) {
-            dark['done'](dark, base);
-        }
+        fxView['machine']['caller'](['done'], [dark, base], dark);
     };
     // 输出
     echo['echo'] = function() {
         // 疏理数据
         dark['echo'] = dark['elem'].val();
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'echo', dark['skin']], [dark, base, echo, tray], dark);
+        // 校验输出
         if (dark['echoSwitch'] == 1 && dark['require'] == 1 && isBlank(dark['echo'])) {
             dark['elem'].trigger('focus');
             layui.layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
@@ -166,11 +113,15 @@ fxView['material']['elem']['date'] = function() {
     echo['reset'] = function() {
         // 疏理数据
         dark['elem'].val(dark['data']);
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
     };
     // 清理
     echo['clean'] = function() {
         // 疏理数据
         dark['elem'].val('');
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
     };
     return echo;
-};
+});

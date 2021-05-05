@@ -28,6 +28,11 @@ fxView['cache'] = Object.assign(isObject(fxView['cache']) ? fxView['cache'] : {}
     'elem': {},
 
     /**
+     * 插件
+     */
+    'plugin': [],
+
+    /**
      * 视图
      */
     'view': {}
@@ -56,32 +61,12 @@ fxView['machine'] = Object.assign(isObject(fxView['machine']) ? fxView['machine'
 /**
  * 物料
  */
-fxView['material'] = Object.assign(isObject(fxView['material']) ? fxView['material'] : {}, {
-    /**
-     * 元素
-     */
-    'elem': {},
-
-    /**
-     * 模板
-     */
-    'template': {}
-});
+fxView['material'] = Object.assign(isObject(fxView['material']) ? fxView['material'] : {}, {});
 
 /**
  * 模具
  */
-fxView['mould'] = Object.assign(isObject(fxView['mould']) ? fxView['mould'] : {}, {
-    /**
-     * 工具
-     */
-    'tool': {},
-
-    /**
-     * 视图
-     */
-    'view': {}
-});
+fxView['mould'] = Object.assign(isObject(fxView['mould']) ? fxView['mould'] : {}, {});
 
 /**
  * 货架
@@ -356,24 +341,172 @@ fxView['store']['facade'] = function() {
         };
     }
     // 替换标题
-    if (isBlank(fxApp['view']['elems'][dark['elem']])) {
+    if (isBlank(fxView['machine']['caller'](['view', 'elems', dark['elem']], null, fxApp))) {
         $('title').html(fxBase['base']['lang']([fxApp['view']['name'], dark['elem'], ' - ', 'site title']));
         fxApp['env']['title'] = $('title').html();
     }
     // 执行视图
-    if (isFunction(fxView['mould']['view'][dark['data']['base']['elem']])) {
-        fxView['mould']['view'][dark['data']['base']['elem']](dark['data']);
-    } else if (isFunction(fxView['custom'][dark['data']['base']['elem']])) {
-        fxView['custom'][dark['data']['base']['elem']](dark['data']);
+    if (isFunction(fxView['machine']['caller'](['custom', dark['data']['base']['elem']]))) {
+        fxView['machine']['caller'](['custom', dark['data']['base']['elem']], [dark['data']]);
+    } else if (isFunction(fxView['machine']['caller'](['mould', 'view', dark['data']['base']['elem'], 'main']))) {
+        fxView['machine']['caller'](['mould', 'view', dark['data']['base']['elem'], 'main'], [dark['data']]);
     } else {
-        return fxView['mould']['tool']['message']({ 'text': ['view', 'not configured'] });
+        // 关闭窗口
+        if (top.fxApp['rank']['self.layer.index.list'].length > 0) {
+            fxApp['rank']['self.layer.close'](top.fxApp['rank']['self.layer.index.list'][0]);
+        }
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark['data']['base']['elem'], 'plugin', 'not loaded'] }]);
     }
 };
 
 /**
- * 云纹加工-元素
+ * 云纹加工-路径
  */
-fxView['machine']['elem'] = function() {
+fxApp['env']['factory'] = fxApp['env']['script'] + '/view/';
+
+/**
+ * 云纹加工-加载器
+ */
+fxView['machine']['loader'] = function() {
+    // 初始化变量
+    var dark = {
+        // 插件
+        0: [],
+        // 配置
+        1: {
+            // 名称
+            'name': [],
+            // 路径
+            'path': null,
+            // 主机
+            'web': fxApp['env']['factory'],
+            // 版本
+            'version': fxApp['env']['version']
+        },
+        // 回调
+        2: null
+    };
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 疏理数据
+    dark['plugin'] = dark[0];
+    dark['config'] = dark[1];
+    dark['callback'] = dark[2];
+    // 解析插件
+    if (isBlank(dark['plugin'])) {
+        dark['plugin'] = [];
+    } else if (!isArray(dark['plugin']) && !isObject(dark['plugin'])) {
+        dark['plugin'] = fxBase['text']['explode'](',', dark['plugin']);
+    }
+    // 解析名称
+    if (isBlank(dark['config']['name'])) {
+        dark['config']['name'] = [];
+    } else if (!isArray(dark['config']['name']) && !isObject(dark['config']['name'])) {
+        dark['config']['name'] = fxBase['text']['explode'](',', dark['config']['name']);
+    }
+    // 加载插件
+    $.each(dark['plugin'], function(key, value) {
+        // 加载名称
+        $.each(dark['config']['name'], function(key2, value2) {
+            // 检查路径
+            if (!isSet(dark['config']['path']) || !isSet(value2)) return true;
+            // 疏理插件
+            dark['model'] = [dark['config']['web'], dark['config']['path'], '/', value, '/', value2];
+            dark['model'] = fxBase['text']['implode']('', dark['model']);
+            // 疏理版本
+            if (!isBlank(dark['config']['version'])) {
+                dark['model'] = fxBase['text']['implode']('', [dark['model'], '?version=', dark['config']['version']]);
+            }
+            // 检查装配
+            if (fxBase['param']['inArray'](dark['model'], fxView['cache']['plugin'])) return true;
+            fxView['cache']['plugin'].push(dark['model']);
+            // 加载模块
+            document.write('<script type="text/javascript" src="' + dark['model'] + '"></script>');
+        });
+    });
+    // 执行回调
+    if (isFunction(dark['callback'])) {
+        $(document).ready(function() {
+            dark['callback']();
+        });
+    }
+};
+
+/**
+ * 云纹加工-部署器
+ */
+fxView['machine']['deployer'] = function() {
+    // 初始化变量
+    var dark = {
+        // 链条
+        0: [],
+        // 数据
+        1: null,
+        // 基础
+        2: null
+    };
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 疏理数据
+    dark['chain'] = dark[0];
+    dark['data'] = dark[1];
+    dark['base'] = isSet(dark[2]) ? dark[2] : fxView;
+    // 检查数据
+    if (!isArray(dark['chain'])) return false;
+    // 加载链条
+    $.each(dark['chain'].reverse(), function(key, value) {
+        // 配置数据
+        dark['echo'] = {};
+        dark['echo'][value] = dark['data'];
+        dark['data'] = dark['echo'];
+    });
+    dark['base'] = fxBase['param']['merge'](dark['base'], dark['data']);
+};
+
+/**
+ * 云纹加工-访问器
+ */
+fxView['machine']['caller'] = function() {
+    // 初始化变量
+    var dark = {
+        // 链条
+        0: [],
+        // 参数
+        1: null,
+        // 基础
+        2: null
+    };
+    dark = fxBase['param']['merge'](dark, arguments);
+    // 疏理数据
+    dark['chain'] = dark[0];
+    dark['data'] = dark[1];
+    dark['base'] = isSet(dark[2]) ? dark[2] : fxView;
+    // 检查数据
+    if (!isArray(dark['chain'])) return false;
+    // 加载链条
+    dark['exit'] = true;
+    dark['name'] = '';
+    $.each(dark['chain'], function(key, value) {
+        // 初始化变量
+        dark['name'] = value;
+        // 检查基础
+        if (isUndefined(dark['base'][dark['name']])) return dark['exit'] = false;
+        // 配置数据
+        dark['base'] = dark['base'][dark['name']];
+    });
+    // 检查数据
+    if (!dark['exit']) {
+        dark['echo'] = undefined;
+    } else if (isFunction(dark['base']) && isArray(dark['data'])) {
+        dark['echo'] = dark['base'].apply(null, dark['data']);
+    } else {
+        dark['echo'] = dark['base'];
+    }
+    return dark['echo'];
+};
+
+/**
+ * 云纹加工-参数器
+ */
+fxView['machine']['darker'] = function() {
     // 初始化变量
     var dark = fxBase['param']['merge'](arguments[0], {
         // 基础属性->↓
@@ -383,6 +516,12 @@ fxView['machine']['elem'] = function() {
         'field': '',
         // 数据
         'data': null,
+        // 数据-前缀
+        'dataPrefix': '',
+        // 数据-后缀
+        'dataSuffix': '',
+        // 数据-输出
+        'dataEcho': null,
         // 输出
         'echo': null,
         // 列表
@@ -399,6 +538,8 @@ fxView['machine']['elem'] = function() {
         'shelf': {},
         // 皮肤
         'skin': null,
+        // 皮肤-列表
+        'skins': null,
         // 开始
         'before': null,
         // 之后
@@ -419,68 +560,7 @@ fxView['machine']['elem'] = function() {
             '<span>', '(', 'field', '[', fxApp['view']['langc']['prefix'] + dark['field'], ']', 'undefined', ')', '</span>'
         ]);
     }
+    // 加载皮肤
+    dark['skins'] = fxView['machine']['caller'](['material', 'elem', dark['type'], 'skin']);
     return dark;
-};
-
-/**
- * 云纹加工-路径
- */
-fxApp['env']['factory'] = fxApp['env']['script'] + '/view/';
-
-/**
- * 云纹加工-加载器
- */
-fxView['machine']['loader'] = function() {
-    // 初始化变量
-    var dark = {
-        // 插件
-        0: [],
-        // 模块
-        1: {
-            // 车间
-            'workshop': null,
-            // 装配
-            'assembly': null,
-            // 门面
-            'facade': 'facade.js',
-            // 版本
-            'version': fxApp['env']['version'],
-        },
-        // 回调
-        2: null,
-        // 路径
-        3: fxApp['env']['factory']
-    };
-    dark = fxBase['param']['merge'](dark, arguments);
-    // 疏理数据
-    dark['plugins'] = dark[0];
-    dark['module'] = dark[1];
-    dark['callback'] = isFunction(dark[2]) ? dark[2] : null;
-    dark['path'] = isString(dark[2]) ? dark[2] : dark[3];
-    if (isBlank(dark['plugins'])) {
-        dark['plugins'] = [];
-    } else if (!isArray(dark['plugins']) && !isObject(dark['plugins'])) {
-        dark['plugins'] = fxBase['text']['explode'](',', dark['plugins']);
-    }
-    // 加载插件
-    $.each(dark['plugins'], function(key, value) {
-        // 检查装配
-        dark['plugin'] = fxView[dark['module']['workshop']][dark['module']['assembly']][value];
-        if (isFunction(dark['plugin']) || dark['plugin'] === true) return true;
-        fxView[dark['module']['workshop']][dark['module']['assembly']][value] = true;
-        // 疏理模块
-        dark['model'] = fxBase['text']['implode']('/', [dark['module']['workshop'], dark['module']['assembly'], value, dark['module']['facade']]);
-        // 疏理版本
-        if (!isBlank(dark['module']['version'])) {
-            dark['model'] = fxBase['text']['implode']('?', [dark['model'], 'version=' + dark['module']['version']]);
-        }
-        // 加载模块
-        document.write('<script type="text/javascript" src="' + dark['path'] + dark['model'] + '"></script>');
-    });
-    // 执行回调
-    if (isFunction(dark['callback'])) {
-        $(document).ready(function() {
-            dark['callback']();
-        });
-    }
 };
