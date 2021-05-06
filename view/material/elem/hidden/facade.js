@@ -15,12 +15,14 @@ fxView['machine']['deployer'](['material', 'elem', 'hidden', 'main'], function()
     // 初始化变量
     var base,
         dark,
-        echo = {},
-        tray = {};
+        tray,
+        echo = {};
     // 基础
     echo['base'] = base = {};
     // 数据
     echo['dark'] = dark = {};
+    // 托盘
+    echo['tray'] = tray = {};
     // 初始化
     echo['init'] = function() {
         // 疏理数据
