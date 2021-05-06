@@ -1424,3 +1424,8 @@ fxApp['console'] = Object.assign(isObject(fxApp['console']) ? fxApp['console'] :
  * 记录IE版本
  */
 fxApp['env']['ie'] = fxBase['client']['ieVersion']();
+
+/**
+ * 记录样式表
+ */
+fxApp['env']['sheet'] = document.styleSheets;

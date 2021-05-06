@@ -216,9 +216,11 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         tray['area']['z-index'] = $(layxWindow).css('z-index');
                         tray['left'] = winform.area.left;
                         tray['top'] = winform.area.top;
-                        // 设置左舷
-                        tray['rudder'] = tray['touchX'] - tray['left'];
-                        tray['left'] = tray['left'] + tray['rudder'] - (tray['rudder'] / winform.area.width * tray['area']['width']);
+                        // 设置舷边
+                        tray['siteLeft'] = tray['touchX'] - tray['left'];
+                        tray['siteTop'] = tray['touchY'] - tray['top'];
+                        tray['left'] = tray['left'] + tray['siteLeft'] - (tray['siteLeft'] / winform.area.width * tray['area']['width']);
+                        tray['top'] = tray['top'] + tray['siteTop'] - (tray['siteTop'] / winform.area.height * tray['area']['height']);
                         // 设置范围
                         layx.setPosition(dark['window'].id, [tray['top'], tray['left']]);
                         layx.setSize(dark['window'].id, { 'width': tray['area']['width'], 'height': tray['area']['height'] });
@@ -289,6 +291,11 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
         'move': {
             // 触碰
             'touch': function() {
+                // 设置定时器
+                if (false !== dark['move']['touchTimer']) {
+                    clearTimeout(dark['move']['touchTimer']);
+                    dark['move']['touchTimer'] = false;
+                }
                 // 配置墙壁
                 tray['wallWidth'] = window.innerWidth;
                 tray['wallHeight'] = window.innerHeight;
@@ -352,32 +359,40 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
             'touchCorner': 50,
             // 触碰-墙边
             'touchEdge': 20,
+            // 触碰-时间
+            'touchTime': 1000,
             // 投影
             'shadow': function() {
                 // 初始化变量
                 tray['shadowElem'] = $('.moire-window-shadow');
                 // 校验投影
-                if (!tray['shadow'] && tray['shadowElem'].css('opacity') == 0) {
+                if (!tray['shadow'] && false !== dark['move']['shadowTimer']) {
                     return false;
                 } else if (!tray['shadow']) {
+                    // 设置定时器
+                    dark['move']['shadowTimer'] = setTimeout(function() {
+                        tray['shadowElem'].hide();
+                    }, dark['move']['shadowTime']);
                     // 设置范围
                     tray['shadowElem'].css({
                         'opacity': 0
                     });
                     return false;
-                } else if (tray['shadowElem'].css('opacity') == 0) {
+                } else if (false !== dark['move']['shadowTimer']) {
+                    // 设置定时器
+                    clearTimeout(dark['move']['shadowTimer']);
+                    dark['move']['shadowTimer'] = false;
                     // 设置范围
                     tray['shadowElem'].attr({
                         'style': null
                     });
+                    tray['shadowElem'].show();
                     tray['shadowElem'].css({
-                        'position': 'fixed',
                         'left': tray['touchX'],
                         'top': tray['touchY'],
                         'width': 0,
                         'height': 0,
                         'opacity': 1,
-                        'box-shadow': 'rgba(0, 0, 0, 0.3) 1px 1px 24px',
                         'transition': 'all 0.3s'
                     });
                 }
@@ -391,7 +406,9 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                 });
             },
             // 投影-缩放
-            'shadowZoom': 10
+            'shadowZoom': 10,
+            // 投影-时间
+            'shadowTime': 300
         }
     }, fxView['shelf']['view']);
     var tray = {};
@@ -434,11 +451,23 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
     });
     // 监听鼠标离开
     $(document).on('mouseleave', function(event) {
-        $(dark['window'].layxWindow).trigger('mouseup');
+        // 设置定时器
+        dark['move']['touchTimer'] = setTimeout(function() {
+            $(dark['window'].layxWindow).trigger('mouseup');
+        }, dark['move']['touchTime']);
     });
 });
 // 执行完成
 $(document).ready(function() {
     // 添加阴影
+    $('head').append('<style type="text/css">.moire-window-shadow {' +
+        'position: fixed;' +
+        'left: 0;' +
+        'top: 0;' +
+        'display: none;' +
+        'width: 0;' +
+        'height: 0;' +
+        'box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 24px;' +
+        '}</style>');
     $('body').append('<div class="moire-window-shadow"></div>');
 });
