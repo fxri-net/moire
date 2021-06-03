@@ -46,12 +46,7 @@ fxView['custom'] = Object.assign(isObject(fxView['custom']) ? fxView['custom'] :
 /**
  * 部署
  */
-fxView['deploy'] = Object.assign(isObject(fxView['deploy']) ? fxView['deploy'] : {}, {
-    /**
-     * 视图
-     */
-    'view': {}
-});
+fxView['deploy'] = Object.assign(isObject(fxView['deploy']) ? fxView['deploy'] : {}, {});
 
 /**
  * 加工
