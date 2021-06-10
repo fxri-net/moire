@@ -318,14 +318,14 @@ fxView['store']['facade'] = function() {
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
-    if (isObject(fxView['deploy']['view'][dark['elem']])) {
+    if (isObject(fxView['machine']['caller'](['deploy', 'view', dark['elem']]))) {
         dark['data'] = fxBase['param']['merge']({
             // 基础
             'base': {
                 // 元素
                 'elem': null
             }
-        }, fxView['deploy']['view'][dark['elem']]);
+        }, fxView['machine']['caller'](['deploy', 'view', dark['elem']]));
     } else {
         dark['data'] = {
             // 基础
