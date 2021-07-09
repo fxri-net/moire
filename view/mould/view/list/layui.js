@@ -145,8 +145,8 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
                 // 更新图片加载器
                 $('[lay-id=moire-table] img').viewer('update');
                 // 绘制表单
-                $('.layui-table-main>.layui-table').off('resize');
-                $('.layui-table-main>.layui-table').on('resize', function() {
+                $('[lay-id=moire-table]').off('resize');
+                $('[lay-id=moire-table]').on('resize', function() {
                     // 初始化变量
                     tray['tableMain'] = $('.layui-table-box>.layui-table-header tr,.layui-table-box>.layui-table-body tr');
                     tray['tableLeft'] = $('.layui-table-fixed-l tr');
@@ -157,7 +157,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
                         tray['tableRight'].eq(key).height($(value).height());
                     });
                 });
-                $('.layui-table-main>.layui-table').trigger('resize');
+                $('[lay-id=moire-table]').trigger('resize');
             }
         }
     };
