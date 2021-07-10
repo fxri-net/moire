@@ -337,7 +337,9 @@ fxView['store']['facade'] = function() {
     }
     // 替换标题
     if (isBlank(fxView['machine']['caller'](['view', 'elems', dark['elem']], null, fxApp))) {
-        $('title').html(fxBase['base']['lang']([fxApp['view']['name'], dark['elem'], ' - ', 'site title']));
+        fxApp['view']['subtitle'] = fxBase['base']['lang']([dark['elem']]);
+        fxApp['view']['title'] = fxBase['base']['lang']([fxApp['view']['name'], dark['elem']]);
+        $('title').html(fxBase['base']['lang']([fxApp['view']['title'], ' - ', 'site title']));
         fxApp['env']['title'] = $('title').html();
     }
     // 执行视图
@@ -530,17 +532,7 @@ fxView['machine']['darker'] = function() {
         // 选项
         'option': {},
         // 货架
-        'shelf': {},
-        // 皮肤
-        'skin': null,
-        // 皮肤-列表
-        'skins': null,
-        // 开始
-        'before': null,
-        // 之后
-        'after': null,
-        // 完成
-        'done': null
+        'shelf': {}
         // 视图属性->↑
     }, arguments[1]);
     dark = fxBase['param']['merge'](dark, {

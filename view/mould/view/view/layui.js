@@ -107,6 +107,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
     tray['elem'] = $('.moire-view .moire-table');
     // 疏理标题
     if (isSet(tray['view']['title'])) {
+        tray['view']['title'] = fxBase['base']['lang'](tray['view']['title']);
         tray['elem'].before('<div class="moire-thead"><div moire-elem="title">' + tray['view']['title'] + '</div></div>');
     }
     // 疏理数据
