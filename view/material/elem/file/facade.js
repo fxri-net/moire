@@ -38,7 +38,9 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
             // 选项
             'option': {
                 // 类型
-                'type': null
+                'type': null,
+                // 面板
+                'panel': true
             },
             // 上传
             'upload': {

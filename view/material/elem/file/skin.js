@@ -35,6 +35,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             switch (dark['option']['type']) {
                 default:
                     // 默认
+                case 'file':
+                    // 文件
                 case 'video':
                     // 视频
                 case 'image':
@@ -114,6 +116,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             switch (dark['option']['type']) {
                 default:
                     // 默认
+                case 'file':
+                    // 文件
                 case 'video':
                     // 视频
                     dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
@@ -135,6 +139,11 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 '<input type="hidden" class="moire-operate-hidden"></div>');
             // 疏理分支
             dark['elem'].find('.moire-operate').on('click', function() {
+                if (!dark['option']['panel']) {
+                    // 本地上传
+                    dark['elem'].find('.moire-operate-hidden').trigger('click');
+                    return false;
+                }
                 layui.layer.prompt({
                     'title': '地址',
                     'btn': ['保存', '本地上传'],
@@ -171,10 +180,10 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 'elem': dark['elem'].find('.moire-operate-hidden'),
                 // 数据
                 'data': {
-                    'base': JSON.stringify({
+                    'base': {
                         'token': fxApp['user']['base']['token'],
                         'format': 'json'
-                    })
+                    }
                 },
                 // 选择回调
                 'choose': choose,
@@ -185,6 +194,10 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 // 异常回调
                 'error': error
             }, dark['upload']);
+            // 格式化数据
+            $.each(dark['upload']['data'], function(key, value) {
+                dark['upload']['data'][key] = JSON.stringify(value);
+            });
             // 选择回调
             function choose(data) {
                 // console.log(data);
@@ -215,6 +228,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                         switch (dark['option']['type']) {
                             default:
                                 // 默认
+                            case 'file':
+                                // 文件
                             case 'video':
                                 // 视频
                                 dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
@@ -334,6 +349,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             switch (dark['option']['type']) {
                 default:
                     // 默认
+                case 'file':
+                    // 文件
                 case 'video':
                     // 视频
                     dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
@@ -355,6 +372,12 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 '<input type="hidden" class="moire-operate-hidden"></div>');
             // 疏理分支
             dark['elem'].find('.moire-operate').on('click', function() {
+                if (!dark['option']['panel']) {
+                    // 本地上传
+                    tray['message'] = ['upload', 'success'];
+                    dark['elem'].find('.moire-operate-hidden').trigger('click');
+                    return false;
+                }
                 layui.layer.prompt({
                     'title': '地址',
                     'btn': ['保存', '本地上传'],
@@ -443,6 +466,10 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     // 'size': 100
                 }
             }, dark['upload']);
+            // 格式化数据
+            $.each(dark['upload']['data'], function(key, value) {
+                dark['upload']['data'][key] = JSON.stringify(value);
+            });
             // 成功回调
             function success(data, index, upload) {
                 // 初始化变量
@@ -457,6 +484,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     switch (dark['option']['type']) {
                         default:
                             // 默认
+                        case 'file':
+                            // 文件
                         case 'video':
                             // 视频
                             dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value['ossUrl'] + '" target="_blank">点击链接</a>' +

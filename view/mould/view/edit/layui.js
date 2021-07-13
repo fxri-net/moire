@@ -131,7 +131,6 @@ fxView['machine']['deployer'](['mould', 'view', 'edit', 'skin', 'layui'], functi
     }
     // 疏理数据
     tray['list'] = fxView['cache']['elem'][dark['base']['elem']] = {};
-    tray['echo']['data']['_worldline'] = fxBase['text']['mtime']();
     $.each(tray['view']['data'](tray['echo']['data']), function(key, value) {
         // 解析数据
         value['id'] = fxBase['text']['explode'](',', value['id']);
@@ -329,5 +328,9 @@ fxView['machine']['deployer'](['mould', 'view', 'edit', 'skin', 'layui'], functi
     tray['elem'].find('div[moire-cell]').viewer({
         'title': false,
         'zIndex': fxBase['base']['maxZIndex']()
+    }).on('show', function() {
+        fxApp['rank']['self.layer.index.set'](md5(tray['elem'].attr('class')))
+    }).on('hide', function() {
+        fxApp['rank']['self.layer.index.destroy'](md5(tray['elem'].attr('class')));
     });
 });

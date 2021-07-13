@@ -527,6 +527,8 @@ fxView['machine']['darker'] = function() {
         // 视图属性->↓
         // 标题
         'title': '',
+        // 定义
+        'define': 0,
         // 必填
         'require': 0,
         // 选项
@@ -542,7 +544,7 @@ fxView['machine']['darker'] = function() {
     // 疏理数据
     dark['label'] = fxBase['base']['lang'](dark['label']);
     dark['requireMark'] = dark['require'] == 1 ? '<span>*</span>' : '';
-    if (!isSet(dark['data'])) {
+    if (dark['define'] == 1 && !isSet(dark['data'])) {
         dark['requireMark'] += fxBase['base']['lang']([
             '<span>', '(', 'field', '[', fxApp['view']['langc']['prefix'] + dark['field'], ']', 'undefined', ')', '</span>'
         ]);

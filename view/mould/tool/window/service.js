@@ -57,11 +57,13 @@ fxView['machine']['deployer'](['rank'], {
         };
         dark = fxBase['param']['merge'](dark, arguments);
         if (!isSet(dark[0])) return false;
+        // 疏理数据
         dark['data'] = fxBase['text']['explode']('-', dark[0]);
         dark['window'] = top.fxApp['rank']['self.layer.window'][dark['data'][1]];
-        if (!isSet(dark['window'])) return false;
         // 销毁索引
         fxApp['rank']['self.layer.index.destroy'](dark[0]);
+        // 检查窗口
+        if (!isSet(dark['window'])) return false;
         // 关闭窗口
         switch (dark['data'][2]) {
             case 'layui':

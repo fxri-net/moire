@@ -73,7 +73,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'export', 'skin', 'layui'], func
         tray['param']['base']['token'] = fxApp['user']['base']['token'];
         // 设置数据
         if (!isEmpty(tray[dark['model']['key']])) {
-            tray['param']['data'][dark['model']['key']] = tray[dark['model']['key']];
+            fxView['machine']['deployer'](['param', 'data', dark['model']['key']], tray[dark['model']['key']], tray);
         }
         // 设置条数
         tray['param']['base']['page'] = 1;
