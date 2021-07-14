@@ -348,11 +348,12 @@ fxView['store']['facade'] = function() {
     } else if (isFunction(fxView['machine']['caller'](['mould', 'view', dark['data']['base']['elem'], 'main']))) {
         fxView['machine']['caller'](['mould', 'view', dark['data']['base']['elem'], 'main'], [dark['data']]);
     } else {
+        // 执行消息
+        fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark['data']['base']['elem'], 'plugin', 'not loaded'] }]);
         // 关闭窗口
         if (top.fxApp['rank']['self.layer.index.list'].length > 0) {
             fxApp['rank']['self.layer.close'](top.fxApp['rank']['self.layer.index.list'][0]);
         }
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark['data']['base']['elem'], 'plugin', 'not loaded'] }]);
     }
 };
 

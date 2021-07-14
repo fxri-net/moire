@@ -15,9 +15,31 @@ fxView['machine']['deployer'](['mould', 'view', 'add', 'skin', 'layui'], functio
     // 初始化变量
     var dark = {
         // 基础
-        'base': fxBase['param']['merge']({}, fxView['shelf']['view'])
+        'base': {
+            // 来源
+            'source': false
+        },
+        // 工具栏
+        'toolbar': {
+            0: fxBase['base']['template']({
+                // 元素
+                'elem': 'tool',
+                // 类型
+                'type': 'view-edit',
+                // 单元
+                'cell': 'submit,reset,clear'
+            }).html(),
+            1: fxBase['base']['template']({
+                // 元素
+                'elem': 'tool',
+                // 类型
+                'type': 'view-edit',
+                // 单元
+                'cell': 'close'
+            }).html()
+        }
     };
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 执行视图
-    fxView['machine']['caller'](['mould', 'view', 'edit', 'main'], [dark]);
+    fxView['machine']['caller'](['mould', 'view', 'view', 'main'], [dark]);
 });

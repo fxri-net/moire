@@ -17,16 +17,7 @@ fxView['machine']['deployer'](['material', 'template', 'view'], {
     'table': '' +
         '<div id="moire-table" class="moire-table" lay-filter="moire-table"></div>',
     'view': '' +
-        '<form class="layui-form moire-view view">' +
-        '<div class="layui-table moire-clear moire-table">' +
-        '</div>' +
-        '<div class="moire-buttons">' +
-        '<div class="moire-button"></div>' +
-        '<div class="moire-button"></div>' +
-        '</div>' +
-        '</form>',
-    'edit': '' +
-        '<form class="layui-form moire-view edit">' +
+        '<form class="layui-form moire-view">' +
         '<div class="layui-table moire-clear moire-table">' +
         '</div>' +
         '<div class="moire-buttons">' +
