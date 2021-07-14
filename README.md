@@ -1,4 +1,4 @@
-云纹框架 V0.2
+云纹框架 V0.3
 ===============
 
 > 运行环境要求主流浏览器或IE9及以上
@@ -11,7 +11,7 @@
 
 ~~~
 // 加载云纹框架
-<script type="text/javascript" src="./moire/moire.js"></script>
+<script type="text/javascript" src="./moire/moire.min.js"></script>
 ~~~
 
 ## 基础依赖
@@ -34,6 +34,14 @@ masonry v4.2.2及以上
 Sortable v1.10.2及以上
 Viewer v1.5.0及以上
 LayX v2.5.4及以上
+~~~
+
+## 打包依赖
+
+~~~
+npm
+glob
+uglify-js
 ~~~
 
 ## 项目开发
