@@ -552,6 +552,7 @@ fxView['machine']['darker'] = function() {
             '<span>', '(', 'field', '[', fxApp['view']['langc']['prefix'] + dark['field'], ']', 'undefined', ')', '</span>'
         ]);
     }
+    dark['shelf']['dataRaw'] = dark['shelf']['data'];
     // 加载皮肤
     dark['skins'] = fxView['machine']['caller'](['material', 'elem', dark['type'], 'skin']);
     return dark;

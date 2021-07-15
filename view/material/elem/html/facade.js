@@ -25,6 +25,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     echo['tray'] = tray = {};
     // 初始化
     echo['init'] = function() {
+        // 检查初始化
+        if (dark['init']) return;
         // 疏理数据
         fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
@@ -34,6 +36,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
         }, dark);
         // 疏理数据
         dark['title'] = fxBase['base']['lang'](dark['title']);
+        // 数据
+        echo['data']();
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
@@ -44,6 +48,11 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     };
     // 部署
     echo['deploy'] = function() {
+        // 检查元素
+        if (dark['init']) {
+            // 重置
+            return echo['reset']();
+        }
         // 初始化变量
         dark = fxBase['param']['merge'](dark, {
             // 包装盒子
@@ -72,11 +81,6 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
         }, dark);
         // 渲染之前
         fxView['machine']['caller'](['before'], [dark, base], dark);
-        // 检查元素
-        if (dark['init']) {
-            // 重置
-            return echo['reset']();
-        }
         // 疏理包装
         dark['wrap'] = $(dark['wrapBox']['elem']);
         dark['wrap'].attr(dark['wrapBox']['attr']);
@@ -93,6 +97,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     };
     // 完成
     echo['done'] = function() {
+        // 检查初始化
+        if (dark['init']) return;
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
@@ -100,6 +106,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     };
     // 输出
     echo['echo'] = function() {
+        // 检查初始化
+        if (!dark['init']) return;
         // 疏理数据
         dark['echo'] = dark['elem'].html();
         // 渲染皮肤
@@ -107,6 +115,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     };
     // 重置
     echo['reset'] = function() {
+        // 检查初始化
+        if (!dark['init']) return;
         // 疏理数据
         dark['elem'].html(dark['data']);
         // 渲染皮肤
@@ -114,6 +124,8 @@ fxView['machine']['deployer'](['material', 'elem', 'html', 'main'], function() {
     };
     // 清理
     echo['clean'] = function() {
+        // 检查初始化
+        if (!dark['init']) return;
         // 疏理数据
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
