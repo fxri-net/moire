@@ -514,6 +514,8 @@ fxView['machine']['darker'] = function() {
         'field': '',
         // 数据
         'data': null,
+        // 数据-原始
+        'dataRaw': null,
         // 数据-前缀
         'dataPrefix': '',
         // 数据-后缀

@@ -45,6 +45,11 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
     };
+    // 数据
+    echo['data'] = function() {
+        // 渲染皮肤
+        fxView['machine']['caller'](['skins', 'data', dark['skin']], [dark, base, echo, tray], dark);
+    };
     // 部署
     echo['deploy'] = function() {
         // 初始化变量
@@ -79,6 +84,11 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
         }, dark);
         // 渲染之前
         fxView['machine']['caller'](['before'], [dark, base], dark);
+        // 检查元素
+        if (dark['init']) {
+            // 重置
+            return echo['reset']();
+        }
         // 疏理包装
         dark['wrap'] = $(dark['wrapBox']['elem']);
         dark['wrap'].attr(dark['wrapBox']['attr']);
@@ -90,6 +100,8 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
         fxView['machine']['caller'](['after'], [dark, base], dark);
+        // 检查初始化
+        dark['init'] = !isEmpty($('#' + dark['id']));
     };
     // 完成
     echo['done'] = function() {
@@ -125,28 +137,32 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
     // 重置
     echo['reset'] = function() {
         // 疏理数据
-        // 识别IE浏览器兼容插件
-        if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
-            tinymce.get(dark['id']).setContent(dark['data']);
-            dark['elem'].val(dark['data']);
-        } else {
-            dark['elem'].val(dark['data']);
-        }
-        // 渲染皮肤
-        fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
+        $(document).ready(function() {
+            // 识别IE浏览器兼容插件
+            if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
+                tinymce.get(dark['id']).setContent(dark['data']);
+                dark['elem'].val(dark['data']);
+            } else {
+                dark['elem'].val(dark['data']);
+            }
+            // 渲染皮肤
+            fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
+        });
     };
     // 清理
     echo['clean'] = function() {
         // 疏理数据
-        // 识别IE浏览器兼容插件
-        if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
-            tinymce.get(dark['id']).setContent('');
-            dark['elem'].val('');
-        } else {
-            dark['elem'].val('');
-        }
-        // 渲染皮肤
-        fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
+        $(document).ready(function() {
+            // 识别IE浏览器兼容插件
+            if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
+                tinymce.get(dark['id']).setContent('');
+                dark['elem'].val('');
+            } else {
+                dark['elem'].val('');
+            }
+            // 渲染皮肤
+            fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
+        });
     };
     return echo;
 });

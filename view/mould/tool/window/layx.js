@@ -170,6 +170,12 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                             // 本身-弹窗-索引
                             'self.layer.index': dark['index']
                         }, $(layxWindow).find('iframe').prop('contentWindow').fxApp);
+                        // 窗口调整
+                        $(window).on('resize', function() {
+                            // 初始化变量
+                            if (dark['window'].status != 'max') return;
+                            layx.max(dark['window'].id);
+                        });
                     }
                 },
                 // 最小化事件

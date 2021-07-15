@@ -110,7 +110,6 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
         tray['echo']['data']['data'][dark['base']['model']['key']] = fxApp['data'][dark['base']['model']['key']];
         fxView['store']['deal'](tray['echo']);
     }
-    tray['echo']['data'] = {};
     // 疏理视图
     $('.moire-wapper').append(fxBase['base']['template']({ 'elem': 'view', 'type': 'view' }).html());
     $('.moire-wapper .moire-view').addClass(dark['base']['elem']);
@@ -129,17 +128,28 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
     tray['list'] = fxView['cache']['elem'][dark['base']['elem']] = {};
     // 渲染表单
     fxView['machine']['deployer'](['cache', 'render', dark['base']['elem']], function() {
-        tray['elem'].find('[moire-elem=elem]').remove();
         $.each(dark['data'](tray['echo']['data']), function(key, value) {
             // 解析数据
             value['id'] = fxBase['text']['explode'](',', value['id']);
             value['type'] = fxBase['text']['explode'](',', value['type']);
+            if (!isSet(value['data']) && isArray(value['dataRaw'])) {
+                value['data'] = fxView['machine']['caller'](value['dataRaw'][1], null, value['dataRaw'][0]);
+                value['data'] = isSet(value['data']) ? value['data'] : value['dataRaw'][2];
+            }
             $.each(value['type'], function(key2, value2) {
                 // 校验元素
                 if (!isFunction(fxView['machine']['caller'](['material', 'elem', value2, 'main']))) {
                     if (dark['base']['debug']) {
                         console.log(fxBase['base']['lang'](['material', 'element', '[', fxApp["view"]["langc"]["prefix"] + value2, ']', 'not2', 'load']));
                     }
+                    return true;
+                }
+                // 检查元素
+                tray['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
+                if (fxView['machine']['caller']([tray['id'], 'dark', 'init'], null, tray['list'])) {
+                    // 初始化数据
+                    tray['list'][tray['id']]['dark']['data'] = value['data'];
+                    tray['list'][tray['id']]['data']();
                     return true;
                 }
                 // 配置基础
@@ -152,11 +162,11 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                     'field': key,
                     'skin': dark['base']['skin']
                 }, value);
-                tray['data']['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
+                tray['data']['id'] = md5(tray['id']);
                 tray['data']['type'] = value2;
                 // 初始化元素
-                tray['list'][tray['data']['id']] = fxView['machine']['caller'](['material', 'elem', value2, 'main'], []);
-                tray['list'][tray['data']['id']]['init'](tray['data'], tray['base']);
+                tray['list'][tray['id']] = fxView['machine']['caller'](['material', 'elem', value2, 'main'], []);
+                tray['list'][tray['id']]['init'](tray['data'], tray['base']);
             })
         });
         // 渲染数据
@@ -181,6 +191,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
         });
     });
     // 渲染表单
+    tray['echo']['data'] = {};
     fxView['machine']['caller'](['cache', 'render', dark['base']['elem']], []);
     // 提交请求
     layui.form.on('submit(moire-submit)', function(data) {

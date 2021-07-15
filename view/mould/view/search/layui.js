@@ -44,6 +44,10 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
         // 解析数据
         value['id'] = fxBase['text']['explode'](',', value['id']);
         value['type'] = fxBase['text']['explode'](',', value['type']);
+        if (!isSet(value['data']) && isArray(value['dataRaw'])) {
+            value['data'] = fxView['machine']['caller'](value['dataRaw'][1], null, value['dataRaw'][0]);
+            value['data'] = isSet(value['data']) ? value['data'] : value['dataRaw'][2];
+        }
         $.each(value['type'], function(key2, value2) {
             // 校验元素
             if (!isFunction(fxView['machine']['caller'](['material', 'elem', value2, 'main']))) {

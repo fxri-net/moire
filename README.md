@@ -23,6 +23,7 @@ Jquery v1.9及以上
 ## 视图车间依赖
 
 ~~~
+MD5 0.7.3及以上
 Layui v2.6.4及以上
 Jquery v1.9及以上
 Jquery_Resize

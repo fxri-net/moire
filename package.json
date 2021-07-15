@@ -4,9 +4,9 @@
   "description": "云纹框架",
   "main": "moire.js",
   "scripts": {
-    "merge": "node build/merge.config.js",
+    "merge": "node build/merge.js",
     "uglifyjs": "uglifyjs moire.min.js -m -o moire.min.js",
-    "build": "npm run merge && npm run uglifyjs"
+    "build": "npm run merge 1 && npm run uglifyjs && npm run merge 2"
   },
   "author": "唐启云",
   "license": "Apache-2.0",
