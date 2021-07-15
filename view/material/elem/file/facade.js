@@ -170,6 +170,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
     // 重置
     echo['reset'] = function() {
         // 疏理数据
+        dark['elem'].find('.moire-elem-inline').masonry('destroy', dark['elem'].find('.moire-elem-inline>div'));
         dark['elem'].find('.moire-elem-inline>div').remove();
         // 输出子项
         $.each(dark['data'], function(key, value) {
@@ -189,7 +190,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
             }
         });
         // 执行瀑布流
-        dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
         dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
             dark['elem'].find('.moire-elem-inline').trigger('resize');
         });
