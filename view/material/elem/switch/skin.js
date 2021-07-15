@@ -38,7 +38,7 @@ fxView['machine']['deployer'](['material', 'elem', 'switch', 'skin', 'deploy'], 
                     'name': dark['field'],
                     'value': data[base['mould']['base']['model']['key']],
                     'lay-skin': 'switch',
-                    'lay-text': dark['shelf']['data'],
+                    'lay-text': dark['shelf']['dataEcho'],
                     'lay-filter': dark['field'],
                     'checked': tray['data'] == 1 ? 'checked' : null
                 });

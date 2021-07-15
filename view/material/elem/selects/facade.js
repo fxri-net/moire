@@ -59,9 +59,8 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'main'], function(
         } else if (!isArray(dark['data']) && !isObject(dark['data'])) {
             dark['data'] = fxBase['text']['explode'](',', dark['data']);
         }
-        dark['shelf']['data'] = JSON.parse(JSON.stringify(dark['shelf']['dataRaw']));
         if (isBlank(dark['shelf']['data'])) {
-            dark['shelf']['data'] = [];
+            dark['shelf']['data'] = {};
         } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }

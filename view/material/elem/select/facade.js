@@ -49,9 +49,8 @@ fxView['machine']['deployer'](['material', 'elem', 'select', 'main'], function()
     // 数据
     echo['data'] = function() {
         // 疏理数据
-        dark['shelf']['data'] = JSON.parse(JSON.stringify(dark['shelf']['dataRaw']));
         if (isBlank(dark['shelf']['data'])) {
-            dark['shelf']['data'] = [];
+            dark['shelf']['data'] = {};
         } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }

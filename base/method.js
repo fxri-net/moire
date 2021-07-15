@@ -285,3 +285,54 @@ if (!isFunction(Object.assign)) {
         return target;
     };
 }
+
+/**
+ * 对象-获取键钥
+ */
+if (!isFunction(Object.keys)) {
+    Object.keys = (function() {
+        var hasOwnProperty = Object.prototype.hasOwnProperty,
+            hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+            dontEnums = [
+                'toString',
+                'toLocaleString',
+                'valueOf',
+                'hasOwnProperty',
+                'isPrototypeOf',
+                'propertyIsEnumerable',
+                'constructor'
+            ],
+            dontEnumsLength = dontEnums.length;
+        return function(obj) {
+            if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+            var result = [];
+            for (var prop in obj) {
+                if (hasOwnProperty.call(obj, prop)) result.push(prop);
+            }
+            if (hasDontEnumBug) {
+                for (var i = 0; i < dontEnumsLength; i++) {
+                    if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
+                }
+            }
+            return result;
+        }
+    })();
+};
+
+/**
+ * 对象-获取键值
+ */
+if (!isFunction(Object.values)) {
+    Object.values = function(obj) {
+        if (obj !== Object(obj))
+            throw new TypeError('Object.values called on a non-object');
+        var val = [],
+            key;
+        for (key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                val.push(obj[key]);
+            }
+        }
+        return val;
+    }
+}

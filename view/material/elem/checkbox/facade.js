@@ -44,13 +44,12 @@ fxView['machine']['deployer'](['material', 'elem', 'checkbox', 'main'], function
     // 数据
     echo['data'] = function() {
         // 疏理数据
-        dark['shelf']['data'] = JSON.parse(JSON.stringify(dark['shelf']['dataRaw']));
         if (isBlank(dark['shelf']['data'])) {
-            dark['shelf']['data'] = [];
+            dark['shelf']['data'] = {};
         } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
-        dark['shelf']['data'] = fxBase['text']['implode']('|', dark['shelf']['data'].reverse());
+        dark['shelf']['dataEcho'] = fxBase['text']['implode']('|', Object.values(dark['shelf']['data']).reverse());
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'data', dark['skin']], [dark, base, echo, tray], dark);
     };
