@@ -171,7 +171,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                             'self.layer.index': dark['index']
                         }, $(layxWindow).find('iframe').prop('contentWindow').fxApp);
                         // 窗口调整
-                        $(window).on('resize', function() {
+                        $(top.window).on('resize', function() {
                             // 初始化变量
                             if (dark['window'].status != 'max') return;
                             layx.max(dark['window'].id);
