@@ -16,6 +16,8 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
     var dark = fxBase['param']['merge']({
         // 副标题
         'subtitle': null,
+        // 状态
+        'status': null,
         // 选项
         'option': {
             // 图标或标题栏左边内容
@@ -173,7 +175,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         // 窗口调整
                         $(top.window).on('resize', function() {
                             // 初始化变量
-                            if (dark['window'].status != 'max') return;
+                            if (dark['status'] != 'max') return;
                             layx.max(dark['window'].id);
                         });
                     }
@@ -183,21 +185,27 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                     // 最小化之前
                     before: function(layxWindow, winform) {},
                     // 最小化之后
-                    after: function(layxWindow, winform) {}
+                    after: function(layxWindow, winform) {
+                        dark['status'] = winform.status;
+                    }
                 },
                 // 最大化事件
                 onmax: {
                     // 最大化之前
                     before: function(layxWindow, winform) {},
                     // 最大化之后
-                    after: function(layxWindow, winform) {}
+                    after: function(layxWindow, winform) {
+                        dark['status'] = winform.status;
+                    }
                 },
                 // 恢复事件
                 onrestore: {
                     // 恢复之前
                     before: function(layxWindow, winform) {},
                     // 恢复之后
-                    after: function(layxWindow, winform) {}
+                    after: function(layxWindow, winform) {
+                        dark['status'] = winform.status;
+                    }
                 },
                 // 关闭事件
                 ondestroy: {
