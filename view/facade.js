@@ -152,7 +152,7 @@ fxView['layui'] = Object.assign(isObject(fxView['layui']) ? fxView['layui'] : {}
                 touch = event;
             }
             var nowX = touch.pageX - dark['getX'],
-                elemX = tray['parent'].width() - tray['elemW'] - 28;
+                elemX = tray['parent'].width() - tray['elemW'] - 34;
             // 计算边界
             if (nowX > 0) {
                 nowX = 0;
