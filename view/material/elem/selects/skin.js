@@ -26,11 +26,8 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'skin', 'deploy'],
             'xm-select-search': '',
             'xm-select-search-type': 'dl'
         });
-        // 初始化layui设定
-        layui.use(['formSelects'], function() {
-            fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
-            layui.formSelects.value(dark['field'], dark['data']);
-        });
+        fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
+        layui.formSelects.value(dark['field'], dark['data']);
     },
     // 视图
     'view': function(dark, base, echo, tray) {
@@ -48,11 +45,8 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'skin', 'deploy'],
             'xm-select-search': '',
             'xm-select-search-type': 'dl'
         });
-        // 初始化layui设定
-        layui.use(['formSelects'], function() {
-            fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
-            layui.formSelects.value(dark['field'], dark['data']);
-        });
+        fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
+        layui.formSelects.value(dark['field'], dark['data']);
     }
 });
 fxView['machine']['deployer'](['material', 'elem', 'selects', 'skin', 'echo'], {

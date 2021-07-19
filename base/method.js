@@ -187,12 +187,8 @@ function isArray(data) {
  */
 function isObject(data) {
     // 初始化变量
-    switch (Object.prototype.toString.call(data)) {
-        case '[object Object]':
-            // 对象
-        case '[object Arguments]':
-            // 类数组对象
-            return true;
+    if ($.isPlainObject(data) || Object.prototype.toString.call(data) == '[object Arguments]') {
+        return true;
     }
     return false;
 }

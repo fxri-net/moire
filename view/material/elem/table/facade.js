@@ -25,8 +25,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     echo['tray'] = tray = {};
     // 初始化
     echo['init'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 疏理数据
         fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
@@ -94,11 +92,8 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     };
     // 部署
     echo['deploy'] = function() {
-        // 检查元素
-        if (dark['init']) {
-            // 重置
-            return echo['reset']();
-        }
+        // 检查初始化
+        if (dark['init']) return;
         // 初始化变量
         dark = fxBase['param']['merge'](dark, {
             // 包装盒子

@@ -25,8 +25,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
     echo['tray'] = tray = {};
     // 初始化
     echo['init'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 疏理数据
         fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
@@ -85,11 +83,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
     };
     // 部署
     echo['deploy'] = function() {
-        // 检查元素
-        if (dark['init']) {
-            // 重置
-            return echo['reset']();
-        }
+        // 检查初始化
+        if (dark['init']) return;
         // 初始化变量
         dark = fxBase['param']['merge'](dark, {
             // 包装盒子
@@ -124,7 +119,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
         // 疏理元素
         dark['elem'] = $(dark['elemBox']['elem']);
         dark['elem'].attr(dark['elemBox']['attr']);
-        dark['elem'].val(dark['data']);
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
@@ -147,23 +141,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
         if (!dark['init']) return;
         // 疏理数据
         if (!dark['upload']['switch'] && !dark['delete']['switch']) return true;
-        // 初始化变量
-        dark['echo'] = [];
-        dark['elem'].find('.moire-elem-inline>div').each(function(key, value) {
-            switch (dark['option']['type']) {
-                default:
-                    // 默认
-                case 'video':
-                    // 视频
-                    dark['echo'].push($(value).find('a').attr('href'));
-                    break;
-                case 'image':
-                    // 图片
-                    dark['echo'].push($(value).find('img').attr('src'));
-                    break;
-            }
-        });
-        dark['echo'] = fxBase['text']['implode'](',', dark['echo']);
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'echo', dark['skin']], [dark, base, echo, tray], dark);
         // 校验输出
@@ -177,33 +154,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
     echo['reset'] = function() {
         // 检查初始化
         if (!dark['init']) return;
-        // 疏理数据
-        dark['elem'].find('.moire-elem-inline').masonry('destroy', dark['elem'].find('.moire-elem-inline>div'));
-        dark['elem'].find('.moire-elem-inline>div').remove();
-        // 输出子项
-        $.each(dark['data'], function(key, value) {
-            switch (dark['option']['type']) {
-                default:
-                    // 默认
-                case 'video':
-                    // 视频
-                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-                case 'image':
-                    // 图片
-                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-            }
-        });
-        // 执行瀑布流
-        dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-            dark['elem'].find('.moire-elem-inline').trigger('resize');
-        });
-        dark['elem'].find('.moire-elem-inline').trigger('resize');
-        // 更新图片加载器
-        dark['elem'].parents('div[moire-cell]').viewer('update');
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
     };
@@ -211,9 +161,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
     echo['clean'] = function() {
         // 检查初始化
         if (!dark['init']) return;
-        // 疏理数据
-        dark['elem'].find('.moire-elem-inline>div').remove();
-        dark['elem'].find('.moire-elem-inline').trigger('resize');
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
     };

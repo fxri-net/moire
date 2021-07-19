@@ -103,7 +103,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['data']));
                     echo['elem'].remove();
                     // 执行瀑布流
-                    dark['elem'].find('.moire-elem-inline').trigger('resize');
+                    dark['event']['masonry']();
                     // 销毁索引
                     fxApp['rank']['self.layer.index.destroy'](tray['layer.index']);
                     // 关闭窗口
@@ -111,25 +111,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 });
             });
         }
-        // 输出子项
-        $.each(dark['data'], function(key, value) {
-            switch (dark['option']['type']) {
-                default:
-                    // 默认
-                case 'file':
-                    // 文件
-                case 'video':
-                    // 视频
-                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-                case 'image':
-                    // 图片
-                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-            }
-        });
         // 疏理上传
         if (dark['upload']['switch']) {
             dark['elem'].append('<div class="moire-elem-operate">' +
@@ -194,10 +175,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 // 异常回调
                 'error': error
             }, dark['upload']);
-            // 格式化数据
-            $.each(dark['upload']['data'], function(key, value) {
-                dark['upload']['data'][key] = JSON.stringify(value);
-            });
             // 选择回调
             function choose(data) {
                 // console.log(data);
@@ -257,7 +234,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     // 执行瀑布流
                     dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
                     dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                        dark['elem'].find('.moire-elem-inline').trigger('resize');
+                        dark['event']['masonry']();
                     });
                 } else {
                     layui.layer.msg(data['message'], {
@@ -277,16 +254,13 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             layui.upload.render(dark['upload']);
         }
         // 执行瀑布流
-        dark['elem'].find('.moire-elem-inline').on('resize', function() {
+        dark['event']['masonry'] = function() {
             // 文件容器
             dark['elem'].find('.moire-elem-inline').masonry({
                 'itemSelector': 'div'
             });
-        });
-        dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-            dark['elem'].find('.moire-elem-inline').trigger('resize');
-        });
-        dark['elem'].find('.moire-elem-inline').trigger('resize');
+        };
+        dark['event']['masonry']();
     },
     // 视图-阿里oss
     'view_alioss': function(dark, base, echo, tray) {
@@ -336,7 +310,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     $('input[name=' + dark['field'] + ']').val(fxBase['text']['implode'](',', echo['data']));
                     echo['elem'].remove();
                     // 执行瀑布流
-                    dark['elem'].find('.moire-elem-inline').trigger('resize');
+                    dark['event']['masonry']();
                     // 销毁索引
                     fxApp['rank']['self.layer.index.destroy'](tray['layer.index']);
                     // 关闭窗口
@@ -344,25 +318,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 });
             });
         }
-        // 输出子项
-        $.each(dark['data'], function(key, value) {
-            switch (dark['option']['type']) {
-                default:
-                    // 默认
-                case 'file':
-                    // 文件
-                case 'video':
-                    // 视频
-                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-                case 'image':
-                    // 图片
-                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
-                        dark['delete']['elem'] + '</div>');
-                    break;
-            }
-        });
         // 疏理上传
         if (dark['upload']['switch']) {
             dark['elem'].append('<div class="moire-elem-operate">' +
@@ -466,10 +421,6 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     // 'size': 100
                 }
             }, dark['upload']);
-            // 格式化数据
-            $.each(dark['upload']['data'], function(key, value) {
-                dark['upload']['data'][key] = JSON.stringify(value);
-            });
             // 成功回调
             function success(data, index, upload) {
                 // 初始化变量
@@ -513,7 +464,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 // 执行瀑布流
                 dark['elem'].find('.moire-elem-inline').masonry('appended', dark['elem'].find('.moire-elem-inline>div:last'));
                 dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-                    dark['elem'].find('.moire-elem-inline').trigger('resize');
+                    dark['event']['masonry']();
                 });
                 // 更新图片加载器
                 dark['elem'].parents('div[moire-cell]').viewer('update');
@@ -526,15 +477,80 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             });
         }
         // 执行瀑布流
-        dark['elem'].find('.moire-elem-inline').on('resize', function() {
+        dark['event']['masonry'] = function() {
             // 文件容器
             dark['elem'].find('.moire-elem-inline').masonry({
                 'itemSelector': 'div'
             });
+        };
+        dark['event']['masonry']();
+    }
+});
+fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'echo'], {
+    // 视图,视图-阿里oss
+    'view,view_alioss': function(dark, base, echo, tray) {
+        // 初始化变量
+        dark['echo'] = [];
+        dark['elem'].find('.moire-elem-inline>div').each(function(key, value) {
+            switch (dark['option']['type']) {
+                default:
+                    // 默认
+                case 'video':
+                    // 视频
+                    dark['echo'].push($(value).find('a').attr('href'));
+                    break;
+                case 'image':
+                    // 图片
+                    dark['echo'].push($(value).find('img').attr('src'));
+                    break;
+            }
         });
+        dark['echo'] = fxBase['text']['implode'](',', dark['echo']);
+    }
+});
+fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'reset'], {
+    // 视图,视图-阿里oss
+    'view,view_alioss': function(dark, base, echo, tray) {
+        // 格式化数据
+        $.each(dark['upload']['data'], function(key, value) {
+            dark['upload']['data'][key] = JSON.stringify(value);
+        });
+        // 疏理数据
+        dark['elem'].find('.moire-elem-inline').masonry('destroy', dark['elem'].find('.moire-elem-inline>div'));
+        dark['elem'].find('.moire-elem-inline>div').remove();
+        // 输出子项
+        $.each(dark['data'], function(key, value) {
+            switch (dark['option']['type']) {
+                default:
+                    // 默认
+                case 'file':
+                    // 文件
+                case 'video':
+                    // 视频
+                    dark['elem'].find('.moire-elem-inline').append('<div><a href="' + value + '" target="_blank">点击链接</a>' +
+                        dark['delete']['elem'] + '</div>');
+                    break;
+                case 'image':
+                    // 图片
+                    dark['elem'].find('.moire-elem-inline').append('<div><img src="' + value + '"' + dark['alt'] + '>' +
+                        dark['delete']['elem'] + '</div>');
+                    break;
+            }
+        });
+        // 执行瀑布流
         dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
-            dark['elem'].find('.moire-elem-inline').trigger('resize');
+            dark['event']['masonry']();
         });
-        dark['elem'].find('.moire-elem-inline').trigger('resize');
+        dark['event']['masonry']();
+        // 更新图片加载器
+        dark['elem'].parents('div[moire-cell]').viewer('update');
+    }
+});
+fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'clean'], {
+    // 视图,视图-阿里oss
+    'view,view_alioss': function(dark, base, echo, tray) {
+        // 疏理数据
+        dark['elem'].find('.moire-elem-inline>div').remove();
+        dark['event']['masonry']();
     }
 });

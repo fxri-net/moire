@@ -161,36 +161,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'skin', 'deploy'], {
                 value['width'] = 'calc((100% - ' + tray['width'] + ') / ' + tray['count'] + ')';
             }
         });
-        $.each(dark['data'], function(key, value) {
-            // 初始化变量
-            var echo = $('<div class="moire-clear"></div>');
-            $.each(dark['shelf']['data'], function(key2, value2) {
-                // 疏理数据
-                if (true === value2['self'] && dark['skin'] == 'view_row') {
-                    tray['value'] = value;
-                } else if (true === value2['self']) {
-                    tray['value'] = {};
-                    tray['value'][value2['field']] = value[value2['field']];
-                } else {
-                    tray['value'] = value[value2['field']];
-                }
-                if (!isString(tray['value'])) {
-                    tray['value'] = JSON.stringify(tray['value']);
-                }
-                // 设置数据
-                echo.append('<input type="text" class="layui-input" moire-type="' + value2['field'] + '"' +
-                    ' placeholder="' + fxBase['base']['lang'](value2['title']) + '" autocomplete="off">')
-                echo.find('[moire-type=' + value2['field'] + ']')
-                    .attr({
-                        'disabled': dark['add']['disabled'],
-                        'style': value2['style']
-                    })
-                    .css('width', value2['width'])
-                    .val(tray['value']);
-            });
-            echo.append(dark['delete']['elem']);
-            dark['elem'].find('.moire-elem-inline').append(echo);
-        });
         // 疏理新增
         if (dark['add']['switch']) {
             dark['elem'].append('<div class="moire-elem-operate">' +

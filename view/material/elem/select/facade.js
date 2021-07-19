@@ -25,8 +25,6 @@ fxView['machine']['deployer'](['material', 'elem', 'select', 'main'], function()
     echo['tray'] = tray = {};
     // 初始化
     echo['init'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 疏理数据
         fxView['machine']['darker'](dark, arguments[0]);
         base = fxBase['param']['merge'](base, {}, isObject(arguments[1]) ? arguments[1] : {});
@@ -59,11 +57,8 @@ fxView['machine']['deployer'](['material', 'elem', 'select', 'main'], function()
     };
     // 部署
     echo['deploy'] = function() {
-        // 检查元素
-        if (dark['init']) {
-            // 重置
-            return echo['reset']();
-        }
+        // 检查初始化
+        if (dark['init']) return;
         // 初始化变量
         dark = fxBase['param']['merge'](dark, {
             // 包装盒子
@@ -101,7 +96,7 @@ fxView['machine']['deployer'](['material', 'elem', 'select', 'main'], function()
         dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].append('<option value="">' + dark['default'] + '</option>');
         $.each(dark['shelf']['data'], function(key, value) {
-            dark['elem'].append('<option value="' + key + '"' + (dark['data'] == key ? ' selected' : '') + '>' + value + '</option>');
+            dark['elem'].append('<option value="' + key + '">' + value + '</option>');
         });
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);

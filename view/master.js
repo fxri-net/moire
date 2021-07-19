@@ -449,11 +449,28 @@ fxView['machine']['deployer'] = function() {
     dark['base'] = isSet(dark[2]) ? dark[2] : fxView;
     // 检查数据
     if (!isArray(dark['chain'])) return false;
+    // 裂变数据
+    if (isObject(dark['data'])) {
+        // 疏理数据
+        dark['echo'] = {};
+        $.each(dark['data'], function(key, value) {
+            // 配置数据
+            key = fxBase['text']['explode'](',', key);
+            $.each(key, function(key2, value2) {
+                dark['echo'][value2] = value;
+            });
+        });
+        dark['data'] = dark['echo'];
+    }
     // 加载链条
     $.each(dark['chain'].reverse(), function(key, value) {
+        // 裂变链条
+        value = fxBase['text']['explode'](',', value);
         // 配置数据
         dark['echo'] = {};
-        dark['echo'][value] = dark['data'];
+        $.each(value, function(key2, value2) {
+            dark['echo'][value2] = dark['data'];
+        });
         dark['data'] = dark['echo'];
     });
     dark['base'] = fxBase['param']['merge'](dark['base'], dark['data']);
@@ -528,6 +545,8 @@ fxView['machine']['darker'] = function() {
         'list': [],
         // 基础属性->↑
         // 视图属性->↓
+        // 事件
+        'event': {},
         // 标题
         'title': '',
         // 定义
@@ -539,7 +558,7 @@ fxView['machine']['darker'] = function() {
         // 货架
         'shelf': {}
         // 视图属性->↑
-    }, arguments[1]);
+    }, isObject(arguments[1]) ? arguments[1] : {});
     dark = fxBase['param']['merge'](dark, {
         // 标签
         'label': [dark['title']]

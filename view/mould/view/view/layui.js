@@ -147,9 +147,16 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                 // 检查元素
                 tray['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
                 if (fxView['machine']['caller']([tray['id'], 'dark', 'init'], null, tray['list'])) {
-                    // 初始化数据
-                    tray['list'][tray['id']]['dark']['data'] = value['data'];
-                    tray['list'][tray['id']]['data']();
+                    // 配置基础
+                    tray['base'] = {};
+                    // 配置数据
+                    tray['data'] = fxBase['param']['merge'](1, {
+                        'field': key,
+                        'skin': dark['base']['skin']
+                    }, value);
+                    tray['data']['id'] = md5(tray['id']);
+                    tray['data']['type'] = value2;
+                    tray['list'][tray['id']]['init'](tray['data'], tray['base']);
                     return true;
                 }
                 // 配置基础
@@ -173,6 +180,8 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
         $.each(tray['list'], function(key, value) {
             // 执行部署
             value['deploy']();
+            // 执行重置
+            value['reset']();
             // 执行完成
             $(document).ready(function() {
                 value['done']();

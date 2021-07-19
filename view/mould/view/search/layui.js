@@ -77,6 +77,8 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
     $.each(tray['list'], function(key, value) {
         // 执行部署
         value['deploy']();
+        // 执行重置
+        value['reset']();
         // 执行完成
         $(document).ready(function() {
             value['done']();
