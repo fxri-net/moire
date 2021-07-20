@@ -103,8 +103,6 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
     };
     // 完成
     echo['done'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
@@ -112,8 +110,6 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
     };
     // 输出
     echo['echo'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         // 识别IE浏览器兼容插件
         if (fxBase['param']['inArray'](fxApp['env']['ie'], [-1, 11])) {
@@ -138,8 +134,6 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
     };
     // 重置
     echo['reset'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         $(document).ready(function() {
             // 识别IE浏览器兼容插件
@@ -153,8 +147,6 @@ fxView['machine']['deployer'](['material', 'elem', 'richtext', 'main'], function
     };
     // 清理
     echo['clean'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         $(document).ready(function() {
             // 识别IE浏览器兼容插件

@@ -137,8 +137,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     };
     // 完成
     echo['done'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
@@ -146,8 +144,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     };
     // 输出
     echo['echo'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         if (!dark['add']['switch'] && !dark['delete']['switch']) return true;
         // 初始化变量
@@ -162,8 +158,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     };
     // 重置
     echo['reset'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         dark['elem'].find('.moire-elem-inline>div').remove();
         $.each(dark['data'], function(key, value) {
@@ -201,8 +195,6 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
     };
     // 清理
     echo['clean'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         dark['elem'].find('.moire-elem-inline>div').remove();
         // 渲染皮肤

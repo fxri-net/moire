@@ -98,8 +98,6 @@ fxView['machine']['deployer'](['material', 'elem', 'password', 'main'], function
     };
     // 完成
     echo['done'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
@@ -107,8 +105,6 @@ fxView['machine']['deployer'](['material', 'elem', 'password', 'main'], function
     };
     // 输出
     echo['echo'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         dark['echo'] = dark['elem'].val();
         // 渲染皮肤
@@ -122,8 +118,6 @@ fxView['machine']['deployer'](['material', 'elem', 'password', 'main'], function
     };
     // 重置
     echo['reset'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         dark['elem'].val(dark['data']);
         // 渲染皮肤
@@ -131,8 +125,6 @@ fxView['machine']['deployer'](['material', 'elem', 'password', 'main'], function
     };
     // 清理
     echo['clean'] = function() {
-        // 检查初始化
-        if (!dark['init']) return;
         // 疏理数据
         dark['elem'].val('');
         // 渲染皮肤
