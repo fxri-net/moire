@@ -472,9 +472,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             // 异常回调
             function error(index, upload) {}
             // 绘制上传
-            layui.use(['aliossUploader'], function() {
-                layui.aliossUploader.render(dark['upload']);
-            });
+            layui.aliossUploader.render(dark['upload']);
         }
         // 执行瀑布流
         dark['event']['masonry'] = function() {

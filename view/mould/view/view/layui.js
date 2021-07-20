@@ -146,17 +146,16 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                 }
                 // 检查元素
                 tray['id'] = !isBlank(value['id'][key2]) ? value['id'][key2] : key + '-' + key2;
-                if (fxView['machine']['caller']([tray['id'], 'dark', 'init'], null, tray['list'])) {
-                    // 配置基础
-                    tray['base'] = {};
+                tray['data'] = fxView['machine']['caller']([tray['id'], 'dark'], null, tray['list']);
+                if (tray['data']) {
                     // 配置数据
                     tray['data'] = fxBase['param']['merge'](1, {
                         'field': key,
                         'skin': dark['base']['skin']
-                    }, value);
+                    }, tray['data'], value);
                     tray['data']['id'] = md5(tray['id']);
                     tray['data']['type'] = value2;
-                    tray['list'][tray['id']]['init'](tray['data'], tray['base']);
+                    tray['list'][tray['id']]['init'](tray['data']);
                     return true;
                 }
                 // 配置基础

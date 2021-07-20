@@ -545,6 +545,23 @@ fxView['machine']['darker'] = function() {
         'list': [],
         // 基础属性->↑
         // 视图属性->↓
+        // 运行
+        'run': {
+            // 初始化
+            'init': 0,
+            // 数据
+            'data': 0,
+            // 部署
+            'deploy': 0,
+            // 完成
+            'done': 0,
+            // 输出
+            'echo': 0,
+            // 重置
+            'reset': 0,
+            // 清理
+            'clean': 0
+        },
         // 事件
         'event': {},
         // 标题

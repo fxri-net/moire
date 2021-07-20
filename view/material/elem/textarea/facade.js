@@ -41,16 +41,20 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
         echo['data']();
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'init', dark['skin']], [dark, base, echo, tray], dark);
+        // 记录运行
+        dark['run']['init']++;
     };
     // 数据
     echo['data'] = function() {
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'data', dark['skin']], [dark, base, echo, tray], dark);
+        // 记录运行
+        dark['run']['data']++;
     };
     // 部署
     echo['deploy'] = function() {
-        // 检查初始化
-        if (dark['init']) return;
+        // 检查运行
+        if (dark['run']['deploy']) return;
         // 初始化变量
         dark = fxBase['param']['merge'](dark, {
             // 包装盒子
@@ -93,8 +97,8 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后
         fxView['machine']['caller'](['after'], [dark, base], dark);
-        // 检查初始化
-        dark['init'] = !isEmpty($('#' + dark['id']));
+        // 记录运行
+        dark['run']['deploy']++;
     };
     // 完成
     echo['done'] = function() {
@@ -102,6 +106,8 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
         fxView['machine']['caller'](['skins', 'done', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染完成
         fxView['machine']['caller'](['done'], [dark, base], dark);
+        // 记录运行
+        dark['run']['done']++;
     };
     // 输出
     echo['echo'] = function() {
@@ -115,6 +121,8 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
             layui.layer.msg(fxBase['base']['lang'](['please', 'input', dark['label']]), { 'icon': 5, 'anim': 6 });
             return false;
         }
+        // 记录运行
+        dark['run']['echo']++;
     };
     // 重置
     echo['reset'] = function() {
@@ -122,6 +130,8 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
         dark['elem'].val(dark['data']);
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'reset', dark['skin']], [dark, base, echo, tray], dark);
+        // 记录运行
+        dark['run']['reset']++;
     };
     // 清理
     echo['clean'] = function() {
@@ -129,6 +139,8 @@ fxView['machine']['deployer'](['material', 'elem', 'textarea', 'main'], function
         dark['elem'].val('');
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'clean', dark['skin']], [dark, base, echo, tray], dark);
+        // 记录运行
+        dark['run']['clean']++;
     };
     return echo;
 });

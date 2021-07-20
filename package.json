@@ -9,6 +9,7 @@
     "uglifyjs-plugin": "uglifyjs moire.plugin.min.js -m -o moire.plugin.min.js",
     "build-main": "npm run merge 1.1 && npm run uglifyjs-main && npm run merge 1.2",
     "build-plugin": "npm run merge 2.1 && npm run uglifyjs-plugin && npm run merge 2.2",
+    "build-quick": "npm run merge 1.1 && npm run merge 2.1",
     "build": "npm run build-main && npm run build-plugin"
   },
   "author": "唐启云",
