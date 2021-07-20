@@ -10,17 +10,19 @@
 ## 基础部署
 
 ~~~
-// 加载云纹框架
+// 加载基础框架
 <script type="text/javascript" src="./moire/moire.min.js"></script>
+// 加载扩展插件
+<script type="text/javascript" src="./moire/moire.plugin.min.js"></script>
 ~~~
 
-## 基础依赖
+## 基础插件依赖
 
 ~~~
 Jquery v1.9及以上
 ~~~
 
-## 视图车间依赖
+## 扩展插件依赖
 
 ~~~
 MD5 0.7.3及以上
