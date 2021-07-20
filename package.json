@@ -5,8 +5,11 @@
   "main": "moire.js",
   "scripts": {
     "merge": "node build/merge.js",
-    "uglifyjs": "uglifyjs moire.min.js -m -o moire.min.js",
-    "build": "npm run merge 1 && npm run uglifyjs && npm run merge 2"
+    "uglifyjs-main": "uglifyjs moire.min.js -m -o moire.min.js",
+    "uglifyjs-plugin": "uglifyjs moire.plugin.min.js -m -o moire.plugin.min.js",
+    "build-main": "npm run merge 1.1 && npm run uglifyjs-main && npm run merge 1.2",
+    "build-plugin": "npm run merge 2.1 && npm run uglifyjs-plugin && npm run merge 2.2",
+    "build": "npm run build-main && npm run build-plugin"
   },
   "author": "唐启云",
   "license": "Apache-2.0",
