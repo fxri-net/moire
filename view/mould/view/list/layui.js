@@ -243,6 +243,11 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         } else {
             tray['fixed'].css('display', '');
         }
+        // 判断顶页面
+        if (self != top) {
+            // 绘制顶页面
+            $(top.window).trigger('resize');
+        }
     });
     // 绘制容器
     $('.moire-wapper').on('resize', function() {
