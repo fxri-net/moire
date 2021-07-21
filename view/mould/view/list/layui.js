@@ -230,14 +230,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         tray['fixed'] = $('.layui-table-fixed');
         tray['view'] = $('.layui-table-view');
         // 适配高度
-        if ($(window).height() < 600) {
-            // tray['search'].css('display', 'none');
-            // tray['height'] = $(window).height();
-            tray['height'] = $(window).height() - tray['search'].outerHeight(true);
-        } else {
-            // tray['search'].css('display', '');
-            tray['height'] = $(window).height() - tray['search'].outerHeight(true);
-        }
+        tray['height'] = $(window).height() - tray['search'].outerHeight(true);
         // 重置表格
         if (isSet(tray['table'])) {
             tray['view'].css('height', tray['height']);
@@ -251,6 +244,15 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
             tray['fixed'].css('display', '');
         }
     });
+    // 绘制容器
+    $('.moire-wapper').on('resize', function() {
+        // 适配高度
+        tray['height'] = $(window).height() - tray['search'].outerHeight(true);
+    });
+    // 适配高度
+    if ($(window).height() < 600) {
+        tray['search'].find('.moire-switch').trigger('click');
+    }
     // 判断顶页面
     if (self != top) {
         // 替换标题

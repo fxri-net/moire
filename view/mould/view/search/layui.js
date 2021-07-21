@@ -19,7 +19,12 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
             // 调试
             'debug': false,
             // 皮肤
-            'skin': 'search'
+            'skin': 'search',
+            // 工具
+            'tool': {
+                // 开关
+                'switch': true
+            }
         }, fxView['shelf']['view']),
         // 数据
         'data': null,
@@ -27,7 +32,7 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
         'toolbar': fxBase['base']['template']({
             'elem': 'tool',
             'type': 'view-search',
-            'cell': 'submit,reset,clear'
+            'cell': 'submit,reset,clear,switch'
         }).html()
     };
     var tray = {};
@@ -89,7 +94,7 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
     // 渲染表单
     layui.form.render();
     // 重置条件
-    $('.moire-search.layui-form .moire-reset').on('click', function() {
+    $('.moire-search.layui-form').on('click', '.moire-reset', function() {
         // 渲染数据
         $.each(tray['list'], function(key, value) {
             // 执行重置
@@ -99,7 +104,7 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
         layui.form.render();
     });
     // 清理条件
-    $('.moire-search.layui-form .moire-clean').on('click', function() {
+    $('.moire-search.layui-form').on('click', '.moire-clean', function() {
         // 渲染数据
         $.each(tray['list'], function(key, value) {
             // 执行清理
@@ -107,5 +112,19 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
         });
         // 渲染表单
         layui.form.render();
+    });
+    // 开关条件
+    $('.moire-search.layui-form').on('click', '.moire-switch', function() {
+        // 检查开关
+        if (dark['base']['tool']['switch']) {
+            tray['elem'].find('[moire-elem=elem]').hide();
+            tray['elem'].find('.moire-button>:not(.moire-switch)').hide();
+            tray['elem'].find('.moire-switch').html(fxBase['base']['lang'](['unfold']));
+        } else {
+            tray['elem'].find('[moire-elem=elem]').show();
+            tray['elem'].find('.moire-button>:not(.moire-switch)').show();
+            tray['elem'].find('.moire-switch').html(fxBase['base']['lang'](['fold']));
+        }
+        dark['base']['tool']['switch'] = !dark['base']['tool']['switch'];
     });
 });

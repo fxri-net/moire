@@ -17,7 +17,8 @@ fxView['machine']['deployer'](['material', 'template', 'tool'], {
     'view-search': '' +
         '<button moire-cell="submit" class="layui-btn moire-bg-green-light moire-submit" lay-filter="moire-submit" lay-submit>search</button>' +
         '<button moire-cell="reset" class="layui-btn layui-btn-primary moire-reset" type="button">reset</button>' +
-        '<button moire-cell="clear" class="layui-btn layui-btn-primary moire-clean" type="button">clear</button>',
+        '<button moire-cell="clear" class="layui-btn layui-btn-primary moire-clean" type="button">clear</button>' +
+        '<button moire-cell="switch" class="layui-btn layui-btn-primary moire-switch" type="button">fold</button>',
     'view-edit': '' +
         '<button moire-cell="submit" class="layui-btn layui-btn-sm moire-bg-green-light moire-submit" lay-filter="moire-submit" lay-submit>save</button>' +
         '<button moire-cell="reset" class="layui-btn layui-btn-sm layui-btn-primary moire-reset" type="button">reset</button>' +
