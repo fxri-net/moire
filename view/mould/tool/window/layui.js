@@ -21,7 +21,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layui'], func
             // 类型
             'type': 2,
             // 皮肤
-            'skin': 'moire-view',
+            'skin': 'moire-window',
             // 宽高
             'area': ['50%', '50%'],
             // 遮罩

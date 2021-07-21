@@ -159,7 +159,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         // 初始化变量
                         tray['area'] = JSON.parse(JSON.stringify(winform.area));
                         // 配置皮肤
-                        $(layxWindow).addClass('moire-view');
+                        $(layxWindow).addClass('moire-window');
                     },
                     // 加载之后
                     after: function(layxWindow, winform) {
