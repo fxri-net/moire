@@ -23,9 +23,9 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
             // 图标或标题栏左边内容
             'icon': false,
             // 宽度
-            'width': '50%',
+            'width': '70%',
             // 高度
-            'height': '50%',
+            'height': '70%',
             // 最小宽度
             'minWidth': 200,
             // 最小高度

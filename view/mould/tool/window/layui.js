@@ -23,7 +23,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layui'], func
             // 皮肤
             'skin': 'moire-window',
             // 宽高
-            'area': ['50%', '50%'],
+            'area': ['70%', '70%'],
             // 遮罩
             'shade': false,
             // 最大最小化

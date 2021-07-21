@@ -104,6 +104,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     echo['elem'].remove();
                     // 执行瀑布流
                     dark['event']['masonry']();
+                    // 执行重置
+                    dark['event']['resize']();
                     // 销毁索引
                     fxApp['rank']['self.layer.index.destroy'](tray['layer.index']);
                     // 关闭窗口
@@ -236,14 +238,16 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     dark['elem'].find('.moire-elem-inline').imagesLoaded(function() {
                         dark['event']['masonry']();
                     });
+                    // 更新图片加载器
+                    dark['elem'].parents('div[moire-cell]').viewer('update');
+                    // 执行重置
+                    dark['event']['resize']();
                 } else {
                     layui.layer.msg(data['message'], {
                         'icon': 2,
                         'time': 2000
                     });
                 }
-                // 更新图片加载器
-                dark['elem'].parents('div[moire-cell]').viewer('update');
             }
             // 异常回调
             function error(index, upload) {
@@ -253,13 +257,23 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
             // 绘制上传
             layui.upload.render(dark['upload']);
         }
-        // 执行瀑布流
+        // 配置瀑布流事件
         dark['event']['masonry'] = function() {
             // 文件容器
             dark['elem'].find('.moire-elem-inline').masonry({
                 'itemSelector': 'div'
             });
         };
+        // 配置重置事件
+        dark['event']['resize'] = function() {
+            // 文件容器
+            dark['elem'].find('.moire-elem-inline>div:first').off('resize');
+            dark['elem'].find('.moire-elem-inline>div:first').on('resize', function() {
+                // 执行瀑布流
+                dark['event']['masonry']();
+            });
+        };
+        // 执行瀑布流
         dark['event']['masonry']();
     },
     // 视图-阿里oss
@@ -311,6 +325,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                     echo['elem'].remove();
                     // 执行瀑布流
                     dark['event']['masonry']();
+                    // 执行重置
+                    dark['event']['resize']();
                     // 销毁索引
                     fxApp['rank']['self.layer.index.destroy'](tray['layer.index']);
                     // 关闭窗口
@@ -468,19 +484,31 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'deploy'], {
                 });
                 // 更新图片加载器
                 dark['elem'].parents('div[moire-cell]').viewer('update');
+                // 执行重置
+                dark['event']['resize']();
             }
             // 异常回调
             function error(index, upload) {}
             // 绘制上传
             layui.aliossUploader.render(dark['upload']);
         }
-        // 执行瀑布流
+        // 配置瀑布流事件
         dark['event']['masonry'] = function() {
             // 文件容器
             dark['elem'].find('.moire-elem-inline').masonry({
                 'itemSelector': 'div'
             });
         };
+        // 配置重置事件
+        dark['event']['resize'] = function() {
+            // 文件容器
+            dark['elem'].find('.moire-elem-inline>div:first').off('resize');
+            dark['elem'].find('.moire-elem-inline>div:first').on('resize', function() {
+                // 执行瀑布流
+                dark['event']['masonry']();
+            });
+        };
+        // 执行瀑布流
         dark['event']['masonry']();
     }
 });
@@ -542,6 +570,8 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'reset'], {
         dark['event']['masonry']();
         // 更新图片加载器
         dark['elem'].parents('div[moire-cell]').viewer('update');
+        // 执行重置
+        dark['event']['resize']();
     }
 });
 fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'clean'], {
@@ -549,6 +579,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'clean'], {
     'view,view_alioss': function(dark, base, echo, tray) {
         // 疏理数据
         dark['elem'].find('.moire-elem-inline>div').remove();
+        // 执行瀑布流
         dark['event']['masonry']();
     }
 });
