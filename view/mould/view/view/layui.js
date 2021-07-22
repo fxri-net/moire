@@ -149,7 +149,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                 tray['data'] = fxView['machine']['caller']([tray['id'], 'dark'], null, tray['list']);
                 if (tray['data']) {
                     // 配置数据
-                    tray['data'] = fxBase['param']['merge'](1, {
+                    tray['data'] = fxBase['param']['merge']({
                         'field': key,
                         'skin': dark['base']['skin']
                     }, tray['data'], value);
@@ -164,7 +164,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                 tray['base']['mould'] = dark;
                 tray['base']['pack'] = tray['elem'];
                 // 配置数据
-                tray['data'] = fxBase['param']['merge'](1, {
+                tray['data'] = fxBase['param']['merge']({
                     'field': key,
                     'skin': dark['base']['skin']
                 }, value);

@@ -539,6 +539,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'skin', 'reset'], {
     'view,view_alioss': function(dark, base, echo, tray) {
         // 格式化数据
         $.each(dark['upload']['data'], function(key, value) {
+            if (isJson(value)) value = JSON.parse(value);
             dark['upload']['data'][key] = JSON.stringify(value);
         });
         // 疏理数据

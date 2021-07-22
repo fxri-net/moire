@@ -67,7 +67,7 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
             tray['base']['mould'] = dark;
             tray['base']['pack'] = tray['elem'];
             // 配置数据
-            tray['data'] = fxBase['param']['merge'](1, {
+            tray['data'] = fxBase['param']['merge']({
                 'field': key,
                 'skin': dark['base']['skin']
             }, value);
