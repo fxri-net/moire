@@ -955,7 +955,7 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
     },
 
     /**
-     * 搜索数组-返回键钥
+     * 搜索数组-返回键名
      */
     'arraySearch': function() {
         // 初始化变量
@@ -1274,7 +1274,7 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
             try {
                 value[1] = isSet(value[1]) ? decodeURIComponent(value[1]) : value[1];
             } catch (e) {}
-            // 解析键钥
+            // 解析键名
             value[0] = fxBase['text']['replace']('^([^\[]*)', '[$1]', value[0]);
             value[2] = echo;
             value = fxBase['text']['strDecodeMerge'](value);

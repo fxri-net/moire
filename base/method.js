@@ -283,7 +283,7 @@ if (!isFunction(Object.assign)) {
 }
 
 /**
- * 对象-获取键钥
+ * 对象-获取键名
  */
 if (!isFunction(Object.keys)) {
     Object.keys = (function() {

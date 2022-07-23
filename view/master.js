@@ -190,9 +190,9 @@ fxView['store']['purchase'] = function() {
             'tips': false,
             // 等级
             'level': 1,
-            // 键钥
+            // 键名
             'key': null,
-            // 键钥-联结
+            // 键名-联结
             'keyNexus': '-',
             // 键值
             'value': null,
@@ -213,7 +213,7 @@ fxView['store']['purchase'] = function() {
         dark['extend']['value'] = fxBase['text']['explode'](',', dark['extend']['value']);
     }
     dark['echo'] = {
-        // 键钥
+        // 键名
         'key': {},
         // 键值
         'value': {}
@@ -229,7 +229,7 @@ fxView['store']['purchase'] = function() {
             $.each(data['data'], function(key, value) {
                 dark['echo']['value'][key] = {};
                 $.each(value, function(key2, value2) {
-                    // 疏理键钥
+                    // 疏理键名
                     dark['echo']['key'] = [];
                     $.each(dark['extend']['key'], function(key3, value3) {
                         dark['echo']['key'].push(!isUndefined(value2[value3]) ? value2[value3] : value3);
