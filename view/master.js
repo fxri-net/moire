@@ -262,7 +262,7 @@ fxView['store']['supply'] = function() {
         // 基础
         'base': {},
         // 数据
-        'data': {},
+        'data': fxApp["view"]["enum"],
         // 视图
         'view': {
             // 元素

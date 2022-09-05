@@ -275,7 +275,8 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         'where': {
             'base': {
                 'order': fxApp['base']['order']
-            }
+            },
+            'data': getData()
         },
         // 响应分页
         'page': {
@@ -287,6 +288,19 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
     tray['table'] = layui.table.render(dark['table']);
     // 提交请求
     layui.form.on('submit(moire-submit)', function(data) {
+        // 重载表格
+        tray['table'].reload({
+            'where': {
+                'base': {
+                    'order': fxApp['base']['order']
+                },
+                'data': getData()
+            }
+        }, true);
+        return false;
+    });
+    // 获取数据
+    function getData() {
         // 渲染数据
         tray['data'] = {};
         $.each(fxView['cache']['elem']['search'], function(key, value) {
@@ -302,17 +316,8 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
             if (!isArray(value) && !isObject(value)) return true;
             tray['data'][key] = JSON.stringify(value);
         });
-        // 重载表格
-        tray['table'].reload({
-            'where': {
-                'base': {
-                    'order': fxApp['base']['order']
-                },
-                'data': tray['data']
-            }
-        }, true);
-        return false;
-    });
+        return tray['data'];
+    }
     // 监听触发事件
     fxBase['dom']['trigger']();
     // 监听排序操作
