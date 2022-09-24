@@ -95,18 +95,11 @@ fxSession['clear'] = function() {
  */
 function isJson(str) {
     // 初始化变量
-    if (typeof str == 'string') {
-        try {
-            var obj = JSON.parse(str);
-            if (typeof obj == 'object' && obj) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (e) {
-            return false;
-        }
-    }
+    try {
+        var obj = JSON.parse(str);
+        return typeof obj == 'object' && obj;
+    } catch (e) {}
+    return false;
 }
 
 /**
@@ -147,7 +140,7 @@ function isEmpty(data) {
  */
 function isUndefined(data) {
     // 初始化变量
-    return data === undefined ? true : false;
+    return data === undefined;
 }
 
 /**
@@ -155,7 +148,7 @@ function isUndefined(data) {
  */
 function isNull(data) {
     // 初始化变量
-    return data === null ? true : false;
+    return data === null;
 }
 
 /**
@@ -163,7 +156,7 @@ function isNull(data) {
  */
 function isSet(data) {
     // 初始化变量
-    return data !== null && data !== undefined ? true : false;
+    return data !== null && data !== undefined;
 }
 
 /**
@@ -171,7 +164,7 @@ function isSet(data) {
  */
 function isBlank(data) {
     // 初始化变量
-    return !isSet(data) || data === '' ? true : false;
+    return !isSet(data) || data === '';
 }
 
 /**
@@ -187,10 +180,28 @@ function isArray(data) {
  */
 function isObject(data) {
     // 初始化变量
-    if ($.isPlainObject(data) || Object.prototype.toString.call(data) == '[object Arguments]') {
-        return true;
-    }
-    return false;
+    return $.isPlainObject(data) || Object.prototype.toString.call(data) == '[object Arguments]';
+}
+
+/**
+ * 校验数组或对象
+ */
+function isAorO(data) {
+    // 初始化变量
+    return isArray(data) || isObject(data);
+}
+
+/**
+ * 校验元素
+ */
+function isHtml(data) {
+    var elem = document.createElement('div');
+    try {
+        if (data instanceof $) return true;
+        elem.appendChild(data.cloneNode(true));
+        return data.nodeType == 1;
+    } catch (e) {}
+    return data == window || data == document;
 }
 
 /**

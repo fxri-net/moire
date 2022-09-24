@@ -19,7 +19,7 @@ var fxApp = {
         /**
          * 版本
          */
-        'version': 'v0.2'
+        'version': 'v0.4'
     }
 };
 fxApp['env']['script'] = document.getElementsByTagName('script');

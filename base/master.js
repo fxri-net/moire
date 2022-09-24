@@ -73,7 +73,7 @@ fxBase['base'] = Object.assign(isObject(fxBase['base']) ? fxBase['base'] : {}, {
     'langList': function(name) {
         // 初始化变量
         var langs = [];
-        if (isArray(name) || isObject(name)) {
+        if (isAorO(name)) {
             $.each(name, function(key, value) {
                 langs.push(fxBase['base']['langList'](value));
             });
@@ -103,9 +103,9 @@ fxBase['base'] = Object.assign(isObject(fxBase['base']) ? fxBase['base'] : {}, {
         // 初始化变量
         var type = fxApp['view']['lang'],
             string;
-        if (isArray(name) || isObject(name)) {
+        if (isAorO(name)) {
             $.each(name, function(key, value) {
-                if (isArray(value) || isObject(value)) {
+                if (isAorO(value)) {
                     name[key] = fxBase['base']['langParse'](value);;
                 }
             });
@@ -228,6 +228,59 @@ fxBase['client'] = Object.assign(isObject(fxBase['client']) ? fxBase['client'] :
 });
 
 /**
+ * 数据
+ */
+fxBase['data'] = Object.assign(isObject(fxBase['data']) ? fxBase['data'] : {}, {
+    /**
+     * 字段-解析
+     */
+    'fieldParse': function() {
+        // 初始化变量
+        var dark = {};
+        // 疏理数据
+        dark['data'] = arguments[0];
+        dark['field'] = arguments[1];
+        dark['joint'] = !isBlank(arguments[2]) ? arguments[2] : '-_';
+        if (!isAorO(dark['data']) && !isString(dark['field']) && !isString(dark['joint'])) {
+            return false;
+        }
+        // 疏理数据
+        dark['field'] = fxBase['text']['explode'](dark['joint'], dark['field']);
+        $.each(dark['field'], function(key, value) {
+            if (!isBlank(dark['data'][value])) {
+                dark['data'] = dark['data'][value];
+            } else {
+                dark['data'] = '';
+                return false;
+            }
+        });
+        return dark['data'];
+    },
+
+    /**
+     * 字段-赋值
+     */
+    'fieldValue': function() {
+        // 初始化变量
+        var dark = {};
+        // 疏理数据
+        dark['field'] = arguments[0];
+        dark['value'] = arguments[1];
+        dark['joint'] = !isBlank(arguments[2]) ? arguments[2] : '-_';
+        if (!isString(dark['field']) && !isString(dark['joint'])) {
+            return false;
+        }
+        // 疏理多级
+        $.each(fxBase['text']['explode'](dark['joint'], dark['field']).reverse(), function(key, value) {
+            var data = {};
+            data[value] = dark['value'];
+            dark['value'] = data;
+        });
+        return dark['value'];
+    }
+});
+
+/**
  * HTML元素
  */
 fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
@@ -306,6 +359,8 @@ fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
             'cell': null,
             // 标题
             'title': null,
+            // 数据
+            'data': {},
             // 参数
             'param': []
         };
@@ -314,15 +369,19 @@ fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
+        // 配置数据
+        if (!isEmpty(dark['data'])) {
+            fxView['shelf']['view']['data'] = fxBase['param']['merge'](fxView['shelf']['view']['data'], dark['data']);
+        }
         // 疏理数据
         if (isBlank(dark['type'])) {
             dark['type'] = [];
-        } else if (!isArray(dark['type']) && !isObject(dark['type'])) {
+        } else if (!isAorO(dark['type'])) {
             dark['type'] = fxBase['text']['explode'](',', dark['type']);
         }
         if (isBlank(dark['title'])) {
             dark['title'] = [];
-        } else if (!isArray(dark['title']) && !isObject(dark['title'])) {
+        } else if (!isAorO(dark['title'])) {
             dark['title'] = fxBase['text']['explode'](',', dark['title']);
         }
         // 疏理元素
@@ -386,6 +445,8 @@ fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
             'cell': null,
             // 标题
             'title': null,
+            // 数据
+            'data': {},
             // 参数
             'param': []
         };
@@ -394,15 +455,19 @@ fxBase['dom'] = Object.assign(isObject(fxBase['dom']) ? fxBase['dom'] : {}, {
             console.log(fxBase['base']['lang'](['lack', 'element']));
             return;
         }
+        // 配置数据
+        if (!isEmpty(dark['data'])) {
+            fxView['shelf']['view']['data'] = fxBase['param']['merge'](fxView['shelf']['view']['data'], dark['data']);
+        }
         // 疏理数据
         if (isBlank(dark['type'])) {
             dark['type'] = [];
-        } else if (!isArray(dark['type']) && !isObject(dark['type'])) {
+        } else if (!isAorO(dark['type'])) {
             dark['type'] = fxBase['text']['explode'](',', dark['type']);
         }
         if (isBlank(dark['title'])) {
             dark['title'] = [];
-        } else if (!isArray(dark['title']) && !isObject(dark['title'])) {
+        } else if (!isAorO(dark['title'])) {
             dark['title'] = fxBase['text']['explode'](',', dark['title']);
         }
         // 疏理元素
@@ -679,7 +744,6 @@ fxBase['math'] = Object.assign(isObject(fxBase['math']) ? fxBase['math'] : {}, {
  * 参数
  */
 fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}, {
-
     /**
      * 定义参数
      */
@@ -871,14 +935,14 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
         if (limit > 0) {
             limit--;
         }
-        if (!isArray(args[0]) && !isObject(args[0])) {
+        if (!isAorO(args[0])) {
             args[0] = args[1];
-        } else if (isArray(args[1]) || isObject(args[1])) {
+        } else if (isAorO(args[1])) {
             // 数组融合，已存在配置参数则覆盖
             $.each(args[1], function(key, value) {
                 if (!isSet(args[0][key])) {
                     args[0][key] = value;
-                } else if ((isArray(value) || isObject(value)) && limit !== 0) {
+                } else if ((isAorO(value)) && limit !== 0) {
                     args[0][key] = fxBase['param']['cover']([args[0][key], value], limit);
                 } else {
                     args[0][key] = value;
@@ -933,7 +997,7 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.href;
                 dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
                 // 解析数据
-                dark['param'] = fxBase['text']['strDecode'](dark['url'][1]);
+                dark['param'] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), dark['param']);
                 if (isSet(dark['name'])) {
                     return dark['param'][dark['name']];
                 }
@@ -965,6 +1029,52 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
             }
         }
         return false;
+    }
+});
+
+/**
+ * 代理
+ */
+fxBase['proxy'] = Object.assign(isObject(fxBase['proxy']) ? fxBase['proxy'] : {}, {
+    /**
+     * 绑定数据
+     */
+    'bind': function() {
+        // 初始化变量
+        var dark = {};
+        // 疏理数据
+        dark['target'] = arguments[0];
+        dark['callback'] = arguments[1];
+        if (!isAorO(dark['target'])) {
+            return false;
+        }
+        dark['target'] = new Proxy(dark['target'], {
+            // 获取
+            "get": function(target, key) {
+                // 获取标识
+                if (key.toString() == '__fx_pro_bin__') return true;
+                return target[key];
+            },
+            // 设置
+            "set": function(target, key, value) {
+                // 绑定子集
+                if ((isAorO(value)) && !value['__fx_pro_bin__']) {
+                    value = fxBase['proxy']['bind'](value, dark['callback']);
+                }
+                // 设置数据
+                target[key] = value;
+                // 回调函数
+                if (isFunction(dark['callback'])) {
+                    // 删除定时器
+                    clearTimeout(dark['timer']);
+                    dark['timer'] = setTimeout(function() {
+                        dark['callback']();
+                    }, 30);
+                }
+                return true;
+            }
+        });
+        return dark['target'];
     }
 });
 
@@ -1156,7 +1266,7 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
             }
         } else if (!isSet(data)) {
             data = [''];
-        } else if (!isArray(data) && !isObject(data)) {
+        } else if (!isAorO(data)) {
             data = [data];
         }
         return data;
@@ -1239,7 +1349,7 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
     'strEncodeMerge': function(data) {
         // 初始化变量
         var tray = [];
-        if (!isArray(data) && !isObject(data)) {
+        if (!isAorO(data)) {
             data = encodeURIComponent(data);
             return '=' + data;
         }
@@ -1374,12 +1484,16 @@ fxApp['console'] = Object.assign(isObject(fxApp['console']) ? fxApp['console'] :
      * 环境
      */
     'env': function() {
-        // 初始化变量
+        // 获取云纹数据
         var dark = $('.moire-data').html();
         dark = JSON.parse(isSet(dark) ? dark : '{}');
         $.each(dark, function(key, value) {
             fxApp[key] = fxBase['param']['merge'](fxApp[key], value);
         });
+        // 获取URL参数
+        fxApp['param'] = fxBase['param']['url']({
+            'type': '2.1'
+        })
     },
 
     /**

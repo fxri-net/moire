@@ -90,7 +90,7 @@ fxView['store']['deal'] = function() {
             // 基础
             'base': {
                 // 令牌
-                'token': fxApp['user']['base']['token'],
+                'token': fxView['machine']['caller'](['user', 'base', 'token'], null, fxApp),
                 // 格式
                 'format': 'json'
             },
@@ -184,6 +184,8 @@ fxView['store']['purchase'] = function() {
         'success': success,
         // 失败回调
         'error': error,
+        // 部署回调
+        'deploy': null,
         // 扩展
         'extend': {
             // 提示
@@ -204,12 +206,12 @@ fxView['store']['purchase'] = function() {
     // 疏理数据
     if (isBlank(dark['extend']['key'])) {
         dark['extend']['key'] = ['id'];
-    } else if (!isArray(dark['extend']['key']) && !isObject(dark['extend']['key'])) {
+    } else if (!isAorO(dark['extend']['key'])) {
         dark['extend']['key'] = fxBase['text']['explode'](',', dark['extend']['key']);
     }
     if (isBlank(dark['extend']['value'])) {
         dark['extend']['value'] = ['id', 'name'];
-    } else if (!isArray(dark['extend']['value']) && !isObject(dark['extend']['value'])) {
+    } else if (!isAorO(dark['extend']['value'])) {
         dark['extend']['value'] = fxBase['text']['explode'](',', dark['extend']['value']);
     }
     dark['echo'] = {
@@ -244,11 +246,14 @@ fxView['store']['purchase'] = function() {
                         fxBase['text']['implode'](dark['extend']['valueNexus'], dark['echo']['value'][key][dark['echo']['key']]);
                 });
             });
+            // 部署回调
+            if (isFunction(dark['deploy'])) {
+                dark['deploy'](dark);
+            }
         }
     }
     // 失败回调
     function error(data) {}
-    return dark['echo']['value'];
 };
 
 /**
@@ -262,7 +267,7 @@ fxView['store']['supply'] = function() {
         // 基础
         'base': {},
         // 数据
-        'data': fxApp["view"]["enum"],
+        'data': fxView['machine']['caller'](['view', 'enum'], null, fxApp),
         // 视图
         'view': {
             // 元素
@@ -274,6 +279,19 @@ fxView['store']['supply'] = function() {
             },
             // 接口
             'api': {},
+            // 数据
+            'data': {
+                'key': function(data) {
+                    // 初始化变量
+                    var echo = {};
+                    // 疏理数据
+                    if (!isBlank(data[fxView['shelf']['view']['model']['key']])) {
+                        echo['data'] = {};
+                        echo['data'][fxView['shelf']['view']['model']['key']] = data[fxView['shelf']['view']['model']['key']];
+                    }
+                    return echo;
+                }
+            },
             // 页面
             'page': {},
             // 参数
@@ -281,10 +299,19 @@ fxView['store']['supply'] = function() {
         }
     };
     fxView['shelf'] = fxBase['param']['merge'](fxView['shelf'], arguments[0]);
-    // 数据采购
+    // 疏理数据
     $.each(fxView['shelf']['base'], function(key, value) {
         if (!isBlank(value['url'])) {
             value = fxBase['param']['merge']({
+                // 部署回调
+                'deploy': function(data) {
+                    // 疏理数据
+                    $.each(data['echo']['value'], function(key, value) {
+                        // 数据上架
+                        data['extend']['index'][key] = !isBlank(data['extend']['index'][key]) ? data['extend']['index'][key] : key;
+                        fxView['shelf']['data'][data['extend']['index'][key]] = value;
+                    });
+                },
                 // 扩展
                 'extend': {
                     // 索引
@@ -295,11 +322,8 @@ fxView['store']['supply'] = function() {
             if (isEmpty(value['extend']['index'])) {
                 value['extend']['index'] = { 0: key };
             }
-            $.each(fxView['store']['purchase'](value), function(key2, value2) {
-                // 数据上架
-                value['extend']['index'][key2] = !isBlank(value['extend']['index'][key2]) ? value['extend']['index'][key2] : key2;
-                fxView['shelf']['data'][value['extend']['index'][key2]] = value2;
-            });
+            // 数据采购
+            fxView['store']['purchase'](value);
         } else {
             // 数据上架
             fxView['shelf']['data'][key] = value;
@@ -392,13 +416,13 @@ fxView['machine']['loader'] = function() {
     // 解析插件
     if (isBlank(dark['plugin'])) {
         dark['plugin'] = [];
-    } else if (!isArray(dark['plugin']) && !isObject(dark['plugin'])) {
+    } else if (!isAorO(dark['plugin'])) {
         dark['plugin'] = fxBase['text']['explode'](',', dark['plugin']);
     }
     // 解析名称
     if (isBlank(dark['config']['name'])) {
         dark['config']['name'] = [];
-    } else if (!isArray(dark['config']['name']) && !isObject(dark['config']['name'])) {
+    } else if (!isAorO(dark['config']['name'])) {
         dark['config']['name'] = fxBase['text']['explode'](',', dark['config']['name']);
     }
     // 加载插件
