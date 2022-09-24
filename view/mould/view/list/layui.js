@@ -95,7 +95,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
                 });
                 window.history.replaceState(null, null, url);
                 // 判断顶页面
-                if (self != top) {
+                if (self != top && parent == top) {
                     url = fxBase['param']['url']({
                         'type': '1.1',
                         'window': top,
@@ -171,8 +171,12 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         $('.moire-wapper').append(fxBase['base']['template']({ 'elem': 'view', 'type': 'table' }).html());
     }
     // 执行视图-搜索
-    fxView['machine']['caller'](['mould', 'view', 'search', 'main'], [dark['search']]);
-    tray['search'] = $('.moire-search');
+    if (!isEmpty(dark['search'])) {
+        fxView['machine']['caller'](['mould', 'view', 'search', 'main'], [dark['search']]);
+        tray['search'] = $('.moire-search');
+    } else {
+        tray['search'] = $('<div></div>');
+    }
     tray['height'] = $(window).height() - tray['search'].outerHeight(true);
     // 检查配置
     if (!isSet(dark['base']['api']['list'])) {
@@ -259,7 +263,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         tray['search'].find('.moire-switch').trigger('click');
     }
     // 判断顶页面
-    if (self != top) {
+    if (self != top && parent == top) {
         // 替换标题
         $(top.document).find('title').html(fxApp['view']['title'] + ' - ' + top.fxApp['env']['title']);
     }
@@ -313,7 +317,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         // 渲染数据
         $.each(tray['data'], function(key, value) {
             // 初始化变量
-            if (!isArray(value) && !isObject(value)) return true;
+            if (!isAorO(value)) return true;
             tray['data'][key] = JSON.stringify(value);
         });
         return tray['data'];
@@ -355,12 +359,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         };
         echo['data'][dark['base']['model']['key']] = this.value;
         // 疏理多级
-        echo['echo'] = event['elem']['checked'] ? 1 : 0;
-        $.each(fxBase['text']['explode']('-_', event['elem']['name']).reverse(), function(key, value) {
-            var data = {};
-            data[value] = echo['echo'];
-            echo['echo'] = data;
-        });
+        echo['echo'] = fxBase['data']['fieldValue'](event['elem']['name'], event['elem']['checked'] ? 1 : 0);
         echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         fxView['store']['deal']({
@@ -393,12 +392,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
         echo['data'][dark['base']['model']['key']] = event.data[dark['base']['model']['key']];
         echo['elem'] = $(event.tr).parents('.layui-table-view').find('.layui-table-header');
         // 疏理多级
-        echo['echo'] = event.value;
-        $.each(fxBase['text']['explode']('-_', event.field).reverse(), function(key, value) {
-            var data = {};
-            data[value] = echo['echo'];
-            echo['echo'] = data;
-        });
+        echo['echo'] = fxBase['data']['fieldValue'](event.field, event.value);
         echo['data'] = fxBase['param']['merge'](echo['data'], echo['echo']);
         // 处理数据
         tray['echo'] = fxView['store']['deal']({
@@ -505,21 +499,34 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
     });
     // 监听头工具事件
     layui.table.on('toolbar(moire-table)', function(event) {
+        // 初始化变量
         var data = layui.table.checkStatus(event.config.id)['data'];
+        tray['attrData'] = fxBase['text']['explode'](',', $(this).attr('moire-data'));
+        tray['attrCell'] = $(this).attr('moire-cell');
         // 执行事件
         switch (event.event) {
-            case 'add':
-                // 新增
-            case 'upload':
-                // 上传
+            default:
+                // 默认
+                if (isBlank(tray['attrCell'])) return;
                 tray['param'] = {
                     // 元素
                     'elem': event.event,
                     // 参数
-                    'param': data,
+                    'param': {},
                     // 副标题
                     'subtitle': event.event
                 };
+                // 疏理数据
+                $.each(tray['attrData'], function(key, value) {
+                    if (isFunction(fxView['shelf']['view']['data'][value])) {
+                        tray['data'] = fxView['shelf']['view']['data'][value](event.data);
+                    } else if (isSet(fxView['shelf']['view']['data'][value])) {
+                        tray['data'] = fxBase['data']['fieldValue'](value, fxView['shelf']['view']['data'][value]);
+                    } else {
+                        return true;
+                    }
+                    tray['param']['param'] = fxBase['param']['merge'](tray['param']['param'], tray['data']);
+                });
                 fxView['machine']['caller'](['mould', 'tool', 'window', 'main'], [tray['param']]);
                 break;
             case 'delete':
@@ -550,6 +557,9 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
     });
     // 监听行工具事件
     layui.table.on('tool(moire-table)', function(event) {
+        // 初始化变量
+        tray['attrData'] = fxBase['text']['explode'](',', $(this).attr('moire-data'));
+        tray['attrCell'] = $(this).attr('moire-cell');
         // 执行事件
         switch (event.event) {
             case 'cell':
@@ -561,18 +571,32 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
                         break;
                 }
                 break;
-            case 'view':
-                // 视图
-            case 'edit':
-                // 编辑
+            default:
+                // 默认
+                if (isBlank(tray['attrCell'])) return;
                 tray['param'] = {
                     // 元素
                     'elem': event.event,
                     // 参数
-                    'param': event.data,
+                    'param': {},
                     // 副标题
                     'subtitle': event.event
                 };
+                // 识别主键
+                if (fxBase['param']['inArray'](tray['param']['elem'], ['view', 'edit']) && !fxBase['param']['inArray']('key', tray['attrData'])) {
+                    tray['attrData'].push('key');
+                }
+                // 疏理数据
+                $.each(tray['attrData'], function(key, value) {
+                    if (isFunction(fxView['shelf']['view']['data'][value])) {
+                        tray['data'] = fxView['shelf']['view']['data'][value](event.data);
+                    } else if (isSet(fxView['shelf']['view']['data'][value])) {
+                        tray['data'] = fxBase['data']['fieldValue'](value, fxView['shelf']['view']['data'][value]);
+                    } else {
+                        return true;
+                    }
+                    tray['param']['param'] = fxBase['param']['merge'](tray['param']['param'], tray['data']);
+                });
                 fxView['machine']['caller'](['mould', 'tool', 'window', 'main'], [tray['param']]);
                 break;
             case 'delete':

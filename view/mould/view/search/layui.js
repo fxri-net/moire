@@ -39,7 +39,7 @@ fxView['machine']['deployer'](['mould', 'view', 'search', 'skin', 'layui'], func
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
     if (!isFunction(dark['data'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['search', 'feature', 'not configured'] }]);
     }
     // 疏理元素
     tray['elem'] = $('.moire-search');
