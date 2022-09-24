@@ -77,7 +77,7 @@ fxView['machine']['deployer'](['material', 'elem', 'file', 'main'], function() {
         // 疏理数据
         if (isBlank(dark['data'])) {
             dark['data'] = [];
-        } else if (!isArray(dark['data']) && !isObject(dark['data'])) {
+        } else if (!isAorO(dark['data'])) {
             dark['data'] = fxBase['text']['explode'](',', dark['data']);
         }
         // 渲染皮肤

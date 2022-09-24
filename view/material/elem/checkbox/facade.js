@@ -46,7 +46,7 @@ fxView['machine']['deployer'](['material', 'elem', 'checkbox', 'main'], function
         // 疏理数据
         if (isBlank(dark['shelf']['data'])) {
             dark['shelf']['data'] = {};
-        } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
+        } else if (!isAorO(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
         dark['shelf']['dataEcho'] = fxBase['text']['implode']('|', Object.values(dark['shelf']['data']).reverse());

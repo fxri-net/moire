@@ -17,17 +17,7 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'skin', 'deploy'], {
         // 初始化变量
         dark['templet'] = function(data) {
             // 初始化变量
-            tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-            tray['data'] = data;
-            // 疏理数据
-            $.each(tray['field'], function(key, value) {
-                if (!isBlank(tray['data'][value])) {
-                    tray['data'] = tray['data'][value];
-                } else {
-                    tray['data'] = '';
-                    return false;
-                }
-            });
+            tray['data'] = fxBase['data']['fieldParse'](data, dark['field']);
             // 疏理数据
             dark['list'].push(data);
             tray['echo'] = [];
@@ -36,11 +26,12 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'skin', 'deploy'], {
                 tray['data'] = [];
             } else if (isJson(tray['data'])) {
                 tray['data'] = JSON.parse(tray['data']);
-            } else if (!isArray(tray['data']) && !isObject(tray['data'])) {
+            } else if (!isAorO(tray['data'])) {
                 tray['data'] = fxBase['text']['explode'](',', tray['data']);
             }
             // 疏理输出
             $.each(tray['data'], function(key, value) {
+                if (!isAorO(value)) return true;
                 // 初始化变量
                 tray['echo'][key] = [];
                 $.each(dark['shelf']['data'], function(key2, value2) {
@@ -57,17 +48,7 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'skin', 'deploy'], {
         // 初始化变量
         dark['templet'] = function(data) {
             // 初始化变量
-            tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-            tray['data'] = data;
-            // 疏理数据
-            $.each(tray['field'], function(key, value) {
-                if (!isBlank(tray['data'][value])) {
-                    tray['data'] = tray['data'][value];
-                } else {
-                    tray['data'] = '';
-                    return false;
-                }
-            });
+            tray['data'] = fxBase['data']['fieldParse'](data, dark['field']);
             // 疏理数据
             dark['list'].push(data);
             tray['echo'] = [];
@@ -76,7 +57,7 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'skin', 'deploy'], {
                 tray['data'] = [];
             } else if (isJson(tray['data'])) {
                 tray['data'] = JSON.parse(tray['data']);
-            } else if (!isArray(tray['data']) && !isObject(tray['data'])) {
+            } else if (!isAorO(tray['data'])) {
                 tray['data'] = fxBase['text']['explode'](',', tray['data']);
             }
             // 疏理输出

@@ -39,18 +39,7 @@ fxView['machine']['deployer'](['material', 'elem', 'selected', 'main'], function
                 'param': function(key, data) {
                     // 初始化变量
                     var echo = { 'data': {} };
-                    tray['field'] = fxBase['text']['explode']('-_', key);
-                    tray['data'] = data;
-                    // 疏理数据
-                    $.each(tray['field'], function(key2, value2) {
-                        if (!isBlank(tray['data'][value2])) {
-                            tray['data'] = tray['data'][value2];
-                        } else {
-                            tray['data'] = '';
-                            return false;
-                        }
-                    });
-                    echo['data'][key] = tray['data'];
+                    echo['data'][key] = fxBase['data']['fieldParse'](data, key);
                     return echo;
                 },
                 // 类名
@@ -71,7 +60,7 @@ fxView['machine']['deployer'](['material', 'elem', 'selected', 'main'], function
         // 疏理数据
         if (isBlank(dark['shelf']['data'])) {
             dark['shelf']['data'] = {};
-        } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
+        } else if (!isAorO(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
         // 渲染皮肤

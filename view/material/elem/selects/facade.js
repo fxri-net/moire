@@ -56,12 +56,12 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'main'], function(
         // 疏理数据
         if (isBlank(dark['data'])) {
             dark['data'] = [];
-        } else if (!isArray(dark['data']) && !isObject(dark['data'])) {
+        } else if (!isAorO(dark['data'])) {
             dark['data'] = fxBase['text']['explode'](',', dark['data']);
         }
         if (isBlank(dark['shelf']['data'])) {
             dark['shelf']['data'] = {};
-        } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
+        } else if (!isAorO(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
         // 渲染皮肤
@@ -112,6 +112,30 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'main'], function(
         $.each(dark['shelf']['data'], function(key, value) {
             dark['elem'].append('<option value="' + key + '">' + value + '</option>');
         });
+
+
+        // console.log(dark['elem']);
+        // console.log(dark['shelf']);
+        // console.log(dark['shelf']['data']);
+        // // 绑定数据
+        // dark['shelf'] = fxBase['proxy']['bind'](dark['shelf'], function() {
+        //     console.log(dark['id']);
+        //     console.log(dark['elem']);
+        //     dark['elem'].find('option').remove();
+        //     dark['elem'].append('<option value="">' + dark['default'] + '</option>');
+        //     $.each(dark['shelf']['data'], function(key, value) {
+        //         dark['elem'].append('<option value="' + key + '">' + value + '</option>');
+        //     });
+        //     // 渲染表单
+        //     layui.formSelects.render(dark['field']);
+        //     // 执行重置
+        //     layui.formSelects.value(dark['field'], dark['data']);
+        // });
+
+
+
+
+
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后

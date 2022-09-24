@@ -17,17 +17,7 @@ fxView['machine']['deployer'](['material', 'elem', 'text', 'skin', 'deploy'], {
         // 初始化变量
         dark['templet'] = function(data) {
             // 初始化变量
-            tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-            tray['data'] = data;
-            // 疏理数据
-            $.each(tray['field'], function(key, value) {
-                if (!isBlank(tray['data'][value])) {
-                    tray['data'] = tray['data'][value];
-                } else {
-                    tray['data'] = '';
-                    return false;
-                }
-            });
+            tray['data'] = fxBase['data']['fieldParse'](data, dark['field']);
             // 疏理数据
             dark['list'].push(data);
             return !isBlank(tray['data']) ? tray['data'] + dark['dataSuffix'] : '';
@@ -39,17 +29,7 @@ fxView['machine']['deployer'](['material', 'elem', 'text', 'skin', 'deploy'], {
         dark['wrapBox']['attr']['moire-elem'] = 'link';
         dark['templet'] = function(data) {
             // 初始化变量
-            tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-            tray['data'] = data;
-            // 疏理数据
-            $.each(tray['field'], function(key, value) {
-                if (!isBlank(tray['data'][value])) {
-                    tray['data'] = tray['data'][value];
-                } else {
-                    tray['data'] = '';
-                    return false;
-                }
-            });
+            tray['data'] = fxBase['data']['fieldParse'](data, dark['field']);
             // 疏理数据
             dark['list'].push(data);
             tray['echo'] = '';

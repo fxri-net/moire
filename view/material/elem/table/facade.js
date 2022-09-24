@@ -81,12 +81,12 @@ fxView['machine']['deployer'](['material', 'elem', 'table', 'main'], function() 
             dark['data'] = [];
         } else if (isJson(dark['data'])) {
             dark['data'] = JSON.parse(dark['data']);
-        } else if (!isArray(dark['data']) && !isObject(dark['data'])) {
+        } else if (!isAorO(dark['data'])) {
             dark['data'] = fxBase['text']['explode'](',', dark['data']);
         }
         if (isBlank(dark['shelf']['data'])) {
             dark['shelf']['data'] = {};
-        } else if (!isArray(dark['shelf']['data']) && !isObject(dark['shelf']['data'])) {
+        } else if (!isAorO(dark['shelf']['data'])) {
             dark['shelf']['data'] = fxBase['text']['explode'](',', dark['shelf']['data']);
         }
         // 渲染皮肤

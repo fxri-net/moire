@@ -16,17 +16,7 @@ fxView['machine']['deployer'](['material', 'elem', 'dateText', 'skin', 'deploy']
     'table': function(dark, base, echo, tray) {
         dark['templet'] = function(data) {
             // 初始化变量
-            tray['field'] = fxBase['text']['explode']('-_', dark['field']);
-            tray['data'] = data;
-            // 疏理数据
-            $.each(tray['field'], function(key, value) {
-                if (!isBlank(tray['data'][value])) {
-                    tray['data'] = tray['data'][value];
-                } else {
-                    tray['data'] = '';
-                    return false;
-                }
-            });
+            tray['data'] = fxBase['data']['fieldParse'](data, dark['field']);
             // 疏理数据
             dark['list'].push(data);
             return !isBlank(tray['data']) ? tray['data'] : '暂无时间';
