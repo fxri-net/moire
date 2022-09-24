@@ -22,7 +22,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'export', 'skin', 'layui'], func
     tray[dark['model']['key']] = [];
     // 检查配置
     if (!isSet(dark['api']['export'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['export', 'feature', 'not configured'] }]);
     }
     // 疏理数据
     if (!isArray(dark['param'])) {

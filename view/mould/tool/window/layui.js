@@ -16,6 +16,8 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layui'], func
     var dark = fxBase['param']['merge']({
         // 副标题
         'subtitle': null,
+        // 事件
+        'event': {},
         // 选项
         'option': {
             // 类型
@@ -43,34 +45,44 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layui'], func
                     // 本身-弹窗-索引
                     'self.layer.index': dark['index']
                 }, $(layero[0]).find('iframe').prop('contentWindow').fxApp);
+                // 执行事件
+                fxView['machine']['caller'](['event', 'success'], [layero, index, dark], dark);
             },
             // 销毁回调
             'end': function() {
                 // 销毁索引
                 fxApp['rank']['self.layer.index.destroy'](dark['index']);
+                // 执行事件
+                fxView['machine']['caller'](['event', 'end'], [dark], dark);
             }
-        }
+        },
+        // 窗口
+        'window': window
     }, fxView['shelf']['view']);
     var tray = {};
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
     if (!isSet(dark['page'][dark['elem']])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark['elem'], 'window', 'feature', 'not configured'] }]);
     }
-    // 疏理数据
-    if (!isBlank(dark['param'][dark['model']['key']])) {
-        dark['data'] = '&data[' + dark['model']['key'] + ']=' + dark['param'][dark['model']['key']];
-    } else {
-        dark['data'] = '';
-    }
+    // 疏理链接
+    tray['url'] = fxBase['param']['url']({
+        'type': '1.2',
+        'url': dark['page'][dark['elem']],
+        'param': fxBase['param']['url']({
+            'type': '2.1',
+            'url': dark['page'][dark['elem']],
+            'param': dark['param']
+        })
+    });
     // 打开弹窗
     dark['option'] = fxBase['param']['merge']({
         // 标题
         'title': fxBase['base']['lang']([fxApp['view']['name'], dark['subtitle']]),
         // 内容
-        'content': dark['page'][dark['elem']] + dark['data'],
+        'content': tray['url'],
     }, dark['option']);
-    dark['index'] = layui.layer.open(dark['option']);
+    dark['index'] = dark['window'].layui.layer.open(dark['option']);
     dark['index'] = fxBase['text']['implode']('-', [dark['index'], fxApp['rank']['self.code'], 'layui']);
     // 配置索引
     fxApp['rank']['self.layer.index.set'](dark['index']);

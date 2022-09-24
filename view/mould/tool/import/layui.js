@@ -19,6 +19,6 @@ fxView['machine']['deployer'](['mould', 'tool', 'import', 'skin', 'layui'], func
     tray[dark['model']['key']] = [];
     // 检查配置
     if (!isSet(dark['api']['import'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['import', 'feature', 'not configured'] }]);
     }
 });

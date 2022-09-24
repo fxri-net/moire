@@ -19,7 +19,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'delete', 'skin', 'layui'], func
     tray[dark['model']['key']] = [];
     // 检查配置
     if (!isSet(dark['api']['delete'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['delete', 'feature', 'not configured'] }]);
     }
     // 疏理数据
     tray['reload'] = true;

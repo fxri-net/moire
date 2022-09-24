@@ -18,7 +18,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'download', 'skin', 'layui'], fu
     tray[dark['model']['key']] = [];
     // 检查配置
     if (!isSet(dark['api']['download'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['download', 'feature', 'not configured'] }]);
     }
     window.open(dark['api']['download']);
 });

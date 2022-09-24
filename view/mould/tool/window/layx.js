@@ -16,8 +16,8 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
     var dark = fxBase['param']['merge']({
         // 副标题
         'subtitle': null,
-        // 状态
-        'status': null,
+        // 事件
+        'event': {},
         // 选项
         'option': {
             // 图标或标题栏左边内容
@@ -157,14 +157,17 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                     // 加载之前
                     before: function(layxWindow, winform) {
                         // 初始化变量
+                        winform.area = dark['proxy']['decimal'](winform.area);
                         tray['area'] = JSON.parse(JSON.stringify(winform.area));
                         // 配置皮肤
                         $(layxWindow).addClass('moire-window');
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onload', 'before'], [layxWindow, winform, dark], dark);
                     },
                     // 加载之后
                     after: function(layxWindow, winform) {
                         // 窗口最大化
-                        layx.max(dark['window'].id);
+                        dark['extend']['autoMax'] && dark['window'].layx.max(dark['self'].id);
                         // 配置数据
                         fxView['machine']['deployer'](['rank'], {
                             // 起源-窗口
@@ -175,52 +178,83 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         // 窗口调整
                         $(top.window).on('resize', function() {
                             // 初始化变量
-                            if (dark['status'] != 'max') return;
-                            layx.max(dark['window'].id);
+                            if (dark['extend']['status'] != 'max') return;
+                            dark['window'].layx.max(dark['self'].id);
                         });
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onload', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 最小化事件
                 onmin: {
                     // 最小化之前
-                    before: function(layxWindow, winform) {},
+                    before: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmin', 'before'], [layxWindow, winform, dark], dark);
+                    },
                     // 最小化之后
                     after: function(layxWindow, winform) {
-                        dark['status'] = winform.status;
+                        // 配置状态
+                        dark['extend']['status'] = winform.status;
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmin', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 最大化事件
                 onmax: {
                     // 最大化之前
-                    before: function(layxWindow, winform) {},
+                    before: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmax', 'before'], [layxWindow, winform, dark], dark);
+                    },
                     // 最大化之后
                     after: function(layxWindow, winform) {
-                        dark['status'] = winform.status;
+                        // 配置状态
+                        dark['extend']['status'] = winform.status;
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmax', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 恢复事件
                 onrestore: {
                     // 恢复之前
-                    before: function(layxWindow, winform) {},
+                    before: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onrestore', 'before'], [layxWindow, winform, dark], dark);
+                    },
                     // 恢复之后
                     after: function(layxWindow, winform) {
-                        dark['status'] = winform.status;
+                        // 配置状态
+                        dark['extend']['status'] = winform.status;
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onrestore', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 关闭事件
                 ondestroy: {
                     // 关闭之前，inside 区分用户点击内置关闭按钮还是自动调用，用户关闭之前传递的参数，escKey表示是否是按下esc触发
-                    before: function(layxWindow, winform, params, inside, escKey) {},
+                    before: function(layxWindow, winform, params, inside, escKey) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'ondestroy', 'before'], [layxWindow, winform, params, inside, escKey, dark], dark);
+                    },
                     // 关闭之后
                     after: function() {
                         // 销毁索引
                         fxApp['rank']['self.layer.index.destroy'](dark['index']);
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'ondestroy', 'after'], [dark], dark);
                     }
                 },
                 // 隐藏/显示窗口时间
                 onvisual: {
-                    before: function(layxWindow, winform, params, inside, status) {},
-                    after: function(layxWindow, winform, status) {}
+                    before: function(layxWindow, winform, params, inside, status) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onvisual', 'before'], [layxWindow, winform, params, inside, status, dark], dark);
+                    },
+                    after: function(layxWindow, winform, status) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onvisual', 'after'], [layxWindow, winform, status, dark], dark);
+                    }
                 },
                 // 移动事件
                 onmove: {
@@ -236,8 +270,10 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         tray['left'] = tray['left'] + tray['siteLeft'] - (tray['siteLeft'] / winform.area.width * tray['area']['width']);
                         tray['top'] = tray['top'] + tray['siteTop'] - (tray['siteTop'] / winform.area.height * tray['area']['height']);
                         // 设置范围
-                        layx.setPosition(dark['window'].id, [tray['top'], tray['left']]);
-                        layx.setSize(dark['window'].id, { 'width': tray['area']['width'], 'height': tray['area']['height'] });
+                        dark['window'].layx.setPosition(dark['self'].id, [tray['top'], tray['left']]);
+                        dark['window'].layx.setSize(dark['self'].id, { 'width': tray['area']['width'], 'height': tray['area']['height'] });
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmove', 'before'], [layxWindow, winform, dark], dark);
                     },
                     // 移动中
                     progress: function(layxWindow, winform) {
@@ -250,6 +286,8 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         dark['move']['touch']();
                         // 执行投影
                         dark['move']['shadow']();
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmove', 'progress'], [layxWindow, winform, dark], dark);
                     },
                     // 移动之后
                     after: function(layxWindow, winform) {
@@ -262,42 +300,69 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
                         tray['shadow'] = false;
                         dark['move']['shadow']();
                         // 设置范围
-                        layx.setPosition(dark['window'].id, [tray['top'], tray['left']]);
-                        layx.setSize(dark['window'].id, { 'width': tray['width'], 'height': tray['height'] });
+                        dark['window'].layx.setPosition(dark['self'].id, [tray['top'], tray['left']]);
+                        dark['window'].layx.setSize(dark['self'].id, { 'width': tray['width'], 'height': tray['height'] });
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onmove', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 拖曳事件
                 onresize: {
                     // 拖曳之前
-                    before: function(layxWindow, winform) {},
+                    before: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onresize', 'before'], [layxWindow, winform, dark], dark);
+                    },
                     // 拖曳中
-                    progress: function(layxWindow, winform) {},
+                    progress: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onresize', 'progress'], [layxWindow, winform, dark], dark);
+                    },
                     // 拖曳之后
                     after: function(layxWindow, winform) {
                         // 初始化变量
                         tray['area'] = JSON.parse(JSON.stringify(winform.area));
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onresize', 'after'], [layxWindow, winform, dark], dark);
                     }
                 },
                 // 获取焦点事件
                 onfocus: function(layxWindow, winform) {
                     // // 配置索引
                     // fxApp['rank']['self.layer.index.set'](dark['index']);
+                    // 执行事件
+                    fxView['machine']['caller'](['event', 'onfocus'], [layxWindow, winform, dark], dark);
                 },
                 // 窗口存在事件
-                onexist: function(layxWindow, winform) {},
+                onexist: function(layxWindow, winform) {
+                    // 执行事件
+                    fxView['machine']['caller'](['event', 'onexist'], [layxWindow, winform, dark], dark);
+                },
                 // 窗口组切换事件
                 onswitch: {
                     // 切换之前
-                    before: function(layxWindow, winform, frameId) {},
+                    before: function(layxWindow, winform, frameId) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onswitch', 'before'], [layxWindow, winform, frameId, dark], dark);
+                    },
                     // 切换之后
-                    after: function(layxWindow, winform, frameId) {}
+                    after: function(layxWindow, winform, frameId) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onswitch', 'after'], [layxWindow, winform, frameId, dark], dark);
+                    }
                 },
                 // 置顶事件
                 onstick: {
                     // 置顶之前
-                    before: function(layxWindow, winform) {},
+                    before: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onstick', 'before'], [layxWindow, winform, dark], dark);
+                    },
                     // 置顶之后
-                    after: function(layxWindow, winform) {}
+                    after: function(layxWindow, winform) {
+                        // 执行事件
+                        fxView['machine']['caller'](['event', 'onstick', 'after'], [layxWindow, winform, dark], dark);
+                    }
                 }
             }
         },
@@ -423,35 +488,72 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
             'shadowZoom': 10,
             // 投影-时间
             'shadowTime': 300
-        }
+        },
+        // 扩展
+        'extend': {
+            // 状态
+            'status': null,
+            // 自动最大化
+            'autoMax': true
+        },
+        // 代理
+        'proxy': {
+            // 小数
+            'decimal': function() {
+                // 初始化变量
+                var dark = {};
+                // 疏理数据
+                dark['target'] = arguments[0];
+                if (!isAorO(dark['target'])) {
+                    return false;
+                }
+                dark['target'] = new Proxy(dark['target'], {
+                    // 获取
+                    "get": function(target, key) {
+                        // 疏理数据
+                        if (isNumeric(target[key])) {
+                            target[key] = Math.round(target[key] * 100) / 100;
+                        }
+                        return target[key];
+                    }
+                });
+                return dark['target'];
+            }
+        },
+        // 窗口
+        'window': window
     }, fxView['shelf']['view']);
     var tray = {};
     dark = fxBase['param']['merge'](dark, arguments[0]);
     // 检查配置
     if (!isSet(dark['page'][dark['elem']])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['feature', 'not configured'] }]);
+        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark['elem'], 'window', 'feature', 'not configured'] }]);
     }
-    // 疏理数据
-    if (!isBlank(dark['param'][dark['model']['key']])) {
-        dark['data'] = '&data[' + dark['model']['key'] + ']=' + dark['param'][dark['model']['key']];
-    } else {
-        dark['data'] = '';
-    }
+    // 疏理链接
+    tray['url'] = fxBase['param']['url']({
+        'type': '1.2',
+        'url': dark['page'][dark['elem']],
+        'param': fxBase['param']['url']({
+            'type': '2.1',
+            'url': dark['page'][dark['elem']],
+            'param': dark['param']
+        })
+    });
     // 打开弹窗
     dark['option'] = fxBase['param']['merge']({
         // 唯一ID
-        'id': md5(dark['page'][dark['elem']] + dark['data']),
+        'id': md5(tray['url']),
         // 标题
         'title': fxBase['base']['lang']([fxApp['view']['name'], dark['subtitle']]),
         // 窗口地址
-        'url': dark['page'][dark['elem']] + dark['data'],
+        'url': tray['url'],
     }, dark['option']);
-    dark['window'] = layx.open(dark['option']);
-    dark['index'] = fxBase['text']['implode']('-', [dark['window'].id, fxApp['rank']['self.code'], 'layx']);
+    dark['self'] = dark['window'].layx.open(dark['option']);
+    dark['index'] = fxBase['text']['implode']('-', [dark['self'].id, fxApp['rank']['self.code'], 'layx']);
     // 配置索引
     fxApp['rank']['self.layer.index.set'](dark['index']);
     // 监听鼠标位置
-    $(dark['window'].layxWindow).on('mousemove touchmove mouseleave', function(event) {
+    $(dark['self'].layxWindow).on('mousemove touchmove mouseleave', function(event) {
         // 初始化变量
         var touch;
         // 识别触摸类型
@@ -467,7 +569,7 @@ fxView['machine']['deployer'](['mould', 'tool', 'window', 'skin', 'layx'], funct
     $(document).on('mouseleave', function(event) {
         // 设置定时器
         dark['move']['touchTimer'] = setTimeout(function() {
-            $(dark['window'].layxWindow).trigger('mouseup');
+            $(dark['self'].layxWindow).trigger('mouseup');
         }, dark['move']['touchTime']);
     });
 });
