@@ -89,7 +89,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
             // 数据
             'data': {
                 // 数据
-                'data': {}
+                'data': dark['base']['param']
             },
             // 成功回调
             'success': function(data) {
@@ -107,7 +107,7 @@ fxView['machine']['deployer'](['mould', 'view', 'view', 'skin', 'layui'], functi
                 fxView['machine']['caller'](['cache', 'render', dark['base']['elem']], []);
             }
         };
-        tray['echo']['data']['data'][dark['base']['model']['key']] = fxApp['data'][dark['base']['model']['key']];
+        tray['echo']['data']['data'] = fxBase['param']['merge'](tray['echo']['data']['data'], fxApp['data']);
         fxView['store']['deal'](tray['echo']);
     }
     // 疏理视图
