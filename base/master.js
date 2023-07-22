@@ -982,26 +982,27 @@ fxBase['param'] = Object.assign(isObject(fxBase['param']) ? fxBase['param'] : {}
                 // 解析地址
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.pathname;
                 dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
-                // 疏理数据
-                dark['url'] = [dark['url'][0]];
-                dark['param'] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), dark['param']);
-                dark['param'] = fxBase['text']['strEncode'](dark['param']);
-                // 拼接地址
-                if (!isBlank(dark['param'])) {
-                    dark['url'].push(dark['param']);
+                dark['url'][1] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), fxBase['text']['strDecode'](dark['param']));
+                // 疏理参数
+                if (!isEmpty(dark['url'][1])) {
+                    dark['url'][1] = fxBase['text']['strEncode'](dark['url'][1]);
+                } else {
+                    dark['url'].splice(1, 1);
                 }
+                // 输出地址
                 return fxBase['text']['implode']('?', dark['url']);
             case '2.1':
                 // 获取参数
                 // 解析地址
                 dark['url'] = !isBlank(dark['url']) ? dark['url'] : dark['window'].location.href;
                 dark['url'] = fxBase['text']['explode']('?', dark['url'], 2);
-                // 解析数据
-                dark['param'] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), dark['param']);
-                if (isSet(dark['name'])) {
-                    return dark['param'][dark['name']];
+                dark['url'][1] = fxBase['param']['merge'](fxBase['text']['strDecode'](dark['url'][1]), fxBase['text']['strDecode'](dark['param']));
+                // 获取参数
+                if (!isBlank(dark['name'])) {
+                    return dark['url'][1][dark['name']];
                 }
-                return dark['param'];
+                // 输出参数
+                return dark['url'][1];
         }
     },
 
