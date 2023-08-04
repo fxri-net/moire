@@ -1326,15 +1326,14 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
      */
     'strEncode': function() {
         // 初始化变量
-        var array = isSet(arguments[0]) ? arguments[0] : {},
+        var data = isSet(arguments[0]) ? arguments[0] : {},
             echo = [];
+        // 校验数据
+        if (!isAorO(data)) return data;
         // 解析数据
-        $.each(array, function(key, value) {
+        $.each(data, function(key, value) {
             // 解析数据
             value = fxBase['text']['strEncodeMerge'](value);
-            if (!isArray(value)) {
-                value = [value];
-            }
             // 疏理数据
             $.each(value, function(key2, value2) {
                 echo.push(key + value2);
@@ -1352,7 +1351,7 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
         var tray = [];
         if (!isAorO(data)) {
             data = encodeURIComponent(data);
-            return '=' + data;
+            return ['=' + data];
         }
         $.each(data, function(key, value) {
             value = fxBase['text']['strEncodeMerge'](value);
@@ -1370,11 +1369,13 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
      */
     'strDecode': function() {
         // 初始化变量
-        var string = isSet(arguments[0]) ? arguments[0] : null,
+        var data = isSet(arguments[0]) ? arguments[0] : null,
             echo = {};
+        // 校验数据
+        if (isAorO(data)) return data;
         // 解析数据
-        string = fxBase['text']['explode']('&', string);
-        $.each(string, function(key, value) {
+        data = fxBase['text']['explode']('&', data);
+        $.each(data, function(key, value) {
             // 解析数据
             value = fxBase['text']['explode']('=', value, 2);
             if (isBlank(value[0]) && !isSet(value[1])) return true;
