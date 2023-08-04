@@ -39,6 +39,15 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'main'], function(
             'plugin': {
                 // 单选
                 'radio': false
+            },
+            // 选项
+            'option': {
+                // 高度
+                'height': '36px',
+                // 搜索地址
+                'search': '',
+                // 搜索类型
+                'searchType': 'dl'
             }
         }, dark);
         // 疏理数据
@@ -109,33 +118,11 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'main'], function(
         dark['elem'] = $(dark['elemBox']['elem']);
         dark['elem'].attr(dark['elemBox']['attr']);
         dark['elem'].append('<option value="">' + dark['default'] + '</option>');
-        $.each(dark['shelf']['data'], function(key, value) {
-            dark['elem'].append('<option value="' + key + '">' + value + '</option>');
-        });
-
-
-        // console.log(dark['elem']);
-        // console.log(dark['shelf']);
-        // console.log(dark['shelf']['data']);
-        // // 绑定数据
-        // dark['shelf'] = fxBase['proxy']['bind'](dark['shelf'], function() {
-        //     console.log(dark['id']);
-        //     console.log(dark['elem']);
-        //     dark['elem'].find('option').remove();
-        //     dark['elem'].append('<option value="">' + dark['default'] + '</option>');
-        //     $.each(dark['shelf']['data'], function(key, value) {
-        //         dark['elem'].append('<option value="' + key + '">' + value + '</option>');
-        //     });
-        //     // 渲染表单
-        //     layui.formSelects.render(dark['field']);
-        //     // 执行重置
-        //     layui.formSelects.value(dark['field'], dark['data']);
-        // });
-
-
-
-
-
+        if (isBlank(dark['option']['search'])) {
+            $.each(dark['shelf']['data'], function(key, value) {
+                dark['elem'].append('<option value="' + key + '">' + value + '</option>');
+            });
+        }
         // 渲染皮肤
         fxView['machine']['caller'](['skins', 'deploy', dark['skin']], [dark, base, echo, tray], dark);
         // 渲染之后

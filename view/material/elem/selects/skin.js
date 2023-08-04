@@ -22,9 +22,9 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'skin', 'deploy'],
         dark['wrap'].append(dark['elem']);
         dark['elem'].attr({
             'xm-select': dark['field'],
-            'xm-select-height': '36px',
-            'xm-select-search': '',
-            'xm-select-search-type': 'dl'
+            'xm-select-height': dark['option']['height'],
+            'xm-select-search': dark['option']['search'],
+            'xm-select-search-type': dark['option']['searchType']
         });
         fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
         layui.formSelects.value(dark['field'], dark['data']);
@@ -41,9 +41,9 @@ fxView['machine']['deployer'](['material', 'elem', 'selects', 'skin', 'deploy'],
         dark['wrap'].children('[moire-cell]').append(dark['elem']);
         dark['elem'].attr({
             'xm-select': dark['field'],
-            'xm-select-height': '36px',
-            'xm-select-search': '',
-            'xm-select-search-type': 'dl'
+            'xm-select-height': dark['option']['height'],
+            'xm-select-search': dark['option']['search'],
+            'xm-select-search-type': dark['option']['searchType']
         });
         fxView['layui']['init']({ 'type': 'select', 'id': dark['field'], 'plugin': dark['plugin'] });
         layui.formSelects.value(dark['field'], dark['data']);
