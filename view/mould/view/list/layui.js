@@ -64,7 +64,7 @@ fxView['machine']['deployer'](['mould', 'view', 'list', 'skin', 'layui'], functi
             },
             // 响应分页
             'page': {
-                'limits': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+                'limits': [10, 20, 50, 100, 1000, 10000, 100000]
             },
             // 请求参数
             'request': {
