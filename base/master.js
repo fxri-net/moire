@@ -1355,11 +1355,14 @@ fxBase['text'] = Object.assign(isObject(fxBase['text']) ? fxBase['text'] : {}, {
         }
         $.each(data, function(key, value) {
             value = fxBase['text']['strEncodeMerge'](value);
-            if (isObject(data)) {
-                tray.push('[' + key + ']' + value);
-            } else {
-                tray.push('[]' + value);
-            }
+            // 疏理数据
+            $.each(value, function(key2, value2) {
+                if (isObject(data)) {
+                    tray.push('[' + key + ']' + value2);
+                } else {
+                    tray.push('[]' + value2);
+                }
+            });
         });
         return tray;
     },
