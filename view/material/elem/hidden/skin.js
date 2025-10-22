@@ -12,9 +12,9 @@
  * 云纹物料-元素-隐藏字段-皮肤
  */
 fxView['machine']['deployer'](['material', 'elem', 'hidden', 'skin', 'deploy'], {
-    // 搜索,视图
-    'search,view': function(dark, base, echo, tray) {
-        // 初始化变量
-        base['pack'].append(dark['elem']);
-    }
-});
+  // 搜索,视图
+  'search,view': function (dark, base, echo, tray) {
+    // 初始化变量
+    base['pack'].append(dark['elem'])
+  },
+})

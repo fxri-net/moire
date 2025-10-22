@@ -11,14 +11,14 @@
 /**
  * 云纹模具-工具-下载-皮肤
  */
-fxView['machine']['deployer'](['mould', 'tool', 'download', 'skin', 'layui'], function() {
-    // 初始化变量
-    var dark = fxBase['param']['merge']({}, fxView['shelf']['view']);
-    var tray = {};
-    tray[dark['model']['key']] = [];
-    // 检查配置
-    if (!isSet(dark['api']['download'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['download', 'feature', 'not configured'] }]);
-    }
-    window.open(dark['api']['download']);
-});
+fxView['machine']['deployer'](['mould', 'tool', 'download', 'skin', 'layui'], function () {
+  // 初始化变量
+  var dark = fxBase['param']['merge']({}, fxView['shelf']['view'])
+  var tray = {}
+  tray[dark['model']['key']] = []
+  // 检查配置
+  if (!isSet(dark['api']['download'])) {
+    return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ text: ['download', 'feature', 'not configured'] }])
+  }
+  window.open(dark['api']['download'])
+})

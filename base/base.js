@@ -12,16 +12,16 @@
  * 初始化变量
  */
 var fxApp = {
+  /**
+   * 环境
+   */
+  env: {
     /**
-     * 环境
+     * 版本
      */
-    'env': {
-        /**
-         * 版本
-         */
-        'version': 'v0.4'
-    }
-};
-fxApp['env']['script'] = document.getElementsByTagName('script');
-fxApp['env']['script'] = fxApp['env']['script'][fxApp['env']['script'].length - 1].src;
-fxApp['env']['script'] = fxApp['env']['script'].replace(/\/[^\/]*$/, '');
+    version: 'v0.4',
+  },
+}
+fxApp['env']['script'] = document.getElementsByTagName('script')
+fxApp['env']['script'] = fxApp['env']['script'][fxApp['env']['script'].length - 1].src
+fxApp['env']['script'] = fxApp['env']['script'].replace(/\/[^\/]*$/, '')

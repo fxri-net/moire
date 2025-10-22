@@ -11,23 +11,23 @@
 /**
  * 云纹模具-工具-消息-皮肤
  */
-fxView['machine']['deployer'](['mould', 'tool', 'message', 'skin', 'layui'], function() {
-    // 初始化变量
-    var dark = {
-        // 内容
-        'text': '',
-        // 图标
-        'icon': 'info',
-        // 自动关闭
-        'hideAfter': 1500,
-        // 位置
-        'position': 'bottom-left',
-        // 消息栈
-        'stack': 1,
-        // 窗口
-        'window': top
-    };
-    dark = fxBase['param']['merge'](dark, arguments[0]);
-    dark['text'] = fxBase['base']['lang'](dark['text']);
-    dark['window'].$.toast(dark);
-});
+fxView['machine']['deployer'](['mould', 'tool', 'message', 'skin', 'layui'], function () {
+  // 初始化变量
+  var dark = {
+    // 内容
+    text: '',
+    // 图标
+    icon: 'info',
+    // 自动关闭
+    hideAfter: 1500,
+    // 位置
+    position: 'bottom-left',
+    // 消息栈
+    stack: 1,
+    // 窗口
+    window: top,
+  }
+  dark = fxBase['param']['merge'](dark, arguments[0])
+  dark['text'] = fxBase['base']['lang'](dark['text'])
+  dark['window'].$.toast(dark)
+})

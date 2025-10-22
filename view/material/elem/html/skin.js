@@ -12,18 +12,18 @@
  * 云纹物料-元素-超文本-皮肤
  */
 fxView['machine']['deployer'](['material', 'elem', 'html', 'skin', 'deploy'], {
-    // 视图
-    'view': function(dark, base, echo, tray) {
-        // 初始化变量
-        base['pack'].append(dark['wrap']);
-        dark['wrap'].attr({
-            'class': 'layui-col-xs12 layui-col-md6'
-        });
-        dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>');
-        dark['wrap'].children('[moire-key]').html(dark['label']);
-        dark['wrap'].children('[moire-cell]').append(dark['elem']);
-        dark['elem'].attr({
-            'class': 'moire-div'
-        });
-    }
-});
+  // 视图
+  view: function (dark, base, echo, tray) {
+    // 初始化变量
+    base['pack'].append(dark['wrap'])
+    dark['wrap'].attr({
+      class: 'layui-col-xs12 layui-col-md6',
+    })
+    dark['wrap'].append('<div moire-key="' + dark['type'] + '"></div><div moire-cell="' + dark['type'] + '"></div>')
+    dark['wrap'].children('[moire-key]').html(dark['label'])
+    dark['wrap'].children('[moire-cell]').append(dark['elem'])
+    dark['elem'].attr({
+      class: 'moire-div',
+    })
+  },
+})

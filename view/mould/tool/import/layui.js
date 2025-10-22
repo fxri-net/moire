@@ -11,14 +11,14 @@
 /**
  * 云纹模具-工具-导入-皮肤
  */
-fxView['machine']['deployer'](['mould', 'tool', 'import', 'skin', 'layui'], function() {
-    // 初始化变量
-    var dark = fxBase['param']['merge']({}, fxView['shelf']['view']);
-    var tray = {};
-    dark = fxBase['param']['merge'](dark, arguments[0]);
-    tray[dark['model']['key']] = [];
-    // 检查配置
-    if (!isSet(dark['api']['import'])) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': ['import', 'feature', 'not configured'] }]);
-    }
-});
+fxView['machine']['deployer'](['mould', 'tool', 'import', 'skin', 'layui'], function () {
+  // 初始化变量
+  var dark = fxBase['param']['merge']({}, fxView['shelf']['view'])
+  var tray = {}
+  dark = fxBase['param']['merge'](dark, arguments[0])
+  tray[dark['model']['key']] = []
+  // 检查配置
+  if (!isSet(dark['api']['import'])) {
+    return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ text: ['import', 'feature', 'not configured'] }])
+  }
+})

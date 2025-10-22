@@ -11,23 +11,23 @@
 /**
  * 云纹模具-视图-列表
  */
-fxView['machine']['deployer'](['mould', 'view', 'list', 'main'], function() {
-    // 初始化变量
-    var dark = [
-        // 参数
-        null,
-        // 皮肤
-        'layui'
-    ];
-    dark = fxBase['param']['merge'](dark, arguments);
-    // 检查皮肤
-    if (!isFunction(fxView['machine']['caller'](['mould', 'view', 'list', 'skin', dark[1]]))) {
-        return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ 'text': [dark[1], 'plugin', 'not loaded'] }]);
-    }
-    // 渲染之前
-    fxView['machine']['caller'](['before'], dark, dark[0]);
-    // 执行皮肤
-    fxView['machine']['caller'](['mould', 'view', 'list', 'skin', dark[1]], dark);
-    // 渲染之后
-    fxView['machine']['caller'](['after'], dark, dark[0]);
-});
+fxView['machine']['deployer'](['mould', 'view', 'list', 'main'], function () {
+  // 初始化变量
+  var dark = [
+    // 参数
+    null,
+    // 皮肤
+    'layui',
+  ]
+  dark = fxBase['param']['merge'](dark, arguments)
+  // 检查皮肤
+  if (!isFunction(fxView['machine']['caller'](['mould', 'view', 'list', 'skin', dark[1]]))) {
+    return fxView['machine']['caller'](['mould', 'tool', 'message', 'main'], [{ text: [dark[1], 'plugin', 'not loaded'] }])
+  }
+  // 渲染之前
+  fxView['machine']['caller'](['before'], dark, dark[0])
+  // 执行皮肤
+  fxView['machine']['caller'](['mould', 'view', 'list', 'skin', dark[1]], dark)
+  // 渲染之后
+  fxView['machine']['caller'](['after'], dark, dark[0])
+})
