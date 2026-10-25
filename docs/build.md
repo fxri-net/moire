@@ -50,7 +50,11 @@ pnpm build
 
 ## 验收命令
 
-`pnpm verify` 是唯一的质量门禁，本地与 CI 共用同一条命令，步骤清单只维护在 `scripts/verify.mjs` 里。单独排查时可跑其中一步：
+`pnpm verify` 是唯一的质量门禁，本地与 CI 共用同一条命令，步骤清单只维护在 `scripts/verify.mjs` 里：依赖安装（`--frozen-lockfile`）→ 类型检查 → 代码规范 → 格式校验 → 单元测试 → 构建产物 → 示例类型 → 文档站构建。任一失败即中止，依赖装不上时后续步骤不再执行。
+
+单元测试固定 `TZ=UTC` 运行，避免本地时区影响时间相关断言；文档站构建同时做站内死链检查，文档改错会让门禁变红。没有文档站构建条件的平台可加 `--skip-docs` 裁剪。
+
+单独排查时可跑其中一步：
 
 ```sh
 pnpm typecheck      # 类型检查
@@ -58,6 +62,7 @@ pnpm lint           # 代码规范
 pnpm format:check   # 格式校验
 pnpm test           # 单元测试
 pnpm check:examples # 示例工程的类型检查，验证声明产物可用
+pnpm docs:build     # 文档站构建与死链检查
 ```
 
 ## 文档站

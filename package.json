@@ -15,6 +15,9 @@
     "./*": "./*"
   },
   "packageManager": "pnpm@10.34.4",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "build": "vite build --mode iife && vite build --mode esm && tsc -p tsconfig.build.json && node scripts/manifest.mjs",
     "typecheck": "tsc --noEmit",
