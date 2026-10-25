@@ -1,16 +1,26 @@
 {
   "name": "moire",
-  "version": "0.4.0",
+  "version": "1.0.0-alpha.0",
   "description": "云纹框架",
+  "type": "module",
   "main": "moire.js",
+  "packageManager": "pnpm@10.34.4",
   "scripts": {
-    "merge": "node build/merge.js",
-    "uglifyjs-main": "uglifyjs moire.min.js -m -o moire.min.js",
-    "uglifyjs-plugin": "uglifyjs moire.plugin.min.js -m -o moire.plugin.min.js",
-    "build-main": "npm run merge 1.1 && npm run uglifyjs-main && npm run merge 1.2",
-    "build-plugin": "npm run merge 2.1 && npm run uglifyjs-plugin && npm run merge 2.2",
-    "build-quick": "npm run merge 1.1 && npm run merge 2.1",
-    "build": "npm run build-main && npm run build-plugin"
+    "merge": "node build/merge.cjs",
+    "uglify:main": "uglifyjs moire.min.js -m -o moire.min.js",
+    "uglify:plugin": "uglifyjs moire.plugin.min.js -m -o moire.plugin.min.js",
+    "build:main": "pnpm run merge 1.1 && pnpm run uglify:main && pnpm run merge 1.2",
+    "build:plugin": "pnpm run merge 2.1 && pnpm run uglify:plugin && pnpm run merge 2.2",
+    "build:quick": "pnpm run merge 1.1 && pnpm run merge 2.1",
+    "build": "pnpm run build:main && pnpm run build:plugin",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "verify": "node scripts/verify.mjs"
   },
   "author": {
     "name": "唐启云",
@@ -34,8 +44,25 @@
     "README.md"
   ],
   "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@types/node": "^20.19.0",
+    "@vitest/coverage-v8": "^4.0.0",
+    "eslint": "^9.39.0",
     "glob": "^7.1.7",
-    "uglify-js": "^3.13.10"
+    "globals": "^16.0.0",
+    "jsdom": "^27.0.0",
+    "prettier": "^3.6.0",
+    "terser": "^5.44.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.46.0",
+    "uglify-js": "^3.13.10",
+    "vite": "^7.1.0",
+    "vitest": "^4.0.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }

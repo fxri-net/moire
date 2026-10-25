@@ -6,26 +6,26 @@
 
 ## 基础信息
 
-* 可以接入任意JS项目，内置诸多实用方法，是一款轻量级JS开发辅助框架。
+- 可以接入任意JS项目，内置诸多实用方法，是一款轻量级JS开发辅助框架。
 
 ## 基础部署
 
-~~~
+```
 // 加载基础框架
 <script type="text/javascript" src="./moire/moire.min.js"></script>
 // 加载扩展插件
 <script type="text/javascript" src="./moire/moire.plugin.min.js"></script>
-~~~
+```
 
 ## 基础插件依赖
 
-~~~
+```
 Jquery v1.9及以上
-~~~
+```
 
 ## 扩展插件依赖
 
-~~~
+```
 MD5 0.7.3及以上
 Layui v2.6.4及以上
 Jquery v1.9及以上
@@ -38,21 +38,21 @@ masonry v4.2.2及以上
 Sortable v1.10.2及以上
 Viewer v1.5.0及以上
 LayX v2.5.4及以上
-~~~
+```
 
 ## 打包
 
-~~~
+```
 npm run build
-~~~
+```
 
 ## 打包依赖
 
-~~~
+```
 npm
 glob
 uglify-js
-~~~
+```
 
 ## 项目开发
 

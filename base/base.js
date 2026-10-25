@@ -19,7 +19,7 @@ var fxApp = {
     /**
      * 版本
      */
-    version: 'v0.4',
+    version: '1.0.0-alpha.0',
   },
 }
 fxApp['env']['script'] = document.getElementsByTagName('script')

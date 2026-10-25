@@ -1,0 +1,15 @@
+# 统一行尾为 LF，避免跨平台差异
+* text=auto eol=lf
+
+# 二进制文件不做行尾转换
+*.zip binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# 构建产物视为生成文件
+*.min.js linguist-generated=true
