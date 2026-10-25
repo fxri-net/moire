@@ -11,6 +11,9 @@ export type { Locale, Messages } from './messages'
 /** 插值参数 */
 export type Interpolation = Record<string, string | number>
 
+/** 取词条函数 */
+export type Translate = (key: string, params?: Interpolation) => string
+
 /** 国际化选项 */
 export interface I18nOptions {
   /** 初始语言，缺省取文档或浏览器语言 */
@@ -24,7 +27,7 @@ export interface I18n {
   /** 当前语言 */
   readonly locale: string
   /** 取词条并按名插值，未命中时回退到第一语言再回退到键名 */
-  t(key: string, params?: Interpolation): string
+  t: Translate
   /** 组合片段，分隔符随语言变化 */
   join(parts: readonly string[]): string
   /** 切换语言 */
@@ -47,7 +50,7 @@ export function createI18n(options: I18nOptions = {}): I18n {
     dictionary[locale] = { ...dictionary[locale], ...extra }
   }
   let current = normalizeLocale(options.locale ?? detectLocale())
-  const translate = (key: string, params?: Interpolation): string => {
+  const translate: Translate = (key, params) => {
     const text = dictionary[current]?.[key] ?? dictionary[locales[0]]?.[key] ?? key
     return interpolate(text, params)
   }

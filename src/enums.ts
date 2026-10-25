@@ -168,19 +168,129 @@ export const Variant = Object.freeze({
 export type Variant = (typeof Variant)[keyof typeof Variant]
 
 /**
+ * 字段阶段
+ * 七步生命周期的固定顺序，前四步一次性，后三步可重复
+ */
+export const FieldStage = Object.freeze({
+  /** 初始化：归一描述与文案 */
+  Init: 'init',
+  /** 数据：整理候选数据 */
+  Data: 'data',
+  /** 部署：生成包装与控件 */
+  Deploy: 'deploy',
+  /** 完成：注册交互与增强 */
+  Done: 'done',
+  /** 输出：读取取值并按规则校验 */
+  Echo: 'echo',
+  /** 重置：写回初始值 */
+  Reset: 'reset',
+  /** 清理：清空控件 */
+  Clean: 'clean',
+} as const)
+
+/** 字段阶段 */
+export type FieldStage = (typeof FieldStage)[keyof typeof FieldStage]
+
+/**
+ * 字段类型
+ * 每个成员对应一个内置渲染器，键名与取值同名便于阅读
+ */
+export const FieldKind = Object.freeze({
+  /** 复选框 */
+  Checkbox: 'checkbox',
+  /** 日期选择 */
+  Date: 'date',
+  /** 日期文本 */
+  DateText: 'dateText',
+  /** 文件上传 */
+  File: 'file',
+  /** 隐藏域 */
+  Hidden: 'hidden',
+  /** 超文本展示 */
+  Html: 'html',
+  /** 单行输入 */
+  Input: 'input',
+  /** 密码输入 */
+  Password: 'password',
+  /** 富文本编辑 */
+  RichText: 'richtext',
+  /** 单选下拉 */
+  Select: 'select',
+  /** 已选展示 */
+  Selected: 'selected',
+  /** 多选下拉 */
+  Selects: 'selects',
+  /** 开关 */
+  Switch: 'switch',
+  /** 表格行集 */
+  Table: 'table',
+  /** 文本展示 */
+  Text: 'text',
+  /** 多行输入 */
+  Textarea: 'textarea',
+} as const)
+
+/** 字段类型 */
+export type FieldKind = (typeof FieldKind)[keyof typeof FieldKind]
+
+/**
+ * 规则类型
+ * 决定校验采用哪一种判定口径
+ */
+export const RuleKind = Object.freeze({
+  /** 长度：字符串长度、数组长度或对象键数 */
+  Length: 'length',
+  /** 正则：按给定表达式匹配 */
+  Pattern: 'pattern',
+  /** 范围：数值区间 */
+  Range: 'range',
+  /** 必填：不允许空白与空容器 */
+  Required: 'required',
+  /** 类型：取值形态 */
+  Type: 'type',
+} as const)
+
+/** 规则类型 */
+export type RuleKind = (typeof RuleKind)[keyof typeof RuleKind]
+
+/**
+ * 取值类型
+ * 校验与归一使用的形态口径
+ */
+export const ValueKind = Object.freeze({
+  /** 数组 */
+  Array: 'array',
+  /** 布尔值 */
+  Boolean: 'boolean',
+  /** 数字 */
+  Number: 'number',
+  /** 对象 */
+  Object: 'object',
+  /** 字符串 */
+  String: 'string',
+} as const)
+
+/** 取值类型 */
+export type ValueKind = (typeof ValueKind)[keyof typeof ValueKind]
+
+/**
  * 枚举总表
  * 供 window.moire.enum 统一暴露，禁止逐项再挂全局
  */
 export const enums = Object.freeze({
+  FieldKind,
+  FieldStage,
   JsonOp,
   MergeBlankAs,
   MergeDirection,
   MergeMissing,
   MergeNormalize,
   PadSide,
+  RuleKind,
   SelectAction,
   TimeUnit,
   UrlMode,
+  ValueKind,
   Variant,
 })
 

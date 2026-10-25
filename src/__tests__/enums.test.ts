@@ -27,9 +27,24 @@ describe('枚举集合', () => {
   })
 
   it('总表覆盖全部枚举且键名不重复', () => {
-    expect(Object.keys(enums)).toHaveLength(10)
-    expect(new Set(Object.keys(enums)).size).toBe(10)
-    expect(Object.keys(enums)).toEqual([...Object.keys(enums)].sort())
+    const names = [
+      'FieldKind',
+      'FieldStage',
+      'JsonOp',
+      'MergeBlankAs',
+      'MergeDirection',
+      'MergeMissing',
+      'MergeNormalize',
+      'PadSide',
+      'RuleKind',
+      'SelectAction',
+      'TimeUnit',
+      'UrlMode',
+      'ValueKind',
+      'Variant',
+    ]
+    expect(Object.keys(enums)).toEqual(names)
+    expect(new Set(names).size).toBe(names.length)
   })
 })
 
