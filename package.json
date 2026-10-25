@@ -1,6 +1,6 @@
 {
   "name": "moire",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "云纹框架",
   "type": "module",
   "main": "dist/moire.min.js",
