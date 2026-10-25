@@ -1,4 +1,9 @@
 /**
- * 内核：全局命名空间、插件注册与生命周期
+ * 内核入口
  */
-export {}
+
+export * from './global'
+export * from './kernel'
+export * from './notifier'
+export * from './registry'
+export * from './types'

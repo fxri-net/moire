@@ -19,7 +19,8 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['src/**/index.ts'],
+      // 单测集中在 src/__tests__，不计入覆盖率分母
+      exclude: ['src/**/index.ts', 'src/**/__tests__/**'],
     },
   },
 })

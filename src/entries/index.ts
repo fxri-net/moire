@@ -1,4 +1,10 @@
 /**
- * 入口：对外暴露的全局命名空间
+ * 浏览器入口
+ * 装配内核并挂到全局，业务侧统一从 window.moire 进入
  */
-export {}
+
+import { createKernel } from '../kernel'
+import { mountGlobal } from '../kernel/global'
+import { version } from '../version'
+
+mountGlobal(createKernel({ version }))

@@ -1,4 +1,12 @@
 /**
- * 工具函数：类型判定、对象处理与 DOM 辅助
+ * 工具函数
+ * 按领域拆分模块，统一从入口导出
  */
-export {}
+
+export * from './dom'
+export * from './file'
+export * from './object'
+export * from './text'
+export * from './time'
+export * from './type'
+export * from './url'
