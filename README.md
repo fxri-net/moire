@@ -25,6 +25,14 @@
 </script>
 ```
 
+现代构建工具可改用 ESM 产物，挂载与启动交由接入方决定：
+
+```
+import { moire } from 'moire'
+
+moire.start()
+```
+
 ## 可选依赖
 
 界面增强按需探测，缺失时自动降级，不阻断核心能力：
@@ -43,7 +51,32 @@ TinyMCE
 pnpm build
 ```
 
-产物输出到 `dist/moire.min.js`（单个 IIFE，terser 压缩）。
+产物全部输出到 `dist`：
+
+| 产物              | 形态                       | 用途                                 |
+| ----------------- | -------------------------- | ------------------------------------ |
+| `moire.min.js`    | IIFE，terser 压缩          | `script` 直接引入，自动挂载并启动    |
+| `moire.esm.js`    | ESM                        | 现代构建引入，挂载与启动由接入方决定 |
+| `types/**/*.d.ts` | 类型声明                   | 编辑器提示与类型检查                 |
+| `manifest.json`   | 版本、构建时间、产物校验和 | 校验产物完整性                       |
+
+## 示例
+
+`examples` 下提供三个可直接打开的最小示例，均只依赖 `dist/moire.min.js`，不要求界面库：
+
+- `examples/form/index.html`：声明式建表、规则校验与回显
+- `examples/list/index.html`：列表装配（排序、分页、选择）与渲染
+- `examples/plugin/index.html`：自定义插件，演示依赖注入与通知订阅
+
+```
+pnpm check:examples
+```
+
+单独对示例做一次类型检查，确认 `dist` 中的声明产物可用。
+
+## 迁移
+
+从旧版本升级请参阅 [迁移对照](docs/migration.md)，其中逐条列出全局命名空间、部署器与访问器、合并模式码、其余数字码与属性前缀的对应关系及已知差异。
 
 ## 验收
 

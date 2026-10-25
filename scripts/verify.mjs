@@ -11,6 +11,7 @@ const steps = [
   ['格式校验', 'format:check'],
   ['单元测试', 'test'],
   ['构建产物', 'build'],
+  ['示例类型', 'check:examples'],
 ]
 
 for (const [title, script] of steps) {

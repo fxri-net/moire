@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>moire 插件示例</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 32px;
+        font:
+          14px/1.6 -apple-system,
+          'Segoe UI',
+          'Microsoft YaHei',
+          sans-serif;
+        color: #1f2328;
+        background: #f6f8fa;
+      }
+      main {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid #d0d7de;
+        border-radius: 8px;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 18px;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      button {
+        padding: 6px 16px;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        background: #f6f8fa;
+        cursor: pointer;
+      }
+      pre {
+        margin: 16px 0 0;
+        padding: 12px;
+        min-height: 24px;
+        overflow: auto;
+        background: #f6f8fa;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>插件示例</h1>
+      <div class="actions">
+        <button id="install" type="button">装配插件</button>
+        <button id="notify" type="button">发出通知</button>
+      </div>
+      <div id="app"></div>
+      <pre id="log"></pre>
+    </main>
+    <script src="../../dist/moire.min.js"></script>
+    <script src="./plugin.js"></script>
+  </body>
+</html>

@@ -76,4 +76,11 @@ export default tseslint.config(
       globals: globals.node,
     },
   },
+  {
+    // 示例页是浏览器脚本，按浏览器环境提供全局变量
+    files: ['examples/**/*.js'],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
 )

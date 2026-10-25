@@ -4,7 +4,7 @@
  */
 
 import '../entries/index'
-import type { Moire } from '../entries/index'
+import type { Moire } from '../entries/app'
 
 /**
  * 取已挂载的框架实例

@@ -4,9 +4,19 @@
   "description": "云纹框架",
   "type": "module",
   "main": "dist/moire.min.js",
+  "module": "dist/moire.esm.js",
+  "types": "dist/types/entries/esm.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/entries/esm.d.ts",
+      "import": "./dist/moire.esm.js",
+      "default": "./dist/moire.min.js"
+    },
+    "./*": "./*"
+  },
   "packageManager": "pnpm@10.34.4",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --mode iife && vite build --mode esm && tsc -p tsconfig.build.json && node scripts/manifest.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -14,6 +24,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "check:examples": "tsc -p examples/tsconfig.json",
     "verify": "node scripts/verify.mjs"
   },
   "author": {
