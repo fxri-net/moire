@@ -55,6 +55,14 @@ export const messages: Record<Locale, Messages> = {
     'field.upload': '选择文件',
     /** 字段类型未注册 */
     'field.unknown': '未注册的字段类型：{kind}',
+    /** 列表空态 */
+    'list.empty': '暂无数据',
+    /** 列表选择列表头 */
+    'list.column.selection': '选择',
+    /** 列表页码 */
+    'list.page': '第 {page} / {pages} 页',
+    /** 列表总条数 */
+    'list.total': '共 {total} 条',
     /** 必填未填 */
     'schema.required': '{label}不能为空',
     /** 形态不符 */
@@ -87,6 +95,28 @@ export const messages: Record<Locale, Messages> = {
     'schema.value.object': '对象',
     /** 取值类型：字符串 */
     'schema.value.string': '字符串',
+    /** 删除确认 */
+    'tool.confirm.delete': '是否确认删除？',
+    /** 导出确认 */
+    'tool.confirm.export': '共 {total} 条数据，导出可能耗时较长，是否继续？',
+    /** 删除成功 */
+    'tool.delete.done': '删除成功',
+    /** 删除地址缺失 */
+    'tool.delete.missing': '未配置删除地址',
+    /** 下载地址缺失 */
+    'tool.download.missing': '未配置下载地址',
+    /** 导出地址缺失 */
+    'tool.export.missing': '未配置导出地址',
+    /** 导入地址缺失 */
+    'tool.import.missing': '未配置导入地址',
+    /** 消息内容为空 */
+    'tool.message.empty': '消息内容不能为空',
+    /** 未选择数据 */
+    'tool.select.empty': '请先选择数据',
+    /** 跳转地址缺失 */
+    'tool.window.missing': '未配置跳转地址',
+    /** 视图缺少字段能力 */
+    'view.fields': '视图渲染需要先装配字段能力',
   },
   'en-us': {
     /** 组合分隔符：英文以空格分词 */
@@ -129,6 +159,14 @@ export const messages: Record<Locale, Messages> = {
     'field.upload': 'Choose file',
     /** 字段类型未注册 */
     'field.unknown': 'Unknown field kind: {kind}',
+    /** 列表空态 */
+    'list.empty': 'No data',
+    /** 列表选择列表头 */
+    'list.column.selection': 'Select',
+    /** 列表页码 */
+    'list.page': 'Page {page} of {pages}',
+    /** 列表总条数 */
+    'list.total': '{total} in total',
     /** 必填未填 */
     'schema.required': '{label} is required',
     /** 形态不符 */
@@ -161,5 +199,27 @@ export const messages: Record<Locale, Messages> = {
     'schema.value.object': 'an object',
     /** 取值类型：字符串 */
     'schema.value.string': 'a string',
+    /** 删除确认 */
+    'tool.confirm.delete': 'Confirm deletion?',
+    /** 导出确认 */
+    'tool.confirm.export': '{total} rows will be exported and may take a while. Continue?',
+    /** 删除成功 */
+    'tool.delete.done': 'Deleted',
+    /** 删除地址缺失 */
+    'tool.delete.missing': 'Delete endpoint is not configured',
+    /** 下载地址缺失 */
+    'tool.download.missing': 'Download endpoint is not configured',
+    /** 导出地址缺失 */
+    'tool.export.missing': 'Export endpoint is not configured',
+    /** 导入地址缺失 */
+    'tool.import.missing': 'Import endpoint is not configured',
+    /** 消息内容为空 */
+    'tool.message.empty': 'Message cannot be empty',
+    /** 未选择数据 */
+    'tool.select.empty': 'Select rows first',
+    /** 跳转地址缺失 */
+    'tool.window.missing': 'Target address is not configured',
+    /** 视图缺少字段能力 */
+    'view.fields': 'Rendering views requires the fields capability',
   },
 }

@@ -274,6 +274,90 @@ export const ValueKind = Object.freeze({
 export type ValueKind = (typeof ValueKind)[keyof typeof ValueKind]
 
 /**
+ * 视图类型
+ * 决定装配器面向表单还是列表
+ */
+export const ViewKind = Object.freeze({
+  /** 表单：字段集合的编辑形态 */
+  Form: 'form',
+  /** 列表：数据行的浏览形态 */
+  List: 'list',
+} as const)
+
+/** 视图类型 */
+export type ViewKind = (typeof ViewKind)[keyof typeof ViewKind]
+
+/**
+ * 选择模式
+ * 决定列表是否提供行选择以及可选数量
+ */
+export const SelectionMode = Object.freeze({
+  /** 多选 */
+  Multiple: 'multiple',
+  /** 不选：只读浏览 */
+  None: 'none',
+  /** 单选 */
+  Single: 'single',
+} as const)
+
+/** 选择模式 */
+export type SelectionMode = (typeof SelectionMode)[keyof typeof SelectionMode]
+
+/**
+ * 排序方向
+ * 决定字段取值的比较顺序
+ */
+export const OrderDirection = Object.freeze({
+  /** 升序 */
+  Asc: 'asc',
+  /** 降序 */
+  Desc: 'desc',
+} as const)
+
+/** 排序方向 */
+export type OrderDirection = (typeof OrderDirection)[keyof typeof OrderDirection]
+
+/**
+ * 工具操作
+ * 覆盖旧工具集的全部动作，替代散落的字符串事件名
+ */
+export const ToolAction = Object.freeze({
+  /** 删除：提交主键集合 */
+  Delete: 'delete',
+  /** 下载：打开下载地址 */
+  Download: 'download',
+  /** 导出：拼装全量查询地址 */
+  Export: 'export',
+  /** 导入：打开导入入口 */
+  Import: 'import',
+  /** 消息：按变体发出通知 */
+  Message: 'message',
+  /** 窗口：打开指定地址 */
+  Window: 'window',
+} as const)
+
+/** 工具操作 */
+export type ToolAction = (typeof ToolAction)[keyof typeof ToolAction]
+
+/**
+ * 工具结果
+ * 以结构化结果区分完成、失败、取消与跳过，禁止用 false 兼表多种语义
+ */
+export const ToolOutcome = Object.freeze({
+  /** 取消：用户在确认环节放弃 */
+  Cancelled: 'cancelled',
+  /** 完成：操作已执行 */
+  Done: 'done',
+  /** 失败：请求失败或缺少必要配置 */
+  Failed: 'failed',
+  /** 跳过：前置条件不成立，未发起操作 */
+  Skipped: 'skipped',
+} as const)
+
+/** 工具结果 */
+export type ToolOutcome = (typeof ToolOutcome)[keyof typeof ToolOutcome]
+
+/**
  * 枚举总表
  * 供 window.moire.enum 统一暴露，禁止逐项再挂全局
  */
@@ -285,13 +369,18 @@ export const enums = Object.freeze({
   MergeDirection,
   MergeMissing,
   MergeNormalize,
+  OrderDirection,
   PadSide,
   RuleKind,
   SelectAction,
+  SelectionMode,
   TimeUnit,
+  ToolAction,
+  ToolOutcome,
   UrlMode,
   ValueKind,
   Variant,
+  ViewKind,
 })
 
 /**

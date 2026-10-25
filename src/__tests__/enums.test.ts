@@ -35,13 +35,18 @@ describe('枚举集合', () => {
       'MergeDirection',
       'MergeMissing',
       'MergeNormalize',
+      'OrderDirection',
       'PadSide',
       'RuleKind',
       'SelectAction',
+      'SelectionMode',
       'TimeUnit',
+      'ToolAction',
+      'ToolOutcome',
       'UrlMode',
       'ValueKind',
       'Variant',
+      'ViewKind',
     ]
     expect(Object.keys(enums)).toEqual(names)
     expect(new Set(names).size).toBe(names.length)

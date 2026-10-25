@@ -3,7 +3,7 @@
  * 表单与列表的统一描述，fields 与 views 共用，不依赖任何界面库
  */
 
-import type { FieldKind, RuleKind, SelectAction, ValueKind } from '../enums'
+import type { FieldKind, RuleKind, SelectAction, SelectionMode, ValueKind } from '../enums'
 
 /** 候选项 */
 export interface FieldChoice {
@@ -149,6 +149,10 @@ export interface ListSchema {
   rows?: readonly RowData[]
   /** 单页条数 */
   limit?: number
+  /** 选择模式，缺省不提供行选择 */
+  selection?: SelectionMode
+  /** 行主键字段名，缺省取 id */
+  key?: string
 }
 
 /** 校验问题 */
