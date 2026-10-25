@@ -198,6 +198,8 @@ fieldRead(app, 'user.base.token', '.')
 | `data-moire-row-key`    | 行元素     | 行主键         |
 | `data-moire-select-all` | 全选控件   | 整表全选       |
 
+1.0 不再读取页面上的任何业务前缀，旧 `fxy-*` 的职责已分别落到 `option.actions`、业务事件委托与渲染器自定义；业务自有标记统一用 `fx-*`，框架既不生成也不读取。
+
 ## 六、迁移检查清单
 
 - [ ] 页面只引 `moire.min.js`，删除对旧子文件与 `moire.plugin.min.js` 的引用。
