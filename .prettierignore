@@ -5,5 +5,7 @@
 # 工具产物
 coverage/
 dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
 node_modules/
 pnpm-lock.yaml

@@ -1,5 +1,4 @@
-从 0.4 升级到 1.0
-=================
+# 从 0.4 升级到 1.0
 
 1.0 是破坏性版本，迁移成本集中在四处：
 
@@ -8,28 +7,22 @@
 - **调用方式**：链式铺数据的部署器、按链条取值的访问器，改为 schema 声明加字段/视图实例。
 - **编码改枚举**：`'1.1.2'`、`'1.2.4'` 这类数字模式码与 `fxy-type="1"` 这类数字属性，全部改为具名枚举成员。
 
+::: tip 本页的枚举写法
+下文出现的枚举成员（`MergeDirection`、`UrlMode`、`PadSide`、`SelectAction` 等）都取自 `moire.enum`，为聚焦对照关系省略了前缀。成员全表见[枚举字典](./enums)。
+:::
+
 ## 产物与引用
 
-| 产物                   | 形态                       | 用途                                                         |
-| ---------------------- | -------------------------- | ------------------------------------------------------------ |
-| `dist/moire.min.js`    | IIFE，terser 压缩          | 传统页面直接 `<script>` 引入，自动挂载 `window.moire` 并启动 |
-| `dist/moire.esm.js`    | ESM                        | 现代构建工具引入，挂载与启动由接入方决定                     |
-| `dist/types/**/*.d.ts` | 类型声明                   | 编辑器提示与类型检查                                         |
-| `dist/manifest.json`   | 版本、构建时间、产物校验和 | 接入方校验产物完整性                                         |
+产物形态与引入方式见[构建产物](./build)，此处只列与迁移直接相关的差异：
 
-```html
-<!-- 传统页面 -->
-<script src="./moire/moire.min.js"></script>
-```
+| 产物                   | 与 0.4 的差异                                    |
+| ---------------------- | ------------------------------------------------ |
+| `dist/moire.min.js`    | 单个 IIFE 产物，加载即挂载 `window.moire` 并启动 |
+| `dist/moire.esm.js`    | 新增 ESM 入口，不写全局、不自动启动              |
+| `dist/types/**/*.d.ts` | 新增类型声明                                     |
+| `dist/manifest.json`   | 新增产物清单，登记版本、构建时间与逐文件校验和   |
 
-```js
-// 现代构建
-import { moire } from 'moire'
-
-moire.start()
-```
-
-`moire.esm.js` 不自动写入全局；需要全局可用时由接入方自行赋值，避免在模块环境里产生隐式副作用。
+旧版入口脚本与 `moire.plugin.min.js` 一并退场，页面只需引一个运行时产物。
 
 ## 一、全局命名空间收敛
 
@@ -205,23 +198,7 @@ fieldRead(app, 'user.base.token', '.')
 | `data-moire-row-key`    | 行元素     | 行主键         |
 | `data-moire-select-all` | 全选控件   | 整表全选       |
 
-## 六、示例与验收
-
-仓库内提供三个可直接打开的最小示例，均以 `dist/moire.min.js` 为唯一依赖，不要求 Layui：
-
-- `examples/form/index.html`：声明式建表、规则校验与回显。
-- `examples/list/index.html`：列表装配（排序、分页、选择）与渲染。
-- `examples/plugin/index.html`：自定义插件，演示依赖注入、订阅通知与装配后注册。
-
-```bash
-# 全量验收：类型检查、代码检查、格式检查、单测、构建
-pnpm verify
-
-# 示例的类型检查：验证 dist 中的声明产物可用
-pnpm check:examples
-```
-
-## 七、迁移检查清单
+## 六、迁移检查清单
 
 - [ ] 页面只引 `moire.min.js`，删除对旧子文件与 `moire.plugin.min.js` 的引用。
 - [ ] 旧五个全局命名空间的引用全部改到 `window.moire` 下的对应能力。
@@ -230,3 +207,5 @@ pnpm check:examples
 - [ ] 页面中 `fxy-*` 属性清理完毕；选择动作改走 `option.actions`。
 - [ ] 旧 `deployer` / `caller` 的调用点改为 `fieldWrite` + `mergeParams` 与 `fieldRead`。
 - [ ] 跑通 `pnpm verify` 与业务侧自身的用例。
+
+示例工程与验收命令见[快速上手](./getting-started)。

@@ -1,100 +1,76 @@
-云纹框架 V1.0
-===============
+<p align="center">
+  <img src="./docs/public/logo.svg" width="128" alt="云纹框架">
+</p>
 
-> 运行环境要求主流浏览器
-> 不兼容 IE
+# 云纹框架
 
-## 基础信息
+[![CI](https://github.com/fxri-net/moire/actions/workflows/ci.yml/badge.svg)](https://github.com/fxri-net/moire/actions/workflows/ci.yml)
+[![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen)](https://fxri-net.github.io/moire/getting-started.html)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENSE)
 
-- 可以接入任意 JS 项目，内置诸多实用方法，是一款轻量级 JS 开发辅助框架。
-- 全部能力收敛到单一全局对象 `window.moire`，不再散落多个全局命名空间。
+轻量级 JS 前端辅助框架：可以接入任意 JS 项目，内置枚举、工具、国际化、请求、字段与视图等常用能力。
 
-## 基础部署
+> 国内网络建议优先 [Gitee 镜像](https://gitee.com/fxri/moire)（与 GitHub 同源同步）；问题反馈走 [GitHub Issues](https://github.com/fxri-net/moire/issues) 或 [Gitee Issues](https://gitee.com/fxri/moire/issues)。
 
+> 定位：把各业务项目里反复重写的辅助代码收敛成一套可复用的能力。全部能力挂在单一实例 `window.moire` 上，按需取用；界面增强经适配层与业务解耦，缺失 UI 库时自动降级，核心能力不受影响。不绑定框架与构建工具，主流浏览器直接可用，不兼容 IE。
+
+## ✨ 能力矩阵
+
+| 能力     | 用途                                                              | 文档                                                                  |
+| -------- | ----------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 枚举字典 | 合并模式、地址参数、时长单位、补位方向、批量选择等一律用具名 code | [枚举字典](https://fxri-net.github.io/moire/enums.html)               |
+| 工具函数 | 类型判断、地址编解码、字符串补位、按路径取值等常用判断与转换      | [API 参考](https://fxri-net.github.io/moire/api/utils.html)           |
+| 国际化   | 词条注册、变量插值、语言检测与本地持久化                          | [API 参考](https://fxri-net.github.io/moire/api/i18n.html)            |
+| 请求封装 | 响应归一、业务码判定、错误回调，网络层与业务层失败分开处理        | [API 参考](https://fxri-net.github.io/moire/api/http.html)            |
+| 字段声明 | 声明式建表、规则校验、回显与重置                                  | [API 参考](https://fxri-net.github.io/moire/api/fields.html)          |
+| 视图装配 | 列表排序、分页、批量选择与容器化渲染                              | [API 参考](https://fxri-net.github.io/moire/api/views.html)           |
+| 工具集   | 删除、导出、导入等常见动作，统一返回结果语义                      | [API 参考](https://fxri-net.github.io/moire/api/tools.html)           |
+| 界面适配 | layui 单一适配实现，覆盖日期、上传、富文本、多选、排序与浮层层级  | [与 layui 适配](https://fxri-net.github.io/moire/adapters/layui.html) |
+
+## 📚 文档
+
+| 文档                                                                  | 适合谁                             |
+| --------------------------------------------------------------------- | ---------------------------------- |
+| [快速上手](https://fxri-net.github.io/moire/getting-started.html)     | 第一次接触，想 30 秒跑起来         |
+| [架构总览](https://fxri-net.github.io/moire/architecture.html)        | 了解微内核、插件装配与适配层的分工 |
+| [枚举字典](https://fxri-net.github.io/moire/enums.html)               | 查具名 code 与取值                 |
+| [API 参考](https://fxri-net.github.io/moire/api/)                     | 查实例上的方法与选项               |
+| [与 layui 适配](https://fxri-net.github.io/moire/adapters/layui.html) | 搞清界面增强的生效条件与降级行为   |
+| [构建产物](https://fxri-net.github.io/moire/build.html)               | 查四类产物、构建链与验收命令       |
+| [分发与接入](https://fxri-net.github.io/moire/distribution.html)      | 用版本标签把产物接入业务项目       |
+| [发版流程](https://fxri-net.github.io/moire/release.html)             | 维护者发版与撰写发布说明           |
+| [从 0.4 升级](https://fxri-net.github.io/moire/migration.html)        | 旧项目迁移的逐项对照               |
+| [更新日志](https://fxri-net.github.io/moire/changelog.html)           | 查各版本变更内容                   |
+| [FAQ](https://fxri-net.github.io/moire/faq.html)                      | 遇到问题先来这里找                 |
+| [完整文档站](https://fxri-net.github.io/moire/)                       | 在线阅读体验                       |
+
+## 📦 接入
+
+```html
+<!-- 直接引入产物：自动挂载到 window.moire 并启动 -->
+<script src="./moire/moire.min.js"></script>
 ```
-// 加载框架，产物已内置全部能力
-<script type="text/javascript" src="./moire/moire.min.js"></script>
-```
 
-```
-<script type="text/javascript">
-  // 枚举、工具函数、国际化、请求、字段、视图与工具能力都在同一实例上
-  moire.utils.isString('a')
-  const list = moire.views.list.assemble({ columns: [{ name: 'name', title: '名称' }] })
-  moire.views.list.render(list, document.querySelector('#app'))
-</script>
-```
-
-现代构建工具可改用 ESM 产物，挂载与启动交由接入方决定：
-
-```
+```js
+// 现代构建工具：挂载与启动交由接入方决定
 import { moire } from 'moire'
 
 moire.start()
 ```
 
-## 可选依赖
+产物获取方式见[分发与接入](https://fxri-net.github.io/moire/distribution.html)，可选 UI 依赖与缺失时的降级规则见[与 layui 适配](https://fxri-net.github.io/moire/adapters/layui.html)。
 
-界面增强按需探测，缺失时自动降级，不阻断核心能力：
+## 🧩 示例
 
-```
-Layui v2.6.4及以上
-Jquery v1.9及以上
-LayX v2.5.4及以上
-Sortable v1.10.2及以上
-TinyMCE
-```
+仓库 `examples` 下提供表单、列表与自定义插件三个最小示例，均只依赖产物、不要求界面库，说明见[快速上手](https://fxri-net.github.io/moire/getting-started.html)。
 
-## 打包
+## ⚙️ 环境要求
 
-```
-pnpm build
-```
+- 运行：主流浏览器，不兼容 IE
+- 可选界面库：layui ≥ 2.6.4、jQuery ≥ 1.9、LayX ≥ 2.5.4、Sortable ≥ 1.10.2、TinyMCE（缺失时自动降级）
+- 构建：Node.js ≥ 20.19.0（详见[构建产物](https://fxri-net.github.io/moire/build.html)）
 
-产物全部输出到 `dist`：
-
-| 产物              | 形态                       | 用途                                 |
-| ----------------- | -------------------------- | ------------------------------------ |
-| `moire.min.js`    | IIFE，terser 压缩          | `script` 直接引入，自动挂载并启动    |
-| `moire.esm.js`    | ESM                        | 现代构建引入，挂载与启动由接入方决定 |
-| `types/**/*.d.ts` | 类型声明                   | 编辑器提示与类型检查                 |
-| `manifest.json`   | 版本、构建时间、产物校验和 | 校验产物完整性                       |
-
-## 分发与接入
-
-产物只从 `dist` 分支的版本标签交付，业务项目用 `git subtree add` / `pull` 按标签获取，不再携带源码副本与 `.git` 压缩包；端点不可达时退回产物包加校验和。命令、校验与发布顺序见 [分发与接入](docs/distribution.md)。
-
-## 示例
-
-`examples` 下提供三个可直接打开的最小示例，均只依赖 `dist/moire.min.js`，不要求界面库：
-
-- `examples/form/index.html`：声明式建表、规则校验与回显
-- `examples/list/index.html`：列表装配（排序、分页、选择）与渲染
-- `examples/plugin/index.html`：自定义插件，演示依赖注入与通知订阅
-
-```
-pnpm check:examples
-```
-
-单独对示例做一次类型检查，确认 `dist` 中的声明产物可用。
-
-## 迁移
-
-从旧版本升级请参阅 [迁移对照](docs/migration.md)，其中逐条列出全局命名空间、部署器与访问器、合并模式码、其余数字码与属性前缀的对应关系及已知差异。
-
-## 验收
-
-```
-pnpm verify
-```
-
-依次执行类型检查、代码检查、格式检查、单测与构建，与 CI 同源。
-
-## 项目开发
-
-请参阅 [云纹框架](https://gitee.com/fxri/moire)。
-
-## 版权信息
+## 📄 版权信息
 
 作者：唐启云 <tqy@fxri.net>
 
@@ -102,7 +78,7 @@ pnpm verify
 
 版权：Copyright © 2017-2026 唐启云. All rights reserved.
 
-网站：[方弦研究信息网](https://www.fxri.net)
+网站：[方弦研究信息网](https://fxri.net:444/)
 
 协议：[Apache License 2.0](./LICENSE)
 

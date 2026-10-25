@@ -13,7 +13,8 @@ const uiSubModules = uiModules.map((name) => `${name}/**`)
 
 export default tseslint.config(
   {
-    ignores: ['node_modules/**', 'coverage/**', 'dist/**', '.tasks/**'],
+    // 文档站构建产物与缓存不参与检查
+    ignores: ['node_modules/**', 'coverage/**', 'dist/**', 'docs/.vitepress/**', '.tasks/**'],
   },
   js.configs.recommended,
   {
