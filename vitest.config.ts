@@ -1,5 +1,9 @@
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { defineConfig } from 'vitest/config'
+
+/** 包信息，版本号在测试期注入源码 */
+const pkg = JSON.parse(readFileSync(resolve(import.meta.dirname, 'package.json'), 'utf8')) as { version: string }
 
 /**
  * 测试配置
@@ -10,6 +14,9 @@ export default defineConfig({
     alias: {
       '@': resolve(import.meta.dirname, 'src'),
     },
+  },
+  define: {
+    __MOIRE_VERSION__: JSON.stringify(pkg.version),
   },
   test: {
     environment: 'jsdom',

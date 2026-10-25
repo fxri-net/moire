@@ -1,5 +1,9 @@
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
+
+/** 包信息，版本号在构建期注入源码 */
+const pkg = JSON.parse(readFileSync(resolve(import.meta.dirname, 'package.json'), 'utf8')) as { version: string }
 
 /**
  * 构建配置
@@ -11,8 +15,10 @@ export default defineConfig({
       '@': resolve(import.meta.dirname, 'src'),
     },
   },
+  define: {
+    __MOIRE_VERSION__: JSON.stringify(pkg.version),
+  },
   build: {
-    // 输出目录在入口切换前不接管根目录产物
     outDir: 'dist',
     emptyOutDir: true,
     lib: {

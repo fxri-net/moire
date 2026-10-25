@@ -2,13 +2,6 @@
 .tasks/
 .agents/
 
-# 旧目录在入口切换前不参与格式化，第 5 批切换后随代码一并移除
-base/
-view/
-moire.js
-moire.plugin.min.js
-*.min.js
-
 # 工具产物
 coverage/
 dist/

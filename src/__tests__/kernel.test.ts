@@ -103,6 +103,19 @@ describe('内核装配', () => {
     kernel.dispose()
     expect(log).toEqual(['dispose:b', 'dispose:a'])
   })
+
+  it('启动后注册的插件立即装配', () => {
+    const log: string[] = []
+    const kernel = createKernel().use(plugin('a', log)).start()
+    kernel.use(plugin('b', log, ['a']))
+    expect(log).toEqual(['setup:a', 'setup:b'])
+  })
+
+  it('启动后注册缺依赖即报错', () => {
+    const log: string[] = []
+    const kernel = createKernel().start()
+    expect(() => kernel.use(plugin('a', log, ['ghost']))).toThrow('插件 a 依赖的 ghost 未注册')
+  })
 })
 
 describe('内核上下文', () => {

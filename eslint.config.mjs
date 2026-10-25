@@ -2,18 +2,18 @@ import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-/** 旧代码目录在第 5 批入口切换前不参与检查 */
-const legacy = ['base/**', 'view/**', 'build/**', 'moire.js', '*.min.js']
-
 /** 界面库全局变量，只允许在适配层出现 */
 const uiGlobals = ['$', 'jQuery', 'layui', 'layx', 'Sortable', 'tinymce']
 
 /** 界面库模块，只允许在适配层引入 */
-const uiModules = ['jquery', 'layui*', 'layx*', 'sortablejs*', 'tinymce*']
+const uiModules = ['jquery', 'layui', 'layx', 'sortablejs', 'tinymce']
+
+/** 界面库模块的子路径，只允许在适配层引入 */
+const uiSubModules = uiModules.map((name) => `${name}/**`)
 
 export default tseslint.config(
   {
-    ignores: [...legacy, 'node_modules/**', 'coverage/**', 'dist/**', '.tasks/**'],
+    ignores: ['node_modules/**', 'coverage/**', 'dist/**', '.tasks/**'],
   },
   js.configs.recommended,
   {
@@ -44,13 +44,14 @@ export default tseslint.config(
       '@typescript-eslint/no-restricted-imports': [
         'error',
         {
+          paths: uiModules.map((name) => ({ name, message: '界面库统一经 adapters/layui 访问' })),
           patterns: [
             {
               group: ['**/adapters/**'],
               message: '界面库统一经 adapters/layui 访问，其他模块只可引用其类型',
               allowTypeImports: true,
             },
-            { group: uiModules, message: '界面库统一经 adapters/layui 访问' },
+            { group: uiSubModules, message: '界面库统一经 adapters/layui 访问' },
           ],
         },
       ],
@@ -60,7 +61,13 @@ export default tseslint.config(
     // 入口是装配点，可引入适配层实例，但仍不得直接触碰界面库
     files: ['src/entries/**/*.ts'],
     rules: {
-      '@typescript-eslint/no-restricted-imports': ['error', { patterns: [{ group: uiModules, message: '界面库统一经 adapters/layui 访问' }] }],
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: uiModules.map((name) => ({ name, message: '界面库统一经 adapters/layui 访问' })),
+          patterns: [{ group: uiSubModules, message: '界面库统一经 adapters/layui 访问' }],
+        },
+      ],
     },
   },
   {
