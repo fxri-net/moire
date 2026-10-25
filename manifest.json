@@ -1,17 +1,18 @@
 {
   "name": "moire",
-  "version": "1.0.0",
-  "builtAt": "2026-10-25T14:56:02.086Z",
+  "version": "1.0.1",
+  "commit": "6ab143028540b4aa8f3777c6c479409cd87d3874",
+  "builtAt": "2026-10-25T16:23:02.313Z",
   "files": [
     {
       "path": "moire.esm.js",
       "bytes": 38819,
-      "sha256": "10548e87491915559e1c9ea229e9885649f16bd2e4c8913a1adb0e333af5ad33"
+      "sha256": "3eb144daaa54cc889dcabb1a9c57d98afc1033e4a1c38102fd787d49a4bec9a6"
     },
     {
       "path": "moire.min.js",
       "bytes": 38717,
-      "sha256": "6639a9927dca3c124242389cc14513c30deac29256404aa61c53a97d950e3596"
+      "sha256": "dab081e6a63bc6584d29b1fd12ad68747906fdebc452af8af8adb07522b455fd"
     },
     {
       "path": "types/adapters/layui/index.d.ts",
