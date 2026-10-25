@@ -60,14 +60,18 @@ uglify-js
 
 ## 版权信息
 
-名称：云纹框架
-
 作者：唐启云 <tqy@fxri.net>
 
-版权：Copyright © 2017-2099 方弦研究所. All rights reserved.
+出品：方弦研究所
+
+版权：Copyright © 2017-2026 唐启云. All rights reserved.
 
 网站：[方弦研究信息网](https://www.fxri.net)
 
-云纹框架遵循Apache2开源协议发布，并提供免费使用。
+协议：[Apache License 2.0](./LICENSE)
+
+商标："方弦®"为第42类注册商标（注册号89648411），本开源许可不授予商标使用权，详见 [TRADEMARK.md](./TRADEMARK.md)
+
+> 方弦研究所为唐启云个人项目品牌与出品方，非独立法人实体；本软件著作权归唐启云所有。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
