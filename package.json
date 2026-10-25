@@ -1,6 +1,6 @@
 {
   "name": "moire",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0",
   "description": "云纹框架",
   "type": "module",
   "main": "dist/moire.min.js",
@@ -25,6 +25,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "check:examples": "tsc -p examples/tsconfig.json",
+    "release": "node scripts/release.mjs",
     "verify": "node scripts/verify.mjs"
   },
   "author": {
@@ -45,6 +46,7 @@
     "README.md"
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@eslint/js": "^9.39.0",
     "@types/node": "^20.19.0",
     "@vitest/coverage-v8": "^4.0.0",
@@ -58,7 +60,6 @@
     "vite": "^7.1.0",
     "vitest": "^4.0.0"
   },
-  "dependencies": {},
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"

@@ -60,6 +60,10 @@ pnpm build
 | `types/**/*.d.ts` | 类型声明                   | 编辑器提示与类型检查                 |
 | `manifest.json`   | 版本、构建时间、产物校验和 | 校验产物完整性                       |
 
+## 分发与接入
+
+产物只从 `dist` 分支的版本标签交付，业务项目用 `git subtree add` / `pull` 按标签获取，不再携带源码副本与 `.git` 压缩包；端点不可达时退回产物包加校验和。命令、校验与发布顺序见 [分发与接入](docs/distribution.md)。
+
 ## 示例
 
 `examples` 下提供三个可直接打开的最小示例，均只依赖 `dist/moire.min.js`，不要求界面库：
