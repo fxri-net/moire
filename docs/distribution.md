@@ -6,7 +6,7 @@
 
 - `dist` 是孤儿分支：只含 `moire.min.js`、`moire.esm.js`、`types/`、`manifest.json`、`LICENSE`、`NOTICE`、`README.md`，不含源码与源码历史。
 - 每个正式版本对应一个 `vX.Y.Z` 标签，标签打在分发提交上，按标签拉取即为该版产物。
-- `manifest.json` 记录版本、构建时间与每个产物的字节数与 sha256，据此校验完整性。
+- `manifest.json` 记录版本、源码提交、构建时间与每个产物的字节数与 sha256，据此校验完整性与来源。
 - 分发分支自带 `.gitattributes`（`* -text`），禁用换行转换；否则检出端 `core.autocrlf=true` 会把 LF 转成 CRLF，产物字节与清单校验和对不上。
 
 发版侧的出包与推送顺序见[发版流程](./release)。
@@ -44,7 +44,7 @@ git subtree pull --prefix public/static/lavender/plugin/moire https://git.fxy.in
 
 ## 校验产物
 
-对照 `manifest.json` 逐项核对 sha256，`path` 是相对分发目录的路径，`types/` 下的声明文件同样登记在内：
+对照 `manifest.json` 逐项核对 sha256，`path` 是相对分发目录的路径，`types/` 下的声明文件同样登记在内。清单里的 `commit` 是构建所用的源码提交，追查来源或对照修复时按它回主分支查看：
 
 ```sh
 # POSIX

@@ -71,7 +71,7 @@ pnpm release
 
 1. 校验工作区干净、当前在 `main`；
 2. `pnpm build` 重新构建（`--skip-build` 可跳过，仅在刚构建过时使用）；
-3. 逐项校验 `dist/manifest.json`：版本号一致、文件存在、字节数与 sha256 匹配、目录内没有清单外文件；
+3. 逐项校验 `dist/manifest.json`：版本号一致、源码提交等于当前 HEAD、文件存在、字节数与 sha256 匹配、目录内没有清单外文件；
 4. 在临时工作树里更新 `dist` 分支：清空上一版、拷入产物与 `LICENSE`/`NOTICE`/`README.md`、写入 `.gitattributes`、提交；
 5. 在分发提交上打附注标签 `vX.Y.Z`，并打印推送命令。
 

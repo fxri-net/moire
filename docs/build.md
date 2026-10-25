@@ -2,12 +2,12 @@
 
 一次构建产出四类文件，全部落在 `dist/`。`dist` 不入库，由发版流程推到 `dist` 孤儿分支，见[分发与接入](./distribution)与[发版流程](./release)。
 
-| 产物              | 形态                         | 用途                                                         |
-| ----------------- | ---------------------------- | ------------------------------------------------------------ |
-| `moire.min.js`    | IIFE，terser 压缩            | 传统页面直接 `<script>` 引入，自动挂载 `window.moire` 并启动 |
-| `moire.esm.js`    | ESM                          | 现代构建工具引入，挂载与启动由接入方决定                     |
-| `types/**/*.d.ts` | 类型声明                     | 编辑器提示与类型检查，入口 `types/entries/esm.d.ts`          |
-| `manifest.json`   | 版本、构建时间、逐文件校验和 | 接入方与发版流程校验产物完整性                               |
+| 产物              | 形态                                   | 用途                                                         |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------ |
+| `moire.min.js`    | IIFE，terser 压缩                      | 传统页面直接 `<script>` 引入，自动挂载 `window.moire` 并启动 |
+| `moire.esm.js`    | ESM                                    | 现代构建工具引入，挂载与启动由接入方决定                     |
+| `types/**/*.d.ts` | 类型声明                               | 编辑器提示与类型检查，入口 `types/entries/esm.d.ts`          |
+| `manifest.json`   | 版本、源码提交、构建时间、逐文件校验和 | 接入方与发版流程校验产物完整性与来源                         |
 
 ## 构建链
 
@@ -18,12 +18,12 @@ pnpm build
 
 `build` 由四步串成，顺序固定：
 
-| 步骤 | 命令                         | 产出                   | 说明                                                    |
-| ---- | ---------------------------- | ---------------------- | ------------------------------------------------------- |
-| 1    | `vite build --mode iife`     | `moire.min.js`         | 入口 `src/entries/index.ts`，会先清空 `dist`            |
-| 2    | `vite build --mode esm`      | `moire.esm.js`         | 入口 `src/entries/esm.ts`，不清空输出目录，与上一步共存 |
-| 3    | `tsc -p tsconfig.build.json` | `dist/types/**/*.d.ts` | 只出声明、不出 JS，排除 `src/__tests__`                 |
-| 4    | `node scripts/manifest.mjs`  | `manifest.json`        | 递归登记 `dist` 下全部文件，清单自身不入清单            |
+| 步骤 | 命令                         | 产出                   | 说明                                                       |
+| ---- | ---------------------------- | ---------------------- | ---------------------------------------------------------- |
+| 1    | `vite build --mode iife`     | `moire.min.js`         | 入口 `src/entries/index.ts`，会先清空 `dist`               |
+| 2    | `vite build --mode esm`      | `moire.esm.js`         | 入口 `src/entries/esm.ts`，不清空输出目录，与上一步共存    |
+| 3    | `tsc -p tsconfig.build.json` | `dist/types/**/*.d.ts` | 只出声明、不出 JS，排除 `src/__tests__`                    |
+| 4    | `node scripts/manifest.mjs`  | `manifest.json`        | 递归登记 `dist` 下全部文件并写入源码提交，清单自身不入清单 |
 
 两次 Vite 构建共用 `dist` 输出目录，`emptyOutDir` 只在 IIFE 那次开启；单独重跑 ESM 构建不会误删已产出的声明与清单。
 
@@ -39,14 +39,15 @@ pnpm build
 {
   "name": "moire",
   "version": "1.0.0",
+  "commit": "52114e0…",
   "builtAt": "2026-10-25T15:20:02.838Z",
   "files": [{ "path": "moire.min.js", "bytes": 38717, "sha256": "6639a992…" }]
 }
 ```
 
-`path` 相对 `dist`，按字典序排列；`bytes` 与 `sha256` 逐文件登记。校验方式见[分发与接入](./distribution)的「校验产物」一节。
+`path` 相对 `dist`，按字典序排列；`bytes` 与 `sha256` 逐文件登记；`commit` 是构建所用的源码提交，据此可从产物反查源码提交（取不到 git 时为空串）。校验方式见[分发与接入](./distribution)的「校验产物」一节。
 
-> ⚠️ `builtAt` 每次构建都会变，因此两次构建的 `manifest.json` 不会逐字节相同；可比对的是 `files` 里的字节数与校验和。发版脚本正是按清单逐项核对，任何清单外的多余文件都会被拒绝。
+> ⚠️ 同一提交重复构建，`commit` 与 `files` 稳定，只有 `builtAt` 每次都会变，因此两次构建的 `manifest.json` 不会逐字节相同；可比对的是 `files` 里的字节数与校验和。发版脚本正是按清单逐项核对，任何清单外的多余文件都会被拒绝。
 
 ## 验收命令
 

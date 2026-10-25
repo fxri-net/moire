@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
@@ -34,6 +35,18 @@ function checksum(file) {
   return createHash('sha256').update(readFileSync(file)).digest('hex')
 }
 
+/**
+ * 取构建所用源码提交
+ * 分发分支的标签指向产物提交，没有这项就无法从产物反查源码；源码包解压等无 git 场景记空串，不阻断构建
+ * @returns {string} 提交标识，取不到时为空串
+ */
+function sourceCommit() {
+  const result = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' })
+  if (result.status === 0) return (result.stdout ?? '').trim()
+  console.warn('⚠️ 未取到源码提交，manifest.commit 留空')
+  return ''
+}
+
 const files = listFiles(outDir)
   .map((file) => relative(outDir, file).split('\\').join('/'))
   .filter((name) => name !== manifestName)
@@ -46,6 +59,7 @@ const files = listFiles(outDir)
 const manifest = {
   name: pkg.name,
   version: pkg.version,
+  commit: sourceCommit(),
   builtAt: new Date().toISOString(),
   files,
 }

@@ -78,6 +78,9 @@ function verifyManifest() {
   if (!existsSync(manifestPath)) throw new Error('缺少产物清单，请先构建')
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
   if (manifest.version !== pkg.version) throw new Error(`产物清单版本 ${manifest.version} 与包版本 ${pkg.version} 不一致`)
+  // 清单里的源码提交必须是当前 HEAD，否则说明产物来自更早的提交（典型是 --skip-build 跳过了重新构建）
+  const head = probe(['rev-parse', 'HEAD'])
+  if (manifest.commit !== head) throw new Error(`产物清单记录的源码提交 ${manifest.commit || '(空)'} 与当前 HEAD ${head.slice(0, 8)} 不一致，请重新构建`)
   const listed = new Set(manifest.files.map((item) => item.path))
   for (const item of manifest.files) {
     const file = join(outDir, item.path)
