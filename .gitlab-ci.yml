@@ -1,28 +1,41 @@
 # GitLab CI：完整验收（test）+ 文档站构建部署（pages）
-# ⚠️ 需 GitLab runner 已注册；runner 未启用时 job 停留在 pending 属预期
 # test 的验收步骤清单唯一真源是 scripts/verify.mjs，此处只调用，不在 CI 里另写一份步骤，避免清单漂移
+# 作业镜像由 ci-templates 依据 .ci/toolchain.json 动态构建，仓库内不再安装 Node 与 pnpm
 # 文档站基址与站点/仓库地址按 GitLab Pages 的实际形态推导（/<项目名>/、$CI_PAGES_URL、$CI_PROJECT_URL），
 # 平台侧设同名 CI/CD 变量可覆盖；勿写项目完整路径，Pages 只取项目名作子路径
+include:
+  - project: fxri/develop/0001.base/ci-templates
+    ref: main
+    file: /dynamic-image.yml
+
+# 全部作业只在默认分支执行，工具链作业随之收敛，避免分支推送反复触发镜像构建
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - when: never
+
 stages:
   - test
   - deploy
 
 test:
   # 与 .node-version 对齐，避免与 GitHub Actions 两侧 node 版本漂移
-  image: node:20.20.2
+  image: $CI_IMAGE
   stage: test
-  before_script:
-    - corepack enable
+  needs:
+    - toolchain:spec
+    - toolchain:ensure
   script:
     - pnpm verify
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 
 pages:
-  image: node:20.20.2
+  image: $CI_IMAGE
   stage: deploy
-  before_script:
-    - corepack enable
+  needs:
+    - toolchain:spec
+    - toolchain:ensure
   script:
     - pnpm install --frozen-lockfile
     # 站点参数优先取 CI/CD 变量；未定义时按 GitLab Pages 的默认形态推导，避免把部署位置写死在仓库里
