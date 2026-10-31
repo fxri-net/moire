@@ -9,3 +9,5 @@ docs/.vitepress/cache/
 docs/.vitepress/dist/
 node_modules/
 pnpm-lock.yaml
+# 依赖缓存目录由 CI 在项目内生成，内容不是仓库代码
+.pnpm-store/
