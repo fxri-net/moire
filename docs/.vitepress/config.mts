@@ -48,8 +48,8 @@ export default defineConfig({
           { text: 'layui 适配', link: '/adapters/layui' },
         ],
       },
-      { text: '更新日志', link: '/changelog' },
       { text: 'FAQ', link: '/faq' },
+      { text: '更新日志', link: '/changelog' },
     ],
     sidebar: [
       {
