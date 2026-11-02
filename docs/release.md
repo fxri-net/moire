@@ -48,7 +48,7 @@ toolkit changelog version
 
 ```sh
 toolkit changelog --history format
-pnpm sync:changelog-doc
+toolkit changelog doc
 ```
 
 第一条按「同组顶层条目逐行相邻」重排历史块，消除人工润色留下的空行；带 `--history` 才会改历史块，缺省只动新块。第二条把根 `CHANGELOG.md` 镜像成文档站的[更新日志](./changelog)，页头带「请勿手改」提示。

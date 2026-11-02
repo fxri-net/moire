@@ -59,6 +59,8 @@ const steps = [
   { label: '单元测试', args: ['test'], env: { TZ: 'UTC' } },
   { label: '构建产物', args: ['build'] },
   { label: '示例类型', args: ['check:examples'] },
+  // 全局 toolkit 未安装时该步打印跳过，不阻断远程 CI
+  { label: '更新日志镜像（CHANGELOG → docs）', command: process.execPath, args: ['scripts/check-changelog-doc.mjs'] },
   // 文档站构建同时做站内死链检查，文档改错会让验收直接变红
   { label: '文档站构建', args: ['docs:build'], skip: skipDocs },
 ]
@@ -175,11 +177,12 @@ reportToolchain()
 /** 未通过的步骤名 */
 const failures = []
 
-for (const { label, args, env, skip, fatal } of steps) {
+for (const { label, command, args, env, skip, fatal } of steps) {
   if (skip) continue
   console.log(`\n▶ ${label}`)
-  // pnpm 在 Windows 上是 .cmd，需经 shell 调用
-  const result = spawnSync('pnpm', args, { cwd: root, stdio: 'inherit', shell: isWindows, env: { ...process.env, ...env } })
+  // pnpm 在 Windows 上是 .cmd，需经 shell 调用；node 直接调用
+  const bin = command ?? 'pnpm'
+  const result = spawnSync(bin, args, { cwd: root, stdio: 'inherit', shell: bin === 'pnpm' && isWindows, env: { ...process.env, ...env } })
   if (result.status === 0) continue
   failures.push(label)
   // 依赖装不上时后续步骤只会是噪音，直接中止；其余步骤跑完再一次暴露全部问题

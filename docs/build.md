@@ -78,4 +78,4 @@ pnpm docs:preview  # 预览构建结果
 
 - 站点基础路径由 `VITEPRESS_BASE` 决定，缺省 `/moire/`，对应 GitHub Pages 子路径。
 - `SITE_URL` 与 `REPO_URL` 供非 GitHub Pages 的部署场景注入站点地址与编辑回链，缺省为 GitHub 仓库。
-- 根目录的 `CHANGELOG.md` 是更新日志真源，`pnpm sync:changelog-doc` 把它同步为 `docs/changelog.md`，不要在文档站里手改该页。
+- 根目录的 `CHANGELOG.md` 是更新日志真源，全局 `toolkit changelog doc` 把它同步为 `docs/changelog.md`，不要在文档站里手改该页。
