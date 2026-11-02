@@ -70,6 +70,10 @@ moire.start()
 - 可选界面库：layui ≥ 2.6.4、jQuery ≥ 1.9、LayX ≥ 2.5.4、Sortable ≥ 1.10.2、TinyMCE（缺失时自动降级）
 - 构建：Node.js ≥ 20.19.0（详见[构建产物](https://fxri-net.github.io/moire/build.html)）
 
+## 🛠️ 开发约定
+
+仓库级能力变更门禁、验收顺序与协作约束见 [AGENTS.md](./AGENTS.md)；提交信息遵循 `.trae/rules/git-commit-message.md`。
+
 ## 📄 版权信息
 
 作者：唐启云 <tqy@fxri.net>
