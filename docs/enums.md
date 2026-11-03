@@ -245,7 +245,7 @@ ToolOutcome.Done // 'done'
 框架源码里的 `assertNever` 专供 `switch` 的 `default` 分支：入参收窄为 `never`，新增枚举成员后类型检查立刻报出遗漏。它属于源码内部工具，不随包产物导出；插件里需要同样的保护时，把未命中值赋给 `never` 即可。
 
 ```ts
-import type { MergeDirection } from 'moire'
+import type { MergeDirection } from '@fxri/moire'
 
 function describe(direction: MergeDirection): string {
   switch (direction) {

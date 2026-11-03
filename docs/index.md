@@ -56,7 +56,7 @@ features:
 现代构建工具改用 ESM 产物，挂载与启动交由接入方决定：
 
 ```js
-import { moire } from 'moire'
+import { moire } from '@fxri/moire'
 
 moire.start()
 ```

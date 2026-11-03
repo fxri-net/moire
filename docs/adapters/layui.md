@@ -90,7 +90,7 @@ moire.ui.notice('账号不能为空', {
 新适配器只需实现 `UiAdapter` 的 13 个成员，再把实例交给字段、视图、工具插件即可。契约不引用第三方类型，因此适配器内部怎么写都行。
 
 ```ts
-import type { UiAdapter } from 'moire'
+import type { UiAdapter } from '@fxri/moire'
 
 const silentUi: UiAdapter = {
   enabled: false,

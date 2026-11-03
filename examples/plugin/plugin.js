@@ -39,11 +39,11 @@ const greetPlugin = {
   depends: ['fields'],
   /**
    * 装配
-   * @param {import('moire').MoireContext} context 插件上下文
+   * @param {import('@fxri/moire').MoireContext} context 插件上下文
    */
   setup(context) {
     // 依赖的插件实例由内核按依赖顺序准备，装配时直接取用
-    const fieldsPlugin = /** @type {import('moire').FieldsPlugin | undefined} */ (context.get('fields'))
+    const fieldsPlugin = /** @type {import('@fxri/moire').FieldsPlugin | undefined} */ (context.get('fields'))
     if (!fieldsPlugin) throw new Error('缺少字段能力')
 
     context.subscribe((notice) => {

@@ -9,7 +9,7 @@ const { fields, tools, enum: enums } = window.moire
 
 ```ts
 // ESM：显式启动
-import { moire } from 'moire'
+import { moire } from '@fxri/moire'
 
 moire.start()
 ```
@@ -51,7 +51,7 @@ moire.start()
 任何能力都以插件形式接入内核，插件只需实现 `name` 与 `setup`。
 
 ```ts
-import type { MoirePlugin } from 'moire'
+import type { MoirePlugin } from '@fxri/moire'
 
 export const auditPlugin: MoirePlugin = {
   name: 'audit',

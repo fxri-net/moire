@@ -17,7 +17,7 @@ IIFE 产物加载即挂载 `window.moire` 并自动启动，无需额外调用�
 ESM 产物只导出实例，不写全局、不自动启动，何时挂载与启动由接入方决定：
 
 ```js
-import { moire } from 'moire'
+import { moire } from '@fxri/moire'
 
 moire.start()
 ```

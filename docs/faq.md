@@ -12,18 +12,18 @@
 现代构建里改用导入式写法：
 
 ```js
-import { moire } from 'moire'
+import { moire } from '@fxri/moire'
 
 moire.start()
 ```
 
-## `import { createKernel } from 'moire'` 报没有导出成员
+## `import { createKernel } from '@fxri/moire'` 报没有导出成员
 
 包产物只导出装好的默认实例 `moire` 与类型，工厂函数（`createKernel`、`createFieldsPlugin`、`createToolsPlugin` 等）和枚举常量都不是包的运行期导出：
 
 ```js
-import { moire } from 'moire'
-import type { MoirePlugin } from 'moire'
+import { moire } from '@fxri/moire'
+import type { MoirePlugin } from '@fxri/moire'
 
 const { FieldKind, ToolAction } = moire.enum
 ```
@@ -133,4 +133,4 @@ moire.i18n.extend('zh-cn', { 'form.saved': '已保存' })
 
 ## 类型提示找不到
 
-类型入口在 `dist/types/entries/esm.d.ts`，随产物一起分发。按[分发与接入](./distribution)把整个产物目录放好后，`import type { FormSchema } from 'moire'` 即可获得提示；只拷贝了两个 `.js` 文件时，类型声明自然缺失。
+类型入口在 `dist/types/entries/esm.d.ts`，随产物一起分发。按[分发与接入](./distribution)把整个产物目录放好后，`import type { FormSchema } from '@fxri/moire'` 即可获得提示；只拷贝了两个 `.js` 文件时，类型声明自然缺失。

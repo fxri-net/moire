@@ -9,7 +9,7 @@ const { FieldKind, RuleKind, SelectionMode, ValueKind } = moire.enum
 下文示例里的枚举成员都取自 `moire.enum`，为聚焦声明结构省略了前缀；类型可从包入口按需引入。
 
 ```ts
-import type { FormSchema, ListSchema } from 'moire'
+import type { FormSchema, ListSchema } from '@fxri/moire'
 ```
 
 ## FieldSchema

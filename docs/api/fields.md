@@ -102,7 +102,7 @@ interface EchoResult {
 渲染器只需实现四个方法，`done` 可选。
 
 ```ts
-import type { FieldRenderer } from 'moire'
+import type { FieldRenderer } from '@fxri/moire'
 
 // 同类型覆盖：把 input 换成取色控件
 const colorRenderer: FieldRenderer = {
