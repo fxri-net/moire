@@ -29,8 +29,10 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: '云纹框架' }],
     ['meta', { property: 'og:title', content: '云纹框架' }],
     ['meta', { property: 'og:description', content: description }],
+    // og:image 必须为绝对地址，社交平台据此抓取分享卡片
+    ['meta', { property: 'og:image', content: `${siteUrl}og-image.png` }],
     ['meta', { property: 'og:url', content: siteUrl }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
   // 生成 sitemap.xml；hostname 带 base 子路径，保证各页 URL 拼接正确
   sitemap: { hostname: siteUrl },

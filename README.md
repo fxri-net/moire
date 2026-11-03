@@ -5,7 +5,7 @@
 # 云纹框架
 
 [![CI](https://github.com/fxri-net/moire/actions/workflows/ci.yml/badge.svg)](https://github.com/fxri-net/moire/actions/workflows/ci.yml)
-[![Node](https://img.shields.io/badge/node-%E2%89%A520-brightgreen)](./docs/getting-started.md)
+[![Node](https://img.shields.io/badge/node-%E2%89%A520.19-brightgreen)](./docs/getting-started.md)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue)](./LICENSE)
 [![文档站](https://img.shields.io/badge/docs-fxri--net.github.io%2Fmoire-blueviolet)](https://fxri-net.github.io/moire/)
 
