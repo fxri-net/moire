@@ -167,7 +167,12 @@ function checkChangeset() {
   const current = existsSync(join(root, '.changeset'))
     ? readdirSync(join(root, '.changeset')).filter((name) => name.endsWith('.md') && name !== 'README.md')
     : []
-  if (!current.some((name) => !baselineFiles.has(name))) {
+  // 发版提交会在同一次推送内消费掉变更集，净差异看不到它，故区间内新增过即算数
+  const addedInRange = (git(['log', '--diff-filter=A', '--name-only', '--pretty=format:', `${baseline}..HEAD`, '--', '.changeset/']) ?? '')
+    .split('\n')
+    .map((file) => file.trim())
+    .filter((file) => file.endsWith('.md') && file.split('/').pop() !== 'README.md')
+  if (addedInRange.length === 0 && !current.some((name) => !baselineFiles.has(name))) {
     errors.push('.changeset: 本次改动触及 src/ 或 docs/，须新增变更集')
   }
 }
