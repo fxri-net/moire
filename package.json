@@ -1,6 +1,6 @@
 {
   "name": "@fxri/moire",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "云纹框架",
   "type": "module",
   "main": "dist/moire.min.js",
