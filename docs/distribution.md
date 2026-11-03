@@ -18,19 +18,19 @@
 业务仓库内需要真实存在的静态目录时使用，`--prefix` 指向产物要落到的目录：
 
 ```sh
-git subtree add --prefix public/static/lavender/plugin/moire https://git.fxy.ink:444/fxri/develop/0001.base/moire.git v1.0.0 --squash
+git subtree add --prefix public/static/lavender/plugin/moire https://github.com/fxri-net/moire.git v1.0.0 --squash
 ```
 
 之后升级只是换标签再拉一次：
 
 ```sh
-git subtree pull --prefix public/static/lavender/plugin/moire https://git.fxy.ink:444/fxri/develop/0001.base/moire.git v1.0.1 --squash
+git subtree pull --prefix public/static/lavender/plugin/moire https://github.com/fxri-net/moire.git v1.0.1 --squash
 ```
 
 - `--squash` 必须保留：分发分支的演进历史对业务仓库无意义，压缩后每个版本只多一条提交。
 - 目录内不要手改：下次拉取会整体覆盖，确需临时改动时要接受被覆盖的结果。
 - 拉取冲突基本来自本地手改产物，取分发侧内容即可。
-- 端点需可达（内网或 VPN）；不可达时改用[离线分发](#离线分发)。
+- 端点需可达；网络受限时改用[离线分发](#离线分发)。
 - 首次接入完成后，业务仓库里原来的源码副本与 `.git.zip` 可以直接删除。
 
 ### 其余方式对照
@@ -62,7 +62,7 @@ Get-FileHash .\moire.min.js, .\moire.esm.js -Algorithm SHA256
 
 ```sh
 # subtree：把目录拉回出问题之前的那一版
-git subtree pull --prefix public/static/lavender/plugin/moire https://git.fxy.ink:444/fxri/develop/0001.base/moire.git v0.4.0 --squash
+git subtree pull --prefix public/static/lavender/plugin/moire https://github.com/fxri-net/moire.git v0.4.0 --squash
 
 # 或在业务仓库里撤销上次的 squash 合并提交
 git revert <squash-commit>

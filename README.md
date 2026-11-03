@@ -72,7 +72,7 @@ moire.start()
 
 ## 🛠️ 开发约定
 
-仓库级能力变更门禁、验收顺序与协作约束见 [AGENTS.md](./AGENTS.md)；提交信息遵循 `.trae/rules/git-commit-message.md`。
+构建、验收与发版命令见[构建产物](https://fxri-net.github.io/moire/build.html)与[发版流程](https://fxri-net.github.io/moire/release.html)。
 
 ## 📄 版权信息
 
