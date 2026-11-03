@@ -1,6 +1,6 @@
 {
   "name": "@fxri/moire",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": true,
   "description": "轻量级 JS 前端辅助框架：枚举、工具、国际化、请求、字段与视图等常用能力。",
   "license": "Apache-2.0",
