@@ -1,7 +1,22 @@
 {
   "name": "@fxri/moire",
   "version": "1.0.5",
-  "description": "云纹框架",
+  "private": true,
+  "description": "轻量级 JS 前端辅助框架：枚举、工具、国际化、请求、字段与视图等常用能力。",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "唐启云",
+    "email": "tqy@fxri.net",
+    "url": "https://fxri.net:444/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fxri-net/moire.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fxri-net/moire/issues"
+  },
+  "homepage": "https://fxri-net.github.io/moire/",
   "type": "module",
   "main": "dist/moire.min.js",
   "module": "dist/moire.esm.js",
@@ -14,14 +29,13 @@
     },
     "./*": "./*"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "packageManager": "pnpm@10.34.4",
-  "engines": {
-    "node": ">=20.19.0"
-  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "TRADEMARK.md",
+    "README.md"
+  ],
   "scripts": {
     "build": "vite build --mode iife && vite build --mode esm && tsc -p tsconfig.build.json && node scripts/manifest.mjs",
     "typecheck": "tsc --noEmit",
@@ -32,30 +46,27 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "check:examples": "tsc -p examples/tsconfig.json",
+    "verify": "node scripts/verify.mjs",
+    "changeset": "node scripts/toolkit.mjs changelog",
+    "changelog:version": "node scripts/toolkit.mjs changelog version",
+    "sync:changelog-doc": "node scripts/toolkit.mjs changelog doc",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "sync:changelog-doc": "toolkit changelog doc",
     "release": "node scripts/release.mjs",
-    "verify": "node scripts/verify.mjs"
+    "prepublishOnly": "node scripts/guard-publish.mjs"
   },
-  "author": {
-    "name": "唐启云",
-    "email": "tqy@fxri.net",
-    "url": "https://fxri.net:444/"
-  },
-  "license": "Apache-2.0",
-  "repository": {
-    "type": "git",
-    "url": "https://git.fxy.ink:444/fxri/develop/0001.base/moire.git"
-  },
-  "files": [
-    "dist",
-    "LICENSE",
-    "NOTICE",
-    "TRADEMARK.md",
-    "README.md"
+  "keywords": [
+    "moire",
+    "frontend",
+    "layui",
+    "i18n",
+    "fxri"
   ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "packageManager": "pnpm@10.34.4",
   "devDependencies": {
     "@eslint/js": "^9.39.0",
     "@types/node": "^20.19.0",
