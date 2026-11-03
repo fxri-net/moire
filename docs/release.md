@@ -4,7 +4,7 @@
 
 ## 前置
 
-- 变更集与更新日志由**全局** `@fxri/toolkit` 提供，项目内不装 `changesets`，也不设对应 npm scripts。
+- 变更集与更新日志由**全局** `@fxri/toolkit` 提供，项目内不装 `changesets`；`changeset` / `changelog:version` / `sync:changelog-doc` 脚本只做包装，调用全局命令，未安装时跳过。
 - 发版在 `main` 分支进行，`pnpm release` 会校验分支、工作区干净、标签未重复。
 
 ```sh
