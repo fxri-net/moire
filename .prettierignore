@@ -7,6 +7,8 @@ coverage/
 dist/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+# 主题文件由 toolkit docs theme 生成并逐字校验，格式化会破坏与模板的一致性
+docs/.vitepress/theme/
 node_modules/
 pnpm-lock.yaml
 # 依赖缓存目录由 CI 在项目内生成，内容不是仓库代码

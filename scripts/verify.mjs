@@ -61,6 +61,7 @@ const steps = [
   { label: '示例类型', args: ['check:examples'] },
   // 全局 toolkit 未安装时该步打印跳过，不阻断远程 CI
   { label: '更新日志镜像（CHANGELOG → docs）', command: process.execPath, args: ['scripts/check-changelog-doc.mjs'] },
+  { label: '文档站主题一致（toolkit docs theme --check）', command: process.execPath, args: ['scripts/check-docs-theme.mjs'] },
   // 文档站构建同时做站内死链检查，文档改错会让验收直接变红
   { label: '文档站构建', args: ['docs:build'], skip: skipDocs },
 ]
