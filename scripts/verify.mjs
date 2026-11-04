@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync, spawnSync } from 'node:child_process'
-import { existsSync, readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -19,6 +19,11 @@ const skipDocs = flags.has('--skip-docs')
 const skipLinks = flags.has('--skip-links')
 /** 跳过变更集检查 */
 const skipChangeset = flags.has('--skip-changeset')
+/** 强制全量：忽略本地改动面与缓存判断，等价于 CI 口径 */
+const full = flags.has('--full')
+/** CI 环境一律全量：本地裁剪只服务于开发效率，不能让 CI 漏检安装与内链 */
+const ciValue = process.env.CI ?? ''
+const isCI = ciValue !== '' && ciValue !== '0' && ciValue.toLowerCase() !== 'false'
 /** 一致性检查错误 */
 const errors = []
 
@@ -47,12 +52,62 @@ function reportToolchain() {
   if (actualPnpm !== expectedPnpm) console.warn(`⚠️ pnpm 版本与 packageManager 不一致：当前 ${actualPnpm}，期望 ${expectedPnpm}`)
 }
 
+/** 文档站构建触发面：站点输入含 docs/，站点配置直接引用源码侧的枚举与版本，故 src/ 也计入 */
+const DOC_TOUCH_PREFIXES = ['docs/', 'src/']
+const DOC_TOUCH_FILES = new Set(['README.md', 'package.json', 'pnpm-lock.yaml'])
+
+/**
+ * git 只读调用
+ * @param {string[]} args git 参数
+ * @returns {string[] | null} 输出行；失败返回 null（调用方按「可能触及」保守处理）
+ */
+function gitLines(args) {
+  const result = spawnSync('git', args, { cwd: root, encoding: 'utf8' })
+  if (result.status !== 0) return null
+  return (result.stdout ?? '')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+}
+
+/**
+ * 本次是否需要构建文档站
+ * @returns {boolean} true 表示执行 docs:build
+ */
+function needDocsBuild() {
+  if (isCI || full) return true
+  const tracked = gitLines(['diff', '--name-only', 'HEAD'])
+  const untracked = gitLines(['ls-files', '--others', '--exclude-standard'])
+  if (tracked === null || untracked === null) return true
+  for (const file of [...tracked, ...untracked]) {
+    if (DOC_TOUCH_FILES.has(file)) return true
+    if (DOC_TOUCH_PREFIXES.some((prefix) => file.startsWith(prefix))) return true
+  }
+  return false
+}
+
+/**
+ * 依赖是否需要重装：lockfile 比已安装快照新，或安装目录缺失
+ * @returns {boolean} true 表示执行 pnpm install
+ */
+function needInstall() {
+  if (isCI || full) return true
+  try {
+    return statSync(join(root, 'pnpm-lock.yaml')).mtimeMs > statSync(join(root, 'node_modules', '.pnpm', 'lock.yaml')).mtimeMs
+  } catch {
+    return true
+  }
+}
+
+const installNeeded = needInstall()
+const docsNeeded = needDocsBuild()
+
 /**
  * 验收步骤
  * 顺序即执行顺序；单元测试钉 TZ=UTC，避免本地时区让时间相关断言漂移
  */
 const steps = [
-  { label: '安装依赖', args: ['install', '--frozen-lockfile'], fatal: true },
+  { label: '安装依赖', args: ['install', '--frozen-lockfile'], fatal: true, skip: installNeeded ? '' : 'lockfile 未变化' },
   { label: '类型检查', args: ['typecheck'] },
   { label: '代码规范', args: ['lint'] },
   { label: '格式校验', args: ['format:check'] },
@@ -63,7 +118,7 @@ const steps = [
   { label: '更新日志镜像（CHANGELOG → docs）', command: process.execPath, args: ['scripts/check-changelog-doc.mjs'] },
   { label: '文档站主题一致（toolkit docs theme --check）', command: process.execPath, args: ['scripts/check-docs-theme.mjs'] },
   // 文档站构建同时做站内死链检查，文档改错会让验收直接变红
-  { label: '文档站构建', args: ['docs:build'], skip: skipDocs },
+  { label: '文档站构建', args: ['docs:build'], skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单' },
 ]
 
 /**
@@ -184,7 +239,10 @@ reportToolchain()
 const failures = []
 
 for (const { label, command, args, env, skip, fatal } of steps) {
-  if (skip) continue
+  if (skip) {
+    console.log(`\n⊘ ${label}（${skip}，跳过）`)
+    continue
+  }
   console.log(`\n▶ ${label}`)
   // pnpm 在 Windows 上是 .cmd，需经 shell 调用；node 直接调用
   const bin = command ?? 'pnpm'

@@ -42,7 +42,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --check --end-of-line auto .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "check:examples": "tsc -p examples/tsconfig.json",
