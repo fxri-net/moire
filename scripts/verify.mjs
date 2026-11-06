@@ -123,6 +123,8 @@ const steps = [
   // 产物断言依赖上一步的 dist，跳过构建时一并跳过
   {
     label: '文档站产物（404 排除站点地图与搜索索引）',
+    // 显式经 node 执行：本脚本其余步骤默认走 pnpm，直接给 .mjs 会被当作可执行文件 spawn，Linux 上因缺执行位报 EACCES
+    command: process.execPath,
     args: ['scripts/check-docs-dist.mjs'],
     skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单',
   },
