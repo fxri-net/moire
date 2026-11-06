@@ -120,6 +120,12 @@ const steps = [
   { label: '文档站导航规范（分类 / 命名 / 顶栏）', command: process.execPath, args: ['scripts/check-docs-nav.mjs'] },
   // 文档站构建同时做站内死链检查，文档改错会让验收直接变红
   { label: '文档站构建', args: ['docs:build'], skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单' },
+  // 产物断言依赖上一步的 dist，跳过构建时一并跳过
+  {
+    label: '文档站产物（404 排除站点地图与搜索索引）',
+    args: ['scripts/check-docs-dist.mjs'],
+    skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单',
+  },
 ]
 
 /**
