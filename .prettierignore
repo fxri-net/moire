@@ -13,3 +13,5 @@ node_modules/
 pnpm-lock.yaml
 # 依赖缓存目录由 CI 在项目内生成，内容不是仓库代码
 .pnpm-store/
+# 变更集是发布元数据，写法须与家族内各仓一致，不随代码风格配置改写
+.changeset/
