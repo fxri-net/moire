@@ -40,8 +40,7 @@ export default defineConfig({
     // 导航栏 logo（字符串路径由 VitePress 自动拼接 base 前缀）
     logo: '/logo.svg',
     nav: [
-      { text: '指南', link: '/getting-started' },
-      { text: '架构', link: '/architecture' },
+      { text: '快速开始', link: '/getting-started' },
       {
         text: '参考',
         items: [
@@ -50,16 +49,30 @@ export default defineConfig({
           { text: 'layui 适配', link: '/adapters/layui' },
         ],
       },
-      { text: 'FAQ', link: '/faq' },
-      { text: '更新日志', link: '/changelog' },
+      { text: '原理', link: '/architecture' },
+      {
+        text: '开发',
+        items: [
+          { text: '构建产物', link: '/build' },
+          { text: '分发与接入', link: '/distribution' },
+          { text: '发版流程', link: '/release' },
+          { text: '迁移指南', link: '/migration' },
+        ],
+      },
+      {
+        text: '帮助',
+        items: [
+          { text: '常见问题', link: '/faq' },
+          { text: '更新日志', link: '/changelog' },
+        ],
+      },
     ],
     sidebar: [
       {
         text: '开始',
         items: [
           { text: '首页', link: '/' },
-          { text: '快速上手', link: '/getting-started' },
-          { text: '架构设计', link: '/architecture' },
+          { text: '快速开始', link: '/getting-started' },
         ],
       },
       {
@@ -76,10 +89,15 @@ export default defineConfig({
           { text: '国际化', link: '/api/i18n' },
           { text: '界面适配', link: '/api/ui' },
           { text: '枚举字典', link: '/enums' },
+          { text: 'layui 适配', link: '/adapters/layui' },
         ],
       },
       {
-        text: '接入与运维',
+        text: '原理',
+        items: [{ text: '架构设计', link: '/architecture' }],
+      },
+      {
+        text: '开发',
         items: [
           { text: '构建产物', link: '/build' },
           { text: '分发与接入', link: '/distribution' },
@@ -88,9 +106,8 @@ export default defineConfig({
         ],
       },
       {
-        text: '适配与答疑',
+        text: '帮助',
         items: [
-          { text: 'layui 适配', link: '/adapters/layui' },
           { text: '常见问题', link: '/faq' },
           { text: '更新日志', link: '/changelog' },
         ],

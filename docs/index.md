@@ -77,7 +77,7 @@ const form = moire.fields.createForm(
 const { valid, values, issues } = form.echo()
 ```
 
-详细步骤见[快速上手](./getting-started)。
+详细步骤见[快速开始](./getting-started)。
 
 ## 能力矩阵
 
@@ -96,7 +96,7 @@ const { valid, values, issues } = form.echo()
 
 | 文档                           | 适合谁                           |
 | ------------------------------ | -------------------------------- |
-| [快速上手](./getting-started)  | 第一次接入，想先跑起来           |
+| [快速开始](./getting-started)  | 第一次接入，想先跑起来           |
 | [架构设计](./architecture)     | 想了解内核、插件、适配层如何分层 |
 | [API 总览](./api/)             | 按模块查签名、选项与返回值       |
 | [枚举字典](./enums)            | 查枚举成员与语义                 |

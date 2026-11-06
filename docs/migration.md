@@ -210,4 +210,4 @@ fieldRead(app, 'user.base.token', '.')
 - [ ] 旧 `deployer` / `caller` 的调用点改为 `fieldWrite` + `mergeParams` 与 `fieldRead`。
 - [ ] 跑通 `pnpm verify` 与业务侧自身的用例。
 
-示例工程与验收命令见[快速上手](./getting-started)。
+示例工程与验收命令见[快速开始](./getting-started)。
