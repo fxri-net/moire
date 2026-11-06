@@ -40,21 +40,21 @@ pnpm verify
 toolkit changelog version
 ```
 
-它会消费 `.changeset/` 下的变更集，升 `package.json` 版本号，并在 `CHANGELOG.md` 顶部写入新版本块与中文分组标题（🚨 破坏性 / ✨ 新增 / 🔧 修改 / ⚡ 优化 / 🐛 修复 / 🧹 清理 / 📝 文档 / 🔗 链接 / 📦 依赖）。
+它会消费 `.changeset/` 下的变更集，升 `package.json` 版本号，并在 `CHANGELOG.md` 顶部写入新版本块与中文分组标题（🚨 重大变更 / ✨ 新增功能 / 🔧 功能调整 / ⚡ 优化改进 / 🐛 问题修复 / 📝 文档更新 / 🧹 清理移除 / 🔗 依赖变更 / 📦 其他变更）。
 
 生成结果需要人工过一遍：补写必要说明、调整分组归属、删掉对使用者无意义的内部条目。
 
 ## 4. 归一与镜像
 
 ```sh
-toolkit changelog --history format
+toolkit changelog format --history
 toolkit changelog doc
 ```
 
 第一条按「同组顶层条目逐行相邻」重排历史块，消除人工润色留下的空行；带 `--history` 才会改历史块，缺省只动新块。第二条把根 `CHANGELOG.md` 镜像成文档站的[更新日志](./changelog)，页头带「请勿手改」提示。
 
-::: tip 选项必须写在子命令之前
-`toolkit changelog --history format` 生效，写成 `toolkit changelog format --history` 会被 changesets 静默忽略，表现为「无 CHANGELOG 需要更新」。
+::: tip 选项跟在子命令之后
+`toolkit changelog format --history` 生效；旧写法 `toolkit changelog --history format` 把选项放在子命令之前，toolkit 1.16.2 起不再支持，会报「未知选项」。
 :::
 
 ## 5. 单独提交版本与日志
