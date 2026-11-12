@@ -116,16 +116,14 @@ const steps = [
   { label: '示例类型', args: ['check:examples'] },
   // 全局 toolkit 未安装时该步打印跳过，不阻断远程 CI
   { label: '更新日志镜像（CHANGELOG → docs）', command: process.execPath, args: ['scripts/check-changelog-doc.mjs'] },
-  { label: '文档站主题一致（toolkit docs theme check）', command: process.execPath, args: ['scripts/check-docs-theme.mjs'] },
-  { label: '文档站导航规范（分类 / 命名 / 顶栏）', command: process.execPath, args: ['scripts/check-docs-nav.mjs'] },
+  { label: '文档站主题一致（toolkit docs theme check）', run: checkDocsTheme },
+  { label: '文档站导航规范（分类 / 命名 / 顶栏）', run: checkDocsNav },
   // 文档站构建同时做站内死链检查，文档改错会让验收直接变红
   { label: '文档站构建', args: ['docs:build'], skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单' },
   // 产物断言依赖上一步的 dist，跳过构建时一并跳过
   {
     label: '文档站产物（404 排除站点地图与搜索索引）',
-    // 显式经 node 执行：本脚本其余步骤默认走 pnpm，直接给 .mjs 会被当作可执行文件 spawn，Linux 上因缺执行位报 EACCES
-    command: process.execPath,
-    args: ['scripts/check-docs-dist.mjs'],
+    run: checkDocsDist,
     skip: skipDocs ? '--skip-docs' : docsNeeded ? '' : '未触及 docs/、src/、README.md、依赖清单',
   },
 ]
@@ -242,21 +240,66 @@ function checkChangeset() {
   }
 }
 
+/**
+ * 文档站主题一致性：全局 toolkit 可用时执行 docs theme check，未安装时打印跳过（远程 CI 不依赖该工具）
+ * @returns {number} 退出码
+ */
+function checkDocsTheme() {
+  const probe = spawnSync('toolkit', ['docs', 'theme', '--help'], { encoding: 'utf8', shell: isWindows })
+  if (probe.status !== 0) {
+    console.log('跳过文档站主题检查（未检测到 toolkit docs theme）')
+    return 0
+  }
+  return spawnSync('toolkit', ['docs', 'theme', 'check'], { cwd: root, stdio: 'inherit', shell: isWindows }).status ?? 1
+}
+
+/**
+ * 文档站导航规范：全局 toolkit 可用时执行 docs nav check，未安装时打印跳过
+ * @returns {number} 退出码
+ */
+function checkDocsNav() {
+  const probe = spawnSync('toolkit', ['docs', 'nav', '--help'], { encoding: 'utf8', shell: isWindows })
+  if (probe.status !== 0) {
+    console.log('跳过文档站导航检查（未检测到 toolkit docs nav）')
+    return 0
+  }
+  return spawnSync('toolkit', ['docs', 'nav', 'check'], { cwd: root, stdio: 'inherit', shell: isWindows }).status ?? 1
+}
+
+/**
+ * 文档站产物：全局 toolkit 可用时执行 docs dist check，未安装时打印跳过
+ * @returns {number} 退出码
+ */
+function checkDocsDist() {
+  const probe = spawnSync('toolkit', ['docs', 'dist', '--help'], { encoding: 'utf8', shell: isWindows })
+  if (probe.status !== 0) {
+    console.log('跳过文档站产物检查（未检测到 toolkit docs dist）')
+    return 0
+  }
+  return spawnSync('toolkit', ['docs', 'dist', 'check'], { cwd: root, stdio: 'inherit', shell: isWindows }).status ?? 1
+}
+
 reportToolchain()
 
 /** 未通过的步骤名 */
 const failures = []
 
-for (const { label, command, args, env, skip, fatal } of steps) {
+for (const { label, command, args, env, skip, fatal, run } of steps) {
   if (skip) {
     console.log(`\n⊘ ${label}（${skip}，跳过）`)
     continue
   }
   console.log(`\n▶ ${label}`)
-  // pnpm 在 Windows 上是 .cmd，需经 shell 调用；node 直接调用
-  const bin = command ?? 'pnpm'
-  const result = spawnSync(bin, args, { cwd: root, stdio: 'inherit', shell: bin === 'pnpm' && isWindows, env: { ...process.env, ...env } })
-  if (result.status === 0) continue
+  // 内联函数步骤（工具命令探测）自行返回退出码；其余按 command/args 起子进程
+  let status
+  if (run) {
+    status = run()
+  } else {
+    // pnpm 在 Windows 上是 .cmd，需经 shell 调用；node 直接调用
+    const bin = command ?? 'pnpm'
+    status = spawnSync(bin, args, { cwd: root, stdio: 'inherit', shell: bin === 'pnpm' && isWindows, env: { ...process.env, ...env } }).status
+  }
+  if (status === 0) continue
   failures.push(label)
   // 依赖装不上时后续步骤只会是噪音，直接中止；其余步骤跑完再一次暴露全部问题
   if (fatal) break

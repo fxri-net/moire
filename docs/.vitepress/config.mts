@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import siteNav from '../site-nav.json'
 
 // 站点基础路径：默认按 GitHub Pages 子路径 /moire/，其他部署场景经 VITEPRESS_BASE 环境变量覆盖
 const base = process.env.VITEPRESS_BASE || '/moire/'
@@ -43,80 +44,9 @@ export default defineConfig({
   themeConfig: {
     // 导航栏 logo（字符串路径由 VitePress 自动拼接 base 前缀）
     logo: '/logo.svg',
-    nav: [
-      { text: '快速开始', link: '/getting-started' },
-      {
-        text: '参考',
-        items: [
-          { text: 'API 总览', link: '/api/' },
-          { text: '枚举字典', link: '/enums' },
-          { text: 'layui 适配', link: '/adapters/layui' },
-        ],
-      },
-      { text: '原理', link: '/architecture' },
-      {
-        text: '开发',
-        items: [
-          { text: '构建产物', link: '/build' },
-          { text: '分发与接入', link: '/distribution' },
-          { text: '发版流程', link: '/release' },
-          { text: '迁移指南', link: '/migration' },
-        ],
-      },
-      {
-        text: '帮助',
-        items: [
-          { text: '常见问题', link: '/faq' },
-          { text: '更新日志', link: '/changelog' },
-        ],
-      },
-    ],
-    sidebar: [
-      {
-        text: '开始',
-        items: [
-          { text: '首页', link: '/' },
-          { text: '快速开始', link: '/getting-started' },
-        ],
-      },
-      {
-        text: '参考',
-        items: [
-          { text: 'API 总览', link: '/api/' },
-          { text: '内核与插件', link: '/api/kernel' },
-          { text: '工具函数', link: '/api/utils' },
-          { text: '声明契约', link: '/api/schema' },
-          { text: '字段能力', link: '/api/fields' },
-          { text: '视图能力', link: '/api/views' },
-          { text: '工具能力', link: '/api/tools' },
-          { text: '请求客户端', link: '/api/http' },
-          { text: '国际化', link: '/api/i18n' },
-          { text: '界面适配', link: '/api/ui' },
-          { text: '枚举字典', link: '/enums' },
-          { text: 'layui 适配', link: '/adapters/layui' },
-        ],
-      },
-      {
-        text: '原理',
-        items: [{ text: '架构设计', link: '/architecture' }],
-      },
-      {
-        text: '开发',
-        items: [
-          { text: '构建产物', link: '/build' },
-          { text: '分发与接入', link: '/distribution' },
-          { text: '发版流程', link: '/release' },
-          { text: '迁移指南', link: '/migration' },
-        ],
-      },
-      {
-        text: '帮助',
-        items: [
-          { text: '常见问题', link: '/faq' },
-          { text: '更新日志', link: '/changelog' },
-        ],
-      },
-    ],
+    // 导航与侧栏的唯一真源：docs/site-nav.json（toolkit docs nav check 按同一份数据校验）
+    nav: siteNav.nav,
+    sidebar: siteNav.sidebar,
     // 本地搜索 + 中文界面文案
     search: {
       provider: 'local',
