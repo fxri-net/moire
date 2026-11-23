@@ -17,13 +17,13 @@ pnpm add -g @fxri/toolkit
 一处改动产生一个变更集，放在 `.changeset/` 下：
 
 ```sh
-toolkit changelog
+toolkit release
 ```
 
 正文逐条写成 `- 类型：描述`，类型取自仓库约定的字典（新增 / 修改 / 修复 / 优化 / 清理 / 文档）。frontmatter 的 bump 级别按改动量级选择：破坏性变更 `major`，新能力 `minor`，其余 `patch`。
 
 ::: warning 条目不写列表标记会被合并
-changesets 会把无 `- ` 标记的裸行并入相邻条目作缩进续行，整段正文塌成单一条目，只有首行参与分组。逐条加 `- ` 是硬要求，`toolkit tasks check` 会在归档前拦下这类问题。
+changesets 会把无 `- ` 标记的裸行并入相邻条目作缩进续行，整段正文塌成单一条目，只有首行参与分组。逐条加 `- ` 是硬要求，`toolkit task check` 会在归档前拦下这类问题。
 :::
 
 ## 2. 门禁
@@ -37,7 +37,7 @@ pnpm verify
 ## 3. 升版本与写日志
 
 ```sh
-toolkit changelog version
+toolkit release bump
 ```
 
 它会消费 `.changeset/` 下的变更集，升 `package.json` 版本号，并在 `CHANGELOG.md` 顶部写入新版本块与中文分组标题（🚨 重大变更 / ✨ 新增功能 / 🔧 功能调整 / ⚡ 优化改进 / 🐛 问题修复 / 📝 文档更新 / 🧹 清理移除 / 🔗 依赖变更 / 📦 其他变更）。
@@ -47,14 +47,14 @@ toolkit changelog version
 ## 4. 归一与镜像
 
 ```sh
-toolkit changelog format --history
-toolkit changelog doc
+toolkit release changelog --history
+toolkit release mirror
 ```
 
 第一条按「同组顶层条目逐行相邻」重排历史块，消除人工润色留下的空行；带 `--history` 才会改历史块，缺省只动新块。第二条把根 `CHANGELOG.md` 镜像成文档站的[更新日志](./changelog)，页头带「请勿手改」提示。
 
 ::: tip 选项跟在子命令之后
-`toolkit changelog format --history` 生效；旧写法 `toolkit changelog --history format` 把选项放在子命令之前，toolkit 1.16.2 起不再支持，会报「未知选项」。
+`toolkit release changelog --history` 生效；把选项放在子命令之前（如 `toolkit release --history changelog`）不受支持，会报「未知选项」。
 :::
 
 ## 5. 单独提交版本与日志
