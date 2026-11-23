@@ -1,18 +1,18 @@
 {
   "name": "@fxri/moire",
-  "version": "1.0.10",
-  "commit": "8d6b9d554e13461a14deb94eadb107f047357424",
-  "builtAt": "2026-11-13T05:52:38.964Z",
+  "version": "1.0.11",
+  "commit": "2bc63b3da36cd3a726504ef93e09868cd8cd0b27",
+  "builtAt": "2026-11-23T09:15:48.044Z",
   "files": [
     {
       "path": "moire.esm.js",
       "bytes": 38820,
-      "sha256": "295a671d29a745605d864f81dbfa5f85964dcc24f658d7b1674ba96258899fd4"
+      "sha256": "739097298c3c44d2a88c1c0ee33dc354fe61471f3194bbd3bd0f930612ef26c3"
     },
     {
       "path": "moire.min.js",
       "bytes": 38718,
-      "sha256": "e0c203bd3c09729e169fde2b563e06440263b8485cf19044db45ceab80d75ad8"
+      "sha256": "e0acaa061d8b5134fd97b0f971169597ac85b3770c362b024547d1ab254e238c"
     },
     {
       "path": "types/adapters/layui/index.d.ts",
